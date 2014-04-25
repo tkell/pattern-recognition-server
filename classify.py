@@ -21,7 +21,7 @@ def load_data_from_file(classification):
 # Translate giant dict / json to scikit-style giant list
 # The use of sorted() here scares me a little.
 # If I am consistant with it, it should not be a problem, 
-# but if I am not, I am going to ruin a ton of shit.  s
+# but if I am not, I am going to ruin a ton of shit.
 def translate_data_to_scikit(data):
     all_data = []
     for example in data:
@@ -79,5 +79,20 @@ classifier = svm.SVC()
 classifier.fit(collected_data, collected_labels)
 
 # Test on own dataset
+print "Validation on training dataset"
 for index, data in enumerate(padded_data):
     print collected_labels[index], classifier.predict([data])
+
+# Load test data
+test_data = load_data_from_file('test_data')
+test_data = translate_data_to_scikit(test_data)
+max_length = max([len(example) for example in test_data])
+padded_test_data = []
+for example_data in test_data:
+    padding_length = max_length - len(example_data)
+    example_data.extend([0] * padding_length)
+    padded_test_data.append(example_data)
+
+print "Test on new examples"
+for data in padded_test_data:
+    print classifier.predict([data])
