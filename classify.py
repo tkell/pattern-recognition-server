@@ -51,6 +51,7 @@ def translate_data_to_scikit(data):
 # Load raw data
 piano_data = load_data_from_file('piano')
 small_grid_data = load_data_from_file('small_grid')
+xylophone_data = load_data_from_file('xylophone')
 
 # Begin translation
 collected_data = []
@@ -65,6 +66,11 @@ collected_labels.extend(['piano'] * len(res))
 res = translate_data_to_scikit(small_grid_data)
 collected_data.extend(res)
 collected_labels.extend(['small grid'] * len(res))
+
+# Translate small grid data
+res = translate_data_to_scikit(xylophone_data)
+collected_data.extend(res)
+collected_labels.extend(['xylophone'] * len(res))
 
 ## This pads the data - this maaay make things weird, but we'll see.
 max_length = max([len(example) for example in collected_data])
@@ -86,7 +92,6 @@ for index, data in enumerate(padded_data):
 # Load test data
 test_data = load_data_from_file('test_data')
 test_data = translate_data_to_scikit(test_data)
-max_length = max([len(example) for example in test_data])
 padded_test_data = []
 for example_data in test_data:
     padding_length = max_length - len(example_data)
