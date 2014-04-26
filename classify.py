@@ -64,6 +64,16 @@ load_data('xylophone')
 load_data('piano_roll')
 load_data('zither')
 
+# OK SO WE HAVE A PROBLEM
+# Adding large-grid makes the dimensional space 
+# so large that we can't determine between any of the small ones anymore
+# (and, hilariously, large_grid still comes back as xylophone)
+# I am not sure how to fix this.
+# I should maybe try other scikit classifiers?
+# Or set a rule that uses different classifiers depending on the number of buttons?
+# I will pick this up next Thursday!
+load_data('large_grid')
+
 
 # Load test data
 test_data = load_data_from_file('test_data')
