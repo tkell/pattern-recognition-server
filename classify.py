@@ -72,7 +72,25 @@ load_data('zither')
 # I should maybe try other scikit classifiers?
 # Or set a rule that uses different classifiers depending on the number of buttons?
 # I will pick this up next Thursday!
-load_data('large_grid')
+# Try:  Nearest neighbours, Decision Trees
+
+# If I can't get an improvement with any other algorithms, 
+# then I need to make with the pruning heuristics
+
+# I can do this based on number-of-buttons:
+    # less than 15 = one classifier
+    # more than 15 = another
+    # more than 40 = another
+    # etc etc
+    # This would also help with the problem of the maximum number of buttons
+    # (Eventually, every layout approaches a grid or a tonnez)
+    # It is worth noting that each prototype could still appear in multiple counts
+    # So, you'd have a single-octave piano in the < 15 class
+    # and a two octave piano in the < 30 class, etc
+
+
+
+#load_data('large_grid')
 
 
 # Load test data
