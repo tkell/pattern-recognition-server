@@ -78,31 +78,40 @@ res = translate_data_to_scikit(piano_roll_data)
 collected_data.extend(res)
 collected_labels.extend(['piano roll'] * len(res))
 
+
+# Load test data
+test_data = load_data_from_file('test_data')
+test_data = translate_data_to_scikit(test_data)
+
 ## This pads the data - this maaay make things weird, but we'll see.
 max_length = max([len(example) for example in collected_data])
+test_max_length = max([len(example) for example in test_data])
+max_length = max(max_length, test_max_length)
+
 padded_data = []
 for example_data in collected_data:
     padding_length = max_length - len(example_data)
     example_data.extend([0] * padding_length)
     padded_data.append(example_data)
 
+padded_test_data = []
+for example_data in test_data:
+    padding_length = max_length - len(example_data)
+    example_data.extend([0] * padding_length)
+    padded_test_data.append(example_data)
+
 # Create classifier
 classifier = svm.SVC()
-classifier.fit(collected_data, collected_labels)
+classifier.fit(padded_data, collected_labels)
 
 # Test on own dataset
 print "Validation on training dataset"
 for index, data in enumerate(padded_data):
     print collected_labels[index], classifier.predict([data])
 
-# Load test data
-test_data = load_data_from_file('test_data')
-test_data = translate_data_to_scikit(test_data)
-padded_test_data = []
-for example_data in test_data:
-    padding_length = max_length - len(example_data)
-    example_data.extend([0] * padding_length)
-    padded_test_data.append(example_data)
+
+
+
 
 print "Test on new examples"
 for data in padded_test_data:
