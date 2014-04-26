@@ -48,35 +48,21 @@ def translate_data_to_scikit(data):
         all_data.append(example_data)
     return all_data
 
-# Load raw data
-piano_data = load_data_from_file('piano')
-small_grid_data = load_data_from_file('small_grid')
-xylophone_data = load_data_from_file('xylophone')
-piano_roll_data = load_data_from_file('piano_roll')
+def load_data(category_name):
+    category_data = load_data_from_file(category_name)
+    res = translate_data_to_scikit(category_data)
+    collected_data.extend(res)
+    collected_labels.extend([category_name] * len(res))
 
-# Begin translation
+# Load data
 collected_data = []
 collected_labels = []
 
-# Translate piano data
-res = translate_data_to_scikit(piano_data)
-collected_data.extend(res)
-collected_labels.extend(['piano'] * len(res))
-
-# Translate small grid data
-res = translate_data_to_scikit(small_grid_data)
-collected_data.extend(res)
-collected_labels.extend(['small grid'] * len(res))
-
-# Translate xylophone data
-res = translate_data_to_scikit(xylophone_data)
-collected_data.extend(res)
-collected_labels.extend(['xylophone'] * len(res))
-
-# Translate piano roll data
-res = translate_data_to_scikit(piano_roll_data)
-collected_data.extend(res)
-collected_labels.extend(['piano roll'] * len(res))
+load_data('piano')
+load_data('small_grid')
+load_data('xylophone')
+load_data('piano_roll')
+load_data('zither')
 
 
 # Load test data
@@ -88,11 +74,11 @@ max_length = max([len(example) for example in collected_data])
 test_max_length = max([len(example) for example in test_data])
 max_length = max(max_length, test_max_length)
 
-padded_data = []
+padded_training_data = []
 for example_data in collected_data:
     padding_length = max_length - len(example_data)
     example_data.extend([0] * padding_length)
-    padded_data.append(example_data)
+    padded_training_data.append(example_data)
 
 padded_test_data = []
 for example_data in test_data:
@@ -102,17 +88,23 @@ for example_data in test_data:
 
 # Create classifier
 classifier = svm.SVC()
-classifier.fit(padded_data, collected_labels)
+classifier.fit(padded_training_data, collected_labels)
 
 # Test on own dataset
-print "Validation on training dataset"
-for index, data in enumerate(padded_data):
-    print collected_labels[index], classifier.predict([data])
+validation_errors = 0
+print "Validation on training dataset..."
+for index, data in enumerate(padded_training_data):
+    if collected_labels[index] != classifier.predict([data]):
+        validation_errors +=1
+        print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
 
+if validation_errors != 0:
+    print "There were %d validation_errors" % validation_errors
+else:
+    print "Validation passed" 
 
+print '\n'
 
-
-
-print "Test on new examples"
+print "Testing on new examples..."
 for data in padded_test_data:
     print classifier.predict([data])
