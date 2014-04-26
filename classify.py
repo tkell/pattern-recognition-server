@@ -52,6 +52,7 @@ def translate_data_to_scikit(data):
 piano_data = load_data_from_file('piano')
 small_grid_data = load_data_from_file('small_grid')
 xylophone_data = load_data_from_file('xylophone')
+piano_roll_data = load_data_from_file('piano_roll')
 
 # Begin translation
 collected_data = []
@@ -67,10 +68,15 @@ res = translate_data_to_scikit(small_grid_data)
 collected_data.extend(res)
 collected_labels.extend(['small grid'] * len(res))
 
-# Translate small grid data
+# Translate xylophone data
 res = translate_data_to_scikit(xylophone_data)
 collected_data.extend(res)
 collected_labels.extend(['xylophone'] * len(res))
+
+# Translate piano roll data
+res = translate_data_to_scikit(piano_roll_data)
+collected_data.extend(res)
+collected_labels.extend(['piano roll'] * len(res))
 
 ## This pads the data - this maaay make things weird, but we'll see.
 max_length = max([len(example) for example in collected_data])
