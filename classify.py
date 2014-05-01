@@ -4,6 +4,9 @@
 import json
 from sklearn import svm
 
+
+from sklearn.neighbors.nearest_centroid import NearestCentroid
+
 '''
 Classification tools.  
 Functions from here will be invoked by the webserver,
@@ -49,49 +52,47 @@ def translate_data_to_scikit(data):
         all_data.append(example_data)
     return all_data
 
-def load_data(category_name):
+def load_data(category_name, collected_data, collected_labels):
     category_data = load_data_from_file(category_name)
     res = translate_data_to_scikit(category_data)
     collected_data.extend(res)
     collected_labels.extend([category_name] * len(res))
 
-# Load data
-collected_data = []
-collected_labels = []
-
-load_data('piano')
-load_data('small_grid')
-load_data('xylophone')
-load_data('piano_roll')
-load_data('zither')
-#load_data('large_grid')
-
-# OK SO WE HAVE A PROBLEM
-# Adding large-grid makes the dimensional space 
-# so large that we can't determine between any of the small ones anymore
-# (and, hilariously, large_grid still comes back as xylophone)
-# I am not sure how to fix this.
-# I should maybe try other scikit classifiers?
-# Or set a rule that uses different classifiers depending on the number of buttons?
-# I will pick this up next Thursday!
-# Try:  Nearest neighbours, Decision Trees
-
-# If I can't get an improvement with any other algorithms, 
-# then I need to make with the pruning heuristics
-
-# I can do this based on number-of-buttons:
-    # less than 15 = one classifier
-    # more than 15 = another
-    # more than 40 = another
-    # etc etc
-    # This would also help with the problem of the maximum number of buttons
-    # (Eventually, every layout approaches a grid or a tonnez)
-    # It is worth noting that each prototype could still appear in multiple counts
-    # So, you'd have a single-octave piano in the < 15 class
-    # and a two octave piano in the < 30 class, etc
+    return collected_data, collected_labels
 
 
+def create_classifier(layout_list):
+    collected_data = []
+    collected_labels = []
+    for layout in layout_list:
+        load_data(layout, collected_data, collected_labels)
 
+    max_length = max([len(example) for example in collected_data])
+
+    padded_training_data = []
+    for example_data in collected_data:
+        padding_length = max_length - len(example_data)
+        example_data.extend([0] * padding_length)
+        padded_training_data.append(example_data)
+
+    classifier = NearestCentroid()
+    classifier.fit(padded_training_data, collected_labels)
+
+    # Validate on training dataset
+    validation_errors = 0
+    for index, data in enumerate(padded_training_data):
+        if collected_labels[index] != classifier.predict([data]):
+            validation_errors +=1
+            print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
+
+    if validation_errors != 0:
+        print "PANIC!  There were %d validation_errors" % validation_errors
+
+    return classifier, max_length
+
+
+small_classifier, small_max_length = create_classifier(['piano', 'small_grid', 'xylophone', 'piano_roll', 'zither'])
+large_classifier, large_max_length = create_classifier(['big_piano', 'large_grid'])
 
 
 
@@ -99,42 +100,13 @@ load_data('zither')
 test_data = load_data_from_file('test_data')
 test_data = translate_data_to_scikit(test_data)
 
-## This pads the data - this maaay make things weird, but we'll see.
-max_length = max([len(example) for example in collected_data])
-test_max_length = max([len(example) for example in test_data])
-max_length = max(max_length, test_max_length)
-
-padded_training_data = []
-for example_data in collected_data:
-    padding_length = max_length - len(example_data)
-    example_data.extend([0] * padding_length)
-    padded_training_data.append(example_data)
-
 padded_test_data = []
 for example_data in test_data:
-    padding_length = max_length - len(example_data)
-    example_data.extend([0] * padding_length)
-    padded_test_data.append(example_data)
-
-# Create classifier
-classifier = svm.SVC()
-classifier.fit(padded_training_data, collected_labels)
-
-# Test on own dataset
-validation_errors = 0
-print "Validation on training dataset..."
-for index, data in enumerate(padded_training_data):
-    if collected_labels[index] != classifier.predict([data]):
-        validation_errors +=1
-        print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
-
-if validation_errors != 0:
-    print "There were %d validation_errors" % validation_errors
-else:
-    print "Validation passed" 
-
-print '\n'
-
-print "Testing on new examples..."
-for data in padded_test_data:
-    print classifier.predict([data])
+    if len(example_data) <= small_max_length:
+        padding_length = small_max_length - len(example_data)
+        example_data.extend([0] * padding_length)
+        print small_classifier.predict([example_data])
+    elif len(example_data) > 1000:
+        padding_length = large_max_length - len(example_data)
+        example_data.extend([0] * padding_length)
+        print large_classifier.predict([example_data])
