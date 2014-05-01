@@ -5,7 +5,8 @@ import json
 from sklearn import svm
 
 '''
-Classification tools.  Functions from here will be invoked by the webserver
+Classification tools.  
+Functions from here will be invoked by the webserver,
 in order to classify data.
 '''
 
@@ -63,6 +64,7 @@ load_data('small_grid')
 load_data('xylophone')
 load_data('piano_roll')
 load_data('zither')
+#load_data('large_grid')
 
 # OK SO WE HAVE A PROBLEM
 # Adding large-grid makes the dimensional space 
@@ -90,7 +92,7 @@ load_data('zither')
 
 
 
-#load_data('large_grid')
+
 
 
 # Load test data
