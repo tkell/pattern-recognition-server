@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
-from sklearn import svm
-
-
-from sklearn.neighbors.nearest_centroid import NearestCentroid
-
 '''
 Classification tools.  
 Functions from here will be invoked by the webserver,
 in order to classify data.
 '''
+
+import json
+from sklearn import svm
+from sklearn.neighbors.nearest_centroid import NearestCentroid
 
 # Load data from a file
 def load_data_from_file(classification):
@@ -60,6 +58,10 @@ def load_data(category_name, collected_data, collected_labels):
 
     return collected_data, collected_labels
 
+def pad_data(example_data, target_length):
+    padding_length = target_length - len(example_data)
+    example_data.extend([0] * padding_length)
+    return example_data
 
 def create_classifier(layout_list):
     collected_data = []
@@ -89,24 +91,3 @@ def create_classifier(layout_list):
         print "PANIC!  There were %d validation_errors" % validation_errors
 
     return classifier, max_length
-
-
-small_classifier, small_max_length = create_classifier(['piano', 'small_grid', 'xylophone', 'piano_roll', 'zither'])
-large_classifier, large_max_length = create_classifier(['big_piano', 'large_grid'])
-
-
-
-# Load test data
-test_data = load_data_from_file('test_data')
-test_data = translate_data_to_scikit(test_data)
-
-padded_test_data = []
-for example_data in test_data:
-    if len(example_data) <= small_max_length:
-        padding_length = small_max_length - len(example_data)
-        example_data.extend([0] * padding_length)
-        print small_classifier.predict([example_data])
-    elif len(example_data) > 1000:
-        padding_length = large_max_length - len(example_data)
-        example_data.extend([0] * padding_length)
-        print large_classifier.predict([example_data])
