@@ -17,6 +17,7 @@ from classify import create_classifier_from_data
 from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from classify import pad_data
+from cross_domain import crossdomain
 
 
 # Create small classifier
@@ -58,8 +59,9 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['GET', 'POST'])
 def analyze_data():
     print request.json
-    raw_data = translate_data_to_scikit(raw_data)
-    res = classification_from_data(raw_data)
+
+    #raw_data = translate_data_to_scikit(raw_data)
+    #res = classification_from_data(raw_data)
     return "We have, in theory, parsed the data and returned JSON"
 
 @app.route("/image", methods=['POST'])
@@ -80,6 +82,7 @@ def fake_analysis():
 
 # Test to make sure that the server is up
 @app.route("/hello", methods=['GET'])
+@crossdomain(origin='*')
 def hello():
     return "Hello, I am a Flask server"
 
