@@ -70,7 +70,7 @@ def analyze_image():
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
-    piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
+    piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/xylophone.json').json()
     raw_data = translate_data_to_scikit(piano_data)
     raw_example = raw_data[0]
 
