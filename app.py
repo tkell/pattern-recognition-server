@@ -18,7 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from classify import pad_data
 
-test_data = get('/home/tidepool/www/pattern-recognition/example_data')
+test_data = get('http://www.tide-pool.ca/pattern-recognition/example_data/test-data.json')
 
 app = Flask(__name__)
 
