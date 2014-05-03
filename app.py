@@ -69,7 +69,7 @@ def analyze_data():
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
-    resp = make_response(jsonify(**return_data))
+    resp = make_response(jsonify(**request.json))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST'
     resp.headers['Access-Control-Max-Age'] = 21600
