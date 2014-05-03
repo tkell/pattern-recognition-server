@@ -62,6 +62,38 @@ def pad_data(example_data, target_length):
     example_data.extend([0] * padding_length)
     return example_data
 
+
+def create_classifier_from_data(layout_list):
+    collected_data = []
+    collected_labels = []
+    for data, category_name in layout_list:
+        res = translate_data_to_scikit(data)
+        collected_data.extend(res)
+        collected_labels.extend([category_name] * len(res))
+
+    max_length = max([len(example) for example in collected_data])
+
+    padded_training_data = []
+    for example_data in collected_data:
+        example_data = pad_data(example_data, max_length)
+        padded_training_data.append(example_data)
+
+    classifier = NearestCentroid()
+    classifier.fit(padded_training_data, collected_labels)
+
+    # Validate on training dataset
+    validation_errors = 0
+    for index, data in enumerate(padded_training_data):
+        if collected_labels[index] != classifier.predict([data]):
+            validation_errors +=1
+            print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
+
+    if validation_errors != 0:
+        print "PANIC!  There were %d validation_errors" % validation_errors
+
+    return classifier, max_length
+    
+
 def create_classifier(layout_list):
     collected_data = []
     collected_labels = []

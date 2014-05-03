@@ -13,21 +13,30 @@ from flask import request
 
 from requests import get
 
-from classify import create_classifier
+from classify import create_classifier_from_data
 from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from classify import pad_data
 
 
-
-# Get data for classifiers
-test_data = get('http://www.tide-pool.ca/pattern-recognition/example_data/test-data.json')
-
-# ugh, organize it here somehow
-
-# Create classifiers
-#small_classifier, small_max_length = create_classifier(['piano', 'small_grid', 'xylophone', 'piano_roll', 'zither'])
-small_classifier, small_max_length = ('', '')
+# Create small classifier
+piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
+xylophone_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/xylophone.json').json()
+small_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/small_grid.json').json()
+piano_roll_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano_roll.json').json()
+zither_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/zither.json').json()
+small_classifier, small_max_length = create_classifier_from_data([(piano_data, 'piano'), 
+                                                                (xylophone_data, 'xylophone'),
+                                                                (small_grid_data, 'small grid'),
+                                                                (piano_roll_data, 'piano roll'),
+                                                                (zither_data, 'zither'),
+                                                                ])
+# Create large classifier
+big_piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/big_piano.json').json()
+large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
+large_classifier, large_max_length = create_classifier_from_data([(big_piano_data, 'big_piano'), 
+                                                                (large_grid_data, 'large_grid'),
+                                                                ])
 
 app = Flask(__name__)
 
@@ -61,8 +70,8 @@ def analyze_image():
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
-    raw_data = load_data_from_file('test_data')
-    raw_data = translate_data_to_scikit(raw_data)
+    piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
+    raw_data = translate_data_to_scikit(piano_data)
     raw_example = raw_data[0]
 
     res = classification_from_data(raw_example)
