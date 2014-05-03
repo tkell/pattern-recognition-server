@@ -56,7 +56,7 @@ def classification_from_data(example_data):
 
 
 ## We will eventually remove this GET thang.
-@app.route("/analysis", methods=['GET', 'POST'])
+@app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def analyze_data():
     print request.json
