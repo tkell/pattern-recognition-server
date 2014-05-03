@@ -61,14 +61,15 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-    print request.json
+    print len(request.json)
+    raw_data = translate_data_to_scikit(request.json)
 
-    #raw_data = translate_data_to_scikit(raw_data)
-    #res = classification_from_data(raw_data)
+    res = classification_from_data(raw_data)
+    return_data = {'result': res[0]}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
-    resp = make_response(jsonify(**request.json))
+    resp = make_response(jsonify(**return_data))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST'
     resp.headers['Access-Control-Max-Age'] = 21600
@@ -92,7 +93,6 @@ def fake_analysis():
 
 # Test to make sure that the server is up
 @app.route("/hello", methods=['GET'])
-@crossdomain(origin='*')
 def hello():
     return "Hello, I am a Flask server"
 
