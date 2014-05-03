@@ -59,11 +59,15 @@ def classification_from_data(example_data):
 
 ## We will eventually remove this GET thang.
 @app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
+@crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
     print request.json
 
     #raw_data = translate_data_to_scikit(raw_data)
     #res = classification_from_data(raw_data)
+
+    # Ugly.  I appear to need both these AND the @crossdomain decorator.
+    # Must be fixed, but not now.
     resp = make_response(jsonify(**request.json))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST'
