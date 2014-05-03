@@ -57,12 +57,13 @@ def classification_from_data(example_data):
 
 ## We will eventually remove this GET thang.
 @app.route("/analysis", methods=['GET', 'POST'])
+@crossdomain(origin='*')
 def analyze_data():
     print request.json
 
     #raw_data = translate_data_to_scikit(raw_data)
     #res = classification_from_data(raw_data)
-    return "We have, in theory, parsed the data and returned JSON"
+    return flask.jsonify(**request.json)
 
 @app.route("/image", methods=['POST'])
 def analyze_image():
