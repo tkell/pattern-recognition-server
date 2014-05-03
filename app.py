@@ -61,11 +61,11 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-    print len(request.json)
-    raw_data = translate_data_to_scikit(request.json)
+    print request.json
 
-    res = classification_from_data(raw_data)
-    return_data = {'result': res[0]}
+    #raw_data = translate_data_to_scikit(request.json)
+    #res = classification_from_data(raw_data)
+    #return_data = {'result': res[0]}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
