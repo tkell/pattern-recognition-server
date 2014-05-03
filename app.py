@@ -18,12 +18,19 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from classify import pad_data
 
+
+
+# Get data for classifiers
 test_data = get('http://www.tide-pool.ca/pattern-recognition/example_data/test-data.json')
+
+# ugh, organize it here somehow
+
+# Create classifiers
+#small_classifier, small_max_length = create_classifier(['piano', 'small_grid', 'xylophone', 'piano_roll', 'zither'])
+small_classifier, small_max_length = ('', '')
 
 app = Flask(__name__)
 
-#small_classifier, small_max_length = create_classifier(['piano', 'small_grid', 'xylophone', 'piano_roll', 'zither'])
-small_classifier, small_max_length = ('', '')
 def objects_from_image():
     pass
 
@@ -65,7 +72,7 @@ def fake_analysis():
 # Test to make sure that the server is up
 @app.route("/hello", methods=['GET'])
 def hello():
-    return "Hello, I am a Flask server:  %s" % test_data.json()
+    return "Hello, I am a Flask server"
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -17,7 +17,7 @@ def load_data_from_file(classification):
     file_path = 'example_data/%s.json' % classification
     with open(file_path, 'r') as f:
         for line in f:
-            data.append(json.loads(line))
+            data = json.loads(line)
     return data
 
 # Translate giant dict / json to scikit-style giant list
@@ -55,8 +55,7 @@ def load_data(category_name, collected_data, collected_labels):
     res = translate_data_to_scikit(category_data)
     collected_data.extend(res)
     collected_labels.extend([category_name] * len(res))
-
-    return collected_data, collected_labels
+    return
 
 def pad_data(example_data, target_length):
     padding_length = target_length - len(example_data)
@@ -73,8 +72,7 @@ def create_classifier(layout_list):
 
     padded_training_data = []
     for example_data in collected_data:
-        padding_length = max_length - len(example_data)
-        example_data.extend([0] * padding_length)
+        example_data = pad_data(example_data, max_length)
         padded_training_data.append(example_data)
 
     classifier = NearestCentroid()
