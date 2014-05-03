@@ -65,7 +65,7 @@ def fake_analysis():
 # Test to make sure that the server is up
 @app.route("/hello", methods=['GET'])
 def hello():
-    return "Hello, I am a Flask server:  %s" % test_data.json
+    return "Hello, I am a Flask server:  %s" % test_data.json()
 
 if __name__ == "__main__":
     app.run(debug=True)
