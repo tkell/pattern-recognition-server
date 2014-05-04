@@ -61,18 +61,9 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-    print len(request.json), type(request.json)
-
-    # This expects a list of giant dicts...
     raw_data = translate_data_to_scikit([request.json])
-
-    print "got raw_data"
     raw_example = raw_data[0]
-    print len(raw_example)
-
     res = classification_from_data(raw_example)
-    print res, res[0]
-
     return_data = {'result': res[0]}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
