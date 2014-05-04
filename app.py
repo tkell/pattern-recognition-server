@@ -65,10 +65,12 @@ def analyze_data():
 
     # This expects a list of giant dicts...
     raw_data = translate_data_to_scikit([request.json])
-    print "got raw_data"
-    print len(raw_data)
 
-    res = classification_from_data(raw_data)
+    print "got raw_data"
+    raw_example = raw_data[0]
+    print len(raw_example)
+
+    res = classification_from_data(raw_example)
     print res, res[0]
 
     return_data = {'result': res[0]}
