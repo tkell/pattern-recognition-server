@@ -61,10 +61,10 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-    print len(request.json)
+    print len(request.json), type(request.json)
 
     # This expects a list of giant dicts...
-    raw_data = translate_data_to_scikit(request.json)
+    raw_data = translate_data_to_scikit([request.json])
     print raw_data
 
     res = classification_from_data(raw_data)
