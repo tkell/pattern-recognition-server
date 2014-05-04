@@ -63,7 +63,10 @@ def classification_from_data(example_data):
 def analyze_data():
     print len(request.json)
 
+    # This expects a list of giant dicts...
     raw_data = translate_data_to_scikit(request.json)
+    print raw_data
+
     res = classification_from_data(raw_data)
 
     print res, res[0]
