@@ -47,12 +47,16 @@ def objects_from_image():
 def data_from_objects():
     pass
 
+## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     if len(example_data) < small_max_length:
         example_data = pad_data(example_data, small_max_length)
         res = small_classifier.predict([example_data])
+    else:
+        example_data = pad_data(example_data, large_max_length)
+        res = large_classifier.predict([example_data])
 
-        return res
+    return res
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
@@ -60,7 +64,7 @@ def analyze_data():
     raw_data = translate_data_to_scikit([request.json])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
-    
+
     # debugz
     print res[0]
 
