@@ -60,6 +60,10 @@ def analyze_data():
     raw_data = translate_data_to_scikit([request.json])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
+    
+    # debugz
+    print res[0]
+
     return_data = {'result': res[0]}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
