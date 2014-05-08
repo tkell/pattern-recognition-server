@@ -27,7 +27,7 @@ small_classifier, small_max_length = create_classifier_from_data([(piano_data, '
                                                                 (zither_data, 'zither'),
                                                                 ])
 
-# Create llarge classifier
+# Create large classifier
 big_piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/big_piano.json').json()
 large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
 large_classifier, large_max_length = create_classifier_from_data([(big_piano_data, 'big_piano'), 
