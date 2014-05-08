@@ -67,7 +67,7 @@ def analyze_data():
     resp = make_response(jsonify(**return_data))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST'
-    resp.headers['Access-Control-Max-Age'] = 21600
+    resp.headers['Access-Control-Max-Age'] = 54000
     return resp
 
 @app.route("/image", methods=['POST'])
