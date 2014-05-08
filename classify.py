@@ -20,13 +20,52 @@ def load_data_from_file(classification):
             data = json.loads(line)
     return data
 
+
+# Function that replaces the button subtraction code in the client.
+# Basically, this goes from a list of button objects
+# to whatever we want our data to look like.  
+# For the moment, we want the difference in location between all buttons.
+# This is not very pythonic, but I am trying to match the old JS version, 
+# in order to not break other code
+def subtract_data(button_data):
+    max_distance = 0
+    subtracted_data = {}
+    for i, button in enumerate(button_data):
+        subtracted_data[i] = {}
+        for j, other_button in enumerate(button_data):
+            if j == i:
+                continue
+
+            # Other subtraction stuff could go here
+            x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
+            y_distance = button_data[i]['location']['y'] - button_data[j]['location']['y']
+            subtracted_data[i][j] = {'location':  {'x': x_distance, 'y': y_distance}}
+
+            if max_distance < abs(x_distance):
+                max_distance = x_distance
+            if max_distance < abs(y_distance):
+                max_distance = y_distance
+
+    # Normalize with max_distance
+    for i, button in enumerate(button_data):
+        for j, other_button in enumerate(button_data):
+            if j == i:
+                continue
+            subtracted_data[i][j]['location']['x'] = subtracted_data[i][j]['location']['x'] / max_distance
+            subtracted_data[i][j]['location']['y'] = subtracted_data[i][j]['location']['y'] / max_distance
+
+    return subtracted_data
+
+
+
 # Translate giant dict / json to scikit-style giant list
 # The use of sorted() here scares me a little.
 # If I am consistant with it, it should not be a problem, 
 # but if I am not, I am going to ruin a ton of shit.
 def translate_data_to_scikit(data):
     all_data = []
-    for example in data:
+    for raw_example in data:
+        example = subtract_data(raw_example) # new magic!
         example_data = []
         buttons = sorted(example.keys())
         for button in buttons:
