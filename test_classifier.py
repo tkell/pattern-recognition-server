@@ -38,6 +38,7 @@ large_classifier, large_max_length = create_classifier_from_data([(big_piano_dat
 test_data = load_data_from_file('test_data')
 test_data = translate_data_to_scikit(test_data)
 
+# Pad, segment, and classify the test data
 padded_test_data = []
 for example_data in test_data:
     if len(example_data) <= small_max_length:
