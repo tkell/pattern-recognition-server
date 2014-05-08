@@ -36,7 +36,7 @@ def subtract_data(button_data):
             if j == i:
                 continue
 
-            # Other subtraction stuff could go here
+            # Other subtraction stuff could go here, in the future.
             x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
             y_distance = button_data[i]['location']['y'] - button_data[j]['location']['y']
             subtracted_data[i][j] = {'location':  {'x': x_distance, 'y': y_distance}}
@@ -60,7 +60,7 @@ def subtract_data(button_data):
 
 # Translate giant dict / json to scikit-style giant list
 # The use of sorted() here scares me a little.
-# If I am consistant with it, it should not be a problem, 
+# If I am consistent with it, it should not be a problem,
 # but if I am not, I am going to ruin a ton of shit.
 def translate_data_to_scikit(data):
     all_data = []

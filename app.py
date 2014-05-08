@@ -4,8 +4,6 @@
 '''
 Webserver.  This needs to take data from the mobile app, 
 classify it, and return a list of classifications.
-It will be the mobile app's responsibility to do 
-mapping based on the classifications (piano, grid, offset grid, ec)
 '''
 
 from flask import Flask
@@ -56,9 +54,7 @@ def classification_from_data(example_data):
 
         return res
 
-
-## We will eventually remove this GET thang.
-@app.route("/analysis", methods=['GET', 'POST', 'OPTIONS'])
+@app.route("/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
     raw_data = translate_data_to_scikit([request.json])
