@@ -28,8 +28,8 @@ piano_roll_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/
 zither_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/zither.json').json()
 small_classifier, small_max_length = create_classifier_from_data([(piano_data, 'piano'), 
                                                                 (xylophone_data, 'xylophone'),
-                                                                (small_grid_data, 'small grid'),
-                                                                (piano_roll_data, 'piano roll'),
+                                                                (small_grid_data, 'small_grid'),
+                                                                (piano_roll_data, 'piano_roll'),
                                                                 (zither_data, 'zither'),
                                                                 ])
 # Create large classifier
