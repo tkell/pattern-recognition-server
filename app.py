@@ -61,12 +61,30 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-    raw_data = translate_data_to_scikit([request.json])
+
+    # Deal with input data.
+    client_data = request.json
+    if 'locations' in client_data:
+        data_to_map = client_data['locations']
+    else:
+        data_to_map = client_data
+
+    # Look for a mapping flag
+    mapping_flag = False
+    if 'mapping-flag' in client_data and client_data['mapping-flag'] == 'true':
+        mapping_flag = True
+
+    raw_data = translate_data_to_scikit([data_to_map])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
 
     # debugz
+    print "We have a mapping flag: %s" % mapping_flag
     print res[0]
+
+    if mapping_flag:
+        # build up the mapping data here
+        pass
 
     return_data = {'result': res[0]}
 
