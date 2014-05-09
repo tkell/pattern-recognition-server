@@ -47,6 +47,18 @@ def objects_from_image():
 def data_from_objects():
     pass
 
+def mapping_from_classification(classification, button_data):
+    mapped_buttons = []
+    if classification == 'piano':
+        button_data = sorted(button_data, key=lambda b: b['location']['x'])
+        base_note_number = 60
+        for index, button in enumerate(button_data):
+            button['noteNumber'] = base_note_number + index
+            mapped_buttons.append(button)
+
+    return mapped_buttons
+
+
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     if len(example_data) < small_max_length:
@@ -78,6 +90,7 @@ def analyze_data():
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
 
+
     # debugz
     print "We have a mapping flag: %s" % mapping_flag
     print res[0]
@@ -85,7 +98,7 @@ def analyze_data():
     if mapping_flag:
         # build up the mapping data here
         # For now we'll just return the same button data...
-        mapping_data = client_data['locations']
+        mapping_data = mapping_from_classification(res[0], client_data['locations'])
         return_data = {'result': res[0], 'mapping': mapping_data}
     else:
         return_data = {'result': res[0]}
