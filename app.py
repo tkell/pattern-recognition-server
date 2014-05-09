@@ -61,7 +61,6 @@ def classification_from_data(example_data):
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
-
     # Deal with input data.
     client_data = request.json
     if 'locations' in client_data:
@@ -74,6 +73,7 @@ def analyze_data():
     if 'mapping-flag' in client_data and client_data['mapping-flag'] == True:
         mapping_flag = True
 
+    # Transform the data, get a classification
     raw_data = translate_data_to_scikit([data_to_map])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
@@ -84,9 +84,11 @@ def analyze_data():
 
     if mapping_flag:
         # build up the mapping data here
-        pass
-
-    return_data = {'result': res[0]}
+        # For now we'll just return the same button data...
+        mapping_data = client_data['locations']
+        return_data = {'result': res[0], 'mapping': mapping_data}
+    else:
+        return_data = {'result': res[0]}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
