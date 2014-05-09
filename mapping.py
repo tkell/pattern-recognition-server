@@ -6,24 +6,23 @@ Mapping functions for each prototype, hidden behind map_as.
 '''
 
 # List of scales
-chromatic_scale = [1];
+chromatic = [1];
+pentatonic = [2, 2, 3, 2, 3];
+diatonic_major = [2, 2, 1, 2, 2, 2, 1];
+diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
+diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
+trumpetScale = [1, 1, 1];
 
+# Help to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number):
-    print "at the top of map ordered"
     mapped_buttons = []
-
     first_button = button_data[0]
     first_button['noteNumber'] = note_number
     mapped_buttons.append(first_button)
-
     for index, button in enumerate(button_data[1:]):
-        print "1"
         scale_index = index % len(the_scale);
-        print "2"
         note_number = note_number + the_scale[scale_index];
-        print "3"
         button['noteNumber'] = note_number
-        print "4"
         mapped_buttons.append(button)
     return mapped_buttons
 
@@ -31,10 +30,17 @@ def map_ordered(button_data, the_scale, note_number):
 def map_as(classification, button_data):
     if classification == 'piano':
         return map_as_piano(button_data)
+    if classification == 'xylophone':
+        return map_as_xylo(button_data)
 
 # Piano:  a chromatic scale, from left to right
 def map_as_piano(button_data):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    mapped_buttons = map_ordered(button_data, chromatic_scale, 60)
+    mapped_buttons = map_ordered(button_data, chromatic, 60)
+    return mapped_buttons
 
+# Xylophone:  a diatonic major scale, from left to right
+def map_as_xylo(button_data):
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
