@@ -70,9 +70,9 @@ def analyze_data():
     # Deal with input data.
     client_data = request.json
     if 'locations' in client_data:
-        data_to_map = client_data['locations']
+        button_data = client_data['locations']
     else:
-        data_to_map = client_data
+        button_data = client_data
 
     # Look for a mapping flag
     mapping_flag = False
@@ -80,23 +80,17 @@ def analyze_data():
         mapping_flag = True
 
     # Transform the data, get a classification
-    raw_data = translate_data_to_scikit([data_to_map])
+    raw_data = translate_data_to_scikit([button_data])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
+    classification = res[0]
 
-
-    # debugz
-    print "We have a mapping flag: %s" % mapping_flag
-    print res[0]
-
+    # Create mapping, or return the classification
     if mapping_flag:
-        # build up the mapping data here
-        # For now we'll just return the same button data...
-        mapping_data = mapping_from_classification(res[0], client_data['locations'])
-        print "about to return"
-        return_data = {'result': res[0], 'mapping': mapping_data}
+        mapping_data = mapping_from_classification(classification, button_data)
+        return_data = {'result': classification, 'mapping': mapping_data}
     else:
-        return_data = {'result': res[0]}
+        return_data = {'result': classification}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
@@ -117,9 +111,9 @@ def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
     raw_data = translate_data_to_scikit(piano_data)
     raw_example = raw_data[0]
-
     res = classification_from_data(raw_example)
-    return "Hello, we have just done a test classification:  %s" % res[0]
+    classification = res[0]
+    return "Hello, we have just done a test classification:  %s" % classification
 
 
 # Test to make sure that the server is up

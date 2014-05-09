@@ -84,7 +84,7 @@ def map_as_small_grid(button_data):
     return mapped_buttons
 
 
-# Large grid:  yet more conditionals!
+# Large grid:  needs work!
 def map_as_large_grid(button_data):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
