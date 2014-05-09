@@ -33,9 +33,9 @@ def map_as(classification, button_data):
     if classification == 'xylophone':
         return map_as_xylo(button_data)
     if classification == 'piano_roll':
-        return map_as_piano(button_data)
+        return map_as_piano_roll(button_data)
     if classification == 'zither':
-        return map_as_xylo(button_data)
+        return map_as_zither(button_data)
 
 # Piano:  a chromatic scale, from left to right
 def map_as_piano(button_data):
@@ -56,7 +56,7 @@ def map_as_piano_roll(button_data):
     return mapped_buttons
 
 # Zither:  a diatonic major scale, from bottom to top
-def map_as_piano_roll(button_data):
+def map_as_zither(button_data):
     button_data = sorted(button_data, key=lambda b: b['location']['y'])
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
