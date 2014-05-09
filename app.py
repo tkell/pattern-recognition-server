@@ -18,6 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from classify import pad_data
 from cross_domain import crossdomain
+from mapping import map_as
 
 
 # Create small classifier
@@ -48,14 +49,7 @@ def data_from_objects():
     pass
 
 def mapping_from_classification(classification, button_data):
-    mapped_buttons = []
-    if classification == 'piano':
-        button_data = sorted(button_data, key=lambda b: b['location']['x'])
-        base_note_number = 60
-        for index, button in enumerate(button_data):
-            button['noteNumber'] = base_note_number + index
-            mapped_buttons.append(button)
-
+    mapped_buttons = map_as(classification, button_data)
     return mapped_buttons
 
 
