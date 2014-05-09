@@ -7,7 +7,7 @@ Mapping functions for each prototype, hidden behind map_as.
 
 # List of scales
 chromatic = [1];
-pentatonic = [2, 2, 3, 2, 3];
+pentatonic_major = [2, 2, 3, 2, 3];
 diatonic_major = [2, 2, 1, 2, 2, 2, 1];
 diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
 diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
