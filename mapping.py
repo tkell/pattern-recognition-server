@@ -11,7 +11,7 @@ pentatonic = [2, 2, 3, 2, 3];
 diatonic_major = [2, 2, 1, 2, 2, 2, 1];
 diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
 diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
-trumpetScale = [1, 1, 1];
+trumpet = [1, 1, 1];
 
 # Help to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number):
@@ -28,7 +28,7 @@ def map_ordered(button_data, the_scale, note_number):
 
 # Master mapping function
 def map_as(classification, button_data):
-    if classification == 'piano':
+    if classification == 'piano' or classification == 'big_piano':
         return map_as_piano(button_data)
     if classification == 'xylophone':
         return map_as_xylo(button_data)
@@ -36,6 +36,11 @@ def map_as(classification, button_data):
         return map_as_piano_roll(button_data)
     if classification == 'zither':
         return map_as_zither(button_data)
+    if classification == 'small_grid':
+        return map_as_small_grid(button_data)
+    if classification == 'large_grid':
+        return map_as_large_grid(button_data)
+
 
 # Piano:  a chromatic scale, from left to right
 def map_as_piano(button_data):
@@ -60,3 +65,19 @@ def map_as_zither(button_data):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
+
+# Small grid:  more conditional!
+def map_as_small_grid(button_data):
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+
+    if len(button_data) == 9 or len(button_data) == 10:
+        the_scale = diatonic_both
+    elif len(button_data) == 7 or len(button_data) == 8:
+        the_scale = diatonic_major
+    elif len(button_data) == 5 or len(button_data) == 6:
+        the_scale = pentatonic_major
+    elif len(button_data) == 3 or len(button_data) == 4:
+        the_scale = trumpet
+
+    mapped_buttons = map_ordered(button_data, the_scale, 60)
