@@ -71,7 +71,7 @@ def map_as_small_grid(button_data):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
 
-    print "sorted"
+    print "sorted", len(button_data)
     if len(button_data) == 9 or len(button_data) == 10:
         the_scale = diatonic_both
     elif len(button_data) == 7 or len(button_data) == 8:
