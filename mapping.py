@@ -18,7 +18,7 @@ def map_ordered(button_data, the_scale, note_number):
 
     for index, button in enumerate(button_data[1:]):
         print "1"
-        scale_index = index % the_scale.length;
+        scale_index = index % len(the_scale);
         print "2"
         note_number = note_number + the_scale[scale_index];
         print "3"
