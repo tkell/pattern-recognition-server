@@ -9,8 +9,11 @@ Mapping functions for each prototype, hidden behind map_as.
 chromatic_scale = [1];
 
 def map_ordered(button_data, the_scale, note_number):
+    print "at the top of map ordered"
     mapped_buttons = []
-    for index, button in enumerate(button_data):
+    button_data[0]['noteNumber'] = note_number
+
+    for index, button in enumerate(button_data[1:]):
         scale_index = index % the_scale.length;
         note_number = note_number + the_scale[scale_index];
         button['noteNumber'] = note_number

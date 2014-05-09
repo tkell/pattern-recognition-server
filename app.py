@@ -93,6 +93,7 @@ def analyze_data():
         # build up the mapping data here
         # For now we'll just return the same button data...
         mapping_data = mapping_from_classification(res[0], client_data['locations'])
+        print "about to return"
         return_data = {'result': res[0], 'mapping': mapping_data}
     else:
         return_data = {'result': res[0]}
