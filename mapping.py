@@ -51,12 +51,12 @@ def map_as_xylo(button_data):
 
 # Piano roll:  a chromatic scale, from bottom to top
 def map_as_piano_roll(button_data):
-    button_data = sorted(button_data, key=lambda b: b['location']['y'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     mapped_buttons = map_ordered(button_data, chromatic, 60)
     return mapped_buttons
 
 # Zither:  a diatonic major scale, from bottom to top
 def map_as_zither(button_data):
-    button_data = sorted(button_data, key=lambda b: b['location']['y'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
