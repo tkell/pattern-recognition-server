@@ -68,8 +68,9 @@ def map_as_zither(button_data):
 
 # Small grid:  more conditional!
 def map_as_small_grid(button_data):
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
 
     print "sorted", len(button_data)
     if len(button_data) == 9 or len(button_data) == 10:
