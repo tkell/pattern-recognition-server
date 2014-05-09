@@ -82,3 +82,4 @@ def map_as_small_grid(button_data):
         the_scale = trumpet
 
     mapped_buttons = map_ordered(button_data, the_scale, 60)
+    return mapped_buttons
