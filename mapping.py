@@ -11,12 +11,19 @@ chromatic_scale = [1];
 def map_ordered(button_data, the_scale, note_number):
     print "at the top of map ordered"
     mapped_buttons = []
-    button_data[0]['noteNumber'] = note_number
+
+    first_button = button_data[0]
+    first_button['noteNumber'] = note_number
+    mapped_buttons.append(first_button)
 
     for index, button in enumerate(button_data[1:]):
+        print "1"
         scale_index = index % the_scale.length;
+        print "2"
         note_number = note_number + the_scale[scale_index];
+        print "3"
         button['noteNumber'] = note_number
+        print "4"
         mapped_buttons.append(button)
     return mapped_buttons
 
