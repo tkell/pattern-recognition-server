@@ -66,13 +66,11 @@ def map_as_zither(button_data):
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
 
-# Small grid:  more conditional!
+# Small grid:  conditionals, then bottom-left to top-roight
 def map_as_small_grid(button_data):
+    # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-
-
-    print "sorted", len(button_data)
     if len(button_data) == 9 or len(button_data) == 10:
         the_scale = diatonic_both
     elif len(button_data) == 7 or len(button_data) == 8:
@@ -83,4 +81,42 @@ def map_as_small_grid(button_data):
         the_scale = trumpet
 
     mapped_buttons = map_ordered(button_data, the_scale, 60)
+    return mapped_buttons
+
+
+# Large grid:  yet more conditionals!
+def map_as_large_grid(button_data):
+    # rows first, then columns
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
+    # Get the number of rows and columns
+    rows = []
+    cols = [] 
+    for button in button_data:
+        if button['location']['y'] not in rows:
+            rows.append(button['location']['y'])
+        if button['location']['x'] not in cols:
+            cols.append(button['location']['x'])
+
+    print len(rows), len(cols)
+    column_interval = 5  # will need to update this
+
+    if len(cols) == 9 or len(cols) == 10:
+        the_scale = diatonic_both
+    elif len(cols) == 7 or len(cols) == 8:
+        the_scale = diatonic_major
+    elif len(cols) == 5 or len(cols) == 6:
+        the_scale = pentatonic_major
+    else:
+        the_scale = chromatic
+
+    mapped_buttons = []
+    base_note_number = 60
+    for i in range(len(rows)):
+        starting_index = i * len(cols)
+        ending_index = (i + 1) * len(cols)
+        note_number = base_note_number + column_interval * i
+        mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
+        mapped_buttons.extend(mapped_row)
     return mapped_buttons
