@@ -71,7 +71,7 @@ def analyze_data():
 
     # Look for a mapping flag
     mapping_flag = False
-    if 'mapping-flag' in client_data and client_data['mapping-flag'] == 'true':
+    if 'mapping-flag' in client_data and client_data['mapping-flag'] == True:
         mapping_flag = True
 
     raw_data = translate_data_to_scikit([data_to_map])
