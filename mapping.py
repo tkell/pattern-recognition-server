@@ -13,16 +13,20 @@ diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
 diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
 trumpet = [1, 1, 1];
 
+
+def midi_to_freq(midi_number):
+    return 440 * (2 ** ((midi_number - 69) / 12.0))
+
 # Help to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number):
     mapped_buttons = []
     first_button = button_data[0]
-    first_button['noteNumber'] = note_number
+    first_button['noteFreq'] = midi_to_freq(note_number)
     mapped_buttons.append(first_button)
     for index, button in enumerate(button_data[1:]):
         scale_index = index % len(the_scale);
         note_number = note_number + the_scale[scale_index];
-        button['noteNumber'] = note_number
+        button['noteFreq'] = midi_to_freq(note_number)
         mapped_buttons.append(button)
     return mapped_buttons
 
