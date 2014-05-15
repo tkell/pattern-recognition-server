@@ -69,6 +69,17 @@ def classification_from_data(example_data):
 def analyze_data():
     # Transform the data, get a classification
     button_data = request.json
+
+    if 'adventure' in button_data:
+        adventure = button_data['adventure']
+    else:
+        adventure = 0
+
+    if 'buttons' in button_data:
+        button_data = button_data['buttons']
+    else:
+        button_data = button_data
+
     raw_data = translate_data_to_scikit([button_data])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
