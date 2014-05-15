@@ -93,7 +93,7 @@ def map_as_xylo(button_data, adventure):
                 the_scale = diatonic_minor
             else:
                 the_scale = diatonic_major
-        elif button_length == 9 or button_length <= 10:
+        elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
