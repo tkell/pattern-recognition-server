@@ -51,6 +51,17 @@ def map_ordered(button_data, the_scale, note_number):
         mapped_buttons.append(button)
     return mapped_buttons
 
+def map_equal_tempered(button_data, note_number):
+    mapped_buttons = []
+    start_button = button_data[0]['location']
+    base_freq = midi_to_freq(note_number)
+    for index, button in enumerate(button_data):
+        freq = base_freq * (2 ** (index / len(button_data)))
+        button['noteFreq'] = freq
+        mapped_buttons.append(button)
+
+    return mapped_buttons
+
 def map_by_ratio(button_data, note_number):
     mapped_buttons = []
     start_button = button_data[0]['location']
@@ -135,11 +146,10 @@ def map_as_xylo(button_data, adventure):
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 3:
-        pass
+        map_equal_tempered(button_data, 60)
 
     elif adventure == 4:
         mapped_buttons = map_by_ratio(button_data, 60)
-    
 
     return mapped_buttons
 
@@ -188,7 +198,6 @@ def map_as_large_grid(button_data, adventure):
         if button['location']['x'] not in cols:
             cols.append(button['location']['x'])
 
-    print len(rows), len(cols)
     column_interval = 5  # will need to update this
 
     if len(cols) == 9 or len(cols) == 10:
