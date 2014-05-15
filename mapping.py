@@ -364,8 +364,15 @@ def map_as_large_grid(button_data, adventure):
     elif adventure == 4:
         return map_by_ratio(button_data, 60)
 
+    # Lower notes for bigger grids
+    if len(button_data) < 24:
+        base_note_number = 60:
+    elif len(button_data) < 48:
+        base_note_number = 48:
+    else:
+        base_note_number = 36
+
     mapped_buttons = []
-    base_note_number = 60
     for i in range(num_rows):
         starting_index = i * num_cols
         ending_index = (i + 1) * num_cols
