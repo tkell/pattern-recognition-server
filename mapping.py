@@ -9,12 +9,28 @@ import random
 
 # List of scales
 chromatic = [1];
-pentatonic_major = [2, 2, 3, 2, 3];
-diatonic_major = [2, 2, 1, 2, 2, 2, 1];
-diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
-diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1, 1]; # has flat 3 and flat 7
-diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1]; # has flat 3, flat 6, and  flat 7
-trumpet = [1, 1, 1];
+
+# Pentatonics
+pentatonic_major = [2, 2, 3, 2, 3]
+
+# Hexatonics
+whole_tone = [2]
+augmented = [3, 1]
+prometheus = [2, 2, 2, 3, 1, 2]
+blues = [3, 2, 1, 1, 3, 2]
+
+# Octatonics
+octatonic_one = [2, 1]
+octatonic_two = [1, 2]
+
+# Diatonics
+diatonic_major = [2, 2, 1, 2, 2, 2, 1]
+diatonic_minor = [2, 1, 2, 2, 1, 2, 2]
+diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1, 1] # has flat 3 and flat 7
+diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1] # has flat 3, flat 6, and  flat 7
+
+# Odd
+trumpet = [1, 1, 1]
 
 
 def midi_to_freq(midi_number):
@@ -86,7 +102,7 @@ def map_as_xylo(button_data, adventure):
     button_length = len(button_data)
 
     if adventure == 0:
-        the_scale = diatonic_major
+        mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     elif adventure == 1:
         if button_length <= 8:
             if random.random() > 0.5:
@@ -99,8 +115,39 @@ def map_as_xylo(button_data, adventure):
             the_scale = diatonic_extra
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 2:
+        if button_length == 7: #hexatonics
+            res = random.random()
+            if res < 0.25:
+                the_scale = whole_tone
+            elif res < 0.5:
+                the_scale = augmented
+            elif res < 0.75:
+                the_scale = prometheus
+            else:
+                the_scale = blues
+        if button_length == 8 or button_length == 9: #octatonics
+            if random.random() > 0.5:
+                the_scale = octatonic_one
+            else:
+                the_scale = octatonic_two
+        elif button_length == 10:
+            the_scale = diatonic_both
+
+        elif button_length == 11:
+            the_scale = diatonic_extra
+        elif button_length == 12 or button_length == 13:
+            the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 3:
+        pass
+
+    elif adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
     
-    mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     return mapped_buttons
 
