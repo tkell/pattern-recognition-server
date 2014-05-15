@@ -275,7 +275,7 @@ def map_as_small_grid(button_data, adventure):
     return mapped_buttons
 
 
-# Large grid:  needs work!
+# Large grid:  needs work and cunning to determine the direction
 def map_as_large_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
@@ -289,24 +289,93 @@ def map_as_large_grid(button_data, adventure):
             rows.append(button['location']['y'])
         if button['location']['x'] not in cols:
             cols.append(button['location']['x'])
+    num_rows = len(rows)
+    num_cols = len(cols)
 
-    column_interval = 5  # will need to update this
+    # Set a varying column interval.  May well need tweaking
+    if num_rows == 2:
+        column_interval = 7
+    elif num_rows == 3:
+        column_interval = 5
+    elif num_rows == 4:
+        column_interval = 4
+    elif num_rows == 5:
+        column_interval = 3
+    elif num_rows >= 6:
+        column_interval = 2
 
-    if len(cols) == 9 or len(cols) == 10:
-        the_scale = diatonic_both
-    elif len(cols) == 7 or len(cols) == 8:
-        the_scale = diatonic_major
-    elif len(cols) == 5 or len(cols) == 6:
-        the_scale = pentatonic_major
-    else:
-        the_scale = chromatic
+    # Set the scale
+    if adventure == 0:
+        if num_cols == 3 or num_cols == 4:
+            the_scale = trumpet
+        elif num_cols == 5 or num_cols == 6:
+            the_scale = pentatonic_major
+        elif num_cols == 7 or num_cols == 8:
+            the_scale = diatonic_major
+        elif num_cols == 9 or num_cols == 10:
+            the_scale = diatonic_both
+        elif num_cols == 11:
+            the_scale = diatonic_extra
+        elif num_cols == 12 or num_cols == 13:
+            the_scale = chromatic
+
+    if adventure == 1:
+        if num_cols == 3 or num_cols == 4:
+            the_scale = trumpet
+        elif num_cols == 5 or num_cols == 6:
+            if random.random() > 0.5:
+                the_scale = pentatonic_minor
+            else:
+                the_scale = pentatonic_major
+        elif num_cols == 7 or num_cols == 8:
+            if random.random() > 0.5:
+                the_scale = diatonic_minor
+            else:
+                the_scale = diatonic_major
+        elif num_cols == 9 or num_cols == 10:
+            the_scale = diatonic_both
+        elif num_cols == 11:
+            the_scale = diatonic_extra
+        elif num_cols == 12 or num_cols == 13:
+            the_scale = chromatic
+
+    if adventure == 2:
+        if num_cols == 3 or num_cols == 4:
+            the_scale = trumpet
+        elif num_cols == 5:
+            the_scale = pentatonic_minor
+        elif num_cols == 6 or num_cols == 7:
+            the_scale = hexatonics[random.choice(hexatonics.keys())]
+        elif num_cols == 8 or num_cols == 9:
+            if random.random() > 0.5:
+                the_scale = octatonic_one
+            else:
+                the_scale = octatonic_two
+        elif num_cols == 10:
+             the_scale = diatonic_both
+        elif num_cols == 11:
+            the_scale = diatonic_extra
+        elif num_cols == 12 or num_cols == 13:
+            the_scale = chromatic
+
+    elif adventure == 3:
+        mapped_buttons = map_equal_tempered(button_data, 60)
+
+    elif adventure == 4:
+        return map_by_ratio(button_data, 60)
 
     mapped_buttons = []
     base_note_number = 60
-    for i in range(len(rows)):
-        starting_index = i * len(cols)
-        ending_index = (i + 1) * len(cols)
+    for i in range(num_rows):
+        starting_index = i * num_cols
+        ending_index = (i + 1) * num_cols
         note_number = base_note_number + column_interval * i
-        mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
-        mapped_buttons.extend(mapped_row)
+
+        if adventure < 3:
+            mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
+            mapped_buttons.extend(mapped_row)
+        if adventure == 3:
+            mapped_row = map_equal_tempered(button_data[starting_index:ending_index], note_number)
+            mapped_buttons.extend(mapped_row)
+
     return mapped_buttons
