@@ -12,6 +12,7 @@ chromatic = [1];
 
 # Pentatonics
 pentatonic_major = [2, 2, 3, 2, 3]
+pentatonic_minor = [3, 2, 3, 2, 2]
 
 # Hexatonics
 hexatonics = {'whole_tone': [2],
@@ -210,19 +211,36 @@ def map_as_zither(button_data, adventure):
 
     return mapped_buttons
 
-# Small grid:  conditionals, then bottom-left to top-roight
+# Small grid:  conditionals, then bottom-left to top-right
 def map_as_small_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-    if len(button_data) == 9 or len(button_data) == 10:
-        the_scale = diatonic_both
-    elif len(button_data) == 7 or len(button_data) == 8:
-        the_scale = diatonic_major
-    elif len(button_data) == 5 or len(button_data) == 6:
-        the_scale = pentatonic_major
-    elif len(button_data) == 3 or len(button_data) == 4:
-        the_scale = trumpet
+
+    if adventure == 0:
+        if len(button_data) == 3 or len(button_data) == 4:
+            the_scale = trumpet
+        elif len(button_data) == 5 or len(button_data) == 6:
+            the_scale = pentatonic_major
+        elif len(button_data) == 7 or len(button_data) == 8:
+            the_scale = diatonic_major
+        elif len(button_data) == 9 or len(button_data) == 10:
+            the_scale = diatonic_both
+    elif adventure == 1:
+        if len(button_data) == 3 or len(button_data) == 4:
+            the_scale = trumpet
+        elif len(button_data) == 5 or len(button_data) == 6:
+            if random.random() > 0.5:
+                the_scale = pentatonic_minor
+            else:
+                the_scale = pentatonic_major
+        elif len(button_data) == 7 or len(button_data) == 8:
+            if random.random() > 0.5:
+                the_scale = diatonic_minor
+            else:
+                the_scale = diatonic_major
+        elif len(button_data) == 9 or len(button_data) == 10:
+            the_scale = diatonic_both
 
     mapped_buttons = map_ordered(button_data, the_scale, 60)
     return mapped_buttons
