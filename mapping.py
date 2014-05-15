@@ -5,12 +5,15 @@
 Mapping functions for each prototype, hidden behind map_as.
 '''
 
+import random
+
 # List of scales
 chromatic = [1];
 pentatonic_major = [2, 2, 3, 2, 3];
 diatonic_major = [2, 2, 1, 2, 2, 2, 1];
 diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
 diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
+diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1]; # has flat 3, flat 6, and  flat 7
 trumpet = [1, 1, 1];
 
 
@@ -77,10 +80,27 @@ def map_as_piano(button_data, adventure):
         mapped_buttons = map_by_ratio(button_data, 60)
     return mapped_buttons
 
-# Xylophone:  a diatonic major scale, from left to right
+# Xylophone
 def map_as_xylo(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+    button_length = len(button_data)
+
+    if adventure == 0:
+        mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+    elif adventure == 1:
+        if button_length <= 8:
+            if random.random() > 0.5:
+                the_scale = diatonic_minor
+            else:
+                the_scale = diatonic_major
+        elif button_length == 9 or button_length <= 10:
+            the_scale = diatonic_both
+        elif button_length == 11:
+            the_scale = diatonic_extra
+        elif button_length == 12 or button_length == 13:
+            the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+
     return mapped_buttons
 
 # Piano roll:  a chromatic scale, from bottom to top

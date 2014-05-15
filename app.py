@@ -52,7 +52,6 @@ def mapping_from_classification(classification, button_data, adventure):
     mapped_buttons = map_as(classification, button_data, adventure)
     return mapped_buttons
 
-
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     if len(example_data) < small_max_length:
@@ -69,7 +68,6 @@ def classification_from_data(example_data):
 def analyze_data():
     # Transform the data, get a classification
     button_data = request.json
-
     if 'adventure' in button_data:
         adventure = button_data['adventure']
     else:
@@ -101,7 +99,6 @@ def analyze_data():
 def analyze_image():
     return "We have, in theory, parsed the image and returned JSON"
 
-
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
@@ -111,7 +108,6 @@ def fake_analysis():
     res = classification_from_data(raw_example)
     classification = res[0]
     return "Hello, we have just done a test classification:  %s" % classification
-
 
 # Test to make sure that the server is up
 @app.route("/hello", methods=['GET'])
