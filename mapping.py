@@ -12,8 +12,8 @@ chromatic = [1];
 pentatonic_major = [2, 2, 3, 2, 3];
 diatonic_major = [2, 2, 1, 2, 2, 2, 1];
 diatonic_minor = [2, 1, 2, 2, 1, 2, 2];
-diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1]; # has flat 3 and flat 7
-diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1]; # has flat 3, flat 6, and  flat 7
+diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1, 1]; # has flat 3 and flat 7
+diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1]; # has flat 3, flat 6, and  flat 7
 trumpet = [1, 1, 1];
 
 
