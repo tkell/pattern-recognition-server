@@ -366,9 +366,9 @@ def map_as_large_grid(button_data, adventure):
 
     # Lower notes for bigger grids
     if len(button_data) < 24:
-        base_note_number = 60:
+        base_note_number = 60
     elif len(button_data) < 48:
-        base_note_number = 48:
+        base_note_number = 48
     else:
         base_note_number = 36
 
