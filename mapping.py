@@ -158,13 +158,56 @@ def map_as_xylo(button_data, adventure):
 # Piano roll:  a chromatic scale, from bottom to top
 def map_as_piano_roll(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-    mapped_buttons = map_ordered(button_data, chromatic, 60)
+    if adventure < 4:
+        mapped_buttons = map_ordered(button_data, chromatic, 60)
+    if adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
     return mapped_buttons
 
-# Zither:  a diatonic major scale, from bottom to top
+# Zither
 def map_as_zither(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-    mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+    button_length = len(button_data)
+
+    if adventure == 0:
+        mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+
+    elif adventure == 1:
+        if button_length <= 8:
+            if random.random() > 0.5:
+                the_scale = diatonic_minor
+            else:
+                the_scale = diatonic_major
+        elif button_length == 9 or button_length == 10:
+            the_scale = diatonic_both
+        elif button_length == 11:
+            the_scale = diatonic_extra
+        elif button_length == 12 or button_length == 13:
+            the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 2:
+        if button_length == 7: #hexatonics
+            the_scale = hexatonics[random.choice(hexatonics.keys())]
+        elif button_length == 8 or button_length == 9: #octatonics
+            if random.random() > 0.5:
+                the_scale = octatonic_one
+            else:
+                the_scale = octatonic_two
+        elif button_length == 10:
+            the_scale = diatonic_both
+        elif button_length == 11:
+            the_scale = diatonic_extra
+        elif button_length == 12 or button_length == 13:
+            the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 3:
+        mapped_buttons = map_equal_tempered(button_data, 60)
+
+    elif adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
+
     return mapped_buttons
 
 # Small grid:  conditionals, then bottom-left to top-roight
