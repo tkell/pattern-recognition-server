@@ -292,70 +292,79 @@ def map_as_large_grid(button_data, adventure):
     num_rows = len(rows)
     num_cols = len(cols)
 
-    # Set a varying column interval.  May well need tweaking
-    if num_rows == 2:
-        column_interval = 7
-    elif num_rows == 3:
-        column_interval = 5
-    elif num_rows == 4:
-        column_interval = 4
-    elif num_rows == 5:
-        column_interval = 3
-    elif num_rows >= 6:
-        column_interval = 2
+
+    # Figure out if we have more columns or rows.
+    # This determines where we put the scales, and where we put the leaps
+    if num_cols >= num_rows:
+        large_dimension = num_cols
+        short_dimension = num_rows
+    else:
+        large_dimension = num_rows
+        short_dimension = num_cols
+
+    if short_dimension == 2:
+        short_dimension_interval = 7
+    elif short_dimension == 3:
+        short_dimension_interval = 5
+    elif short_dimension == 4:
+        short_dimension_interval = 4
+    elif short_dimension == 5:
+        short_dimension_interval = 3
+    elif short_dimension >= 6:
+        short_dimension_interval = 2
 
     # Set the scale
     if adventure == 0:
-        if num_cols == 3 or num_cols == 4:
+        if large_dimension == 3 or large_dimension == 4:
             the_scale = trumpet
-        elif num_cols == 5 or num_cols == 6:
+        elif large_dimension == 5 or large_dimension == 6:
             the_scale = pentatonic_major
-        elif num_cols == 7 or num_cols == 8:
+        elif large_dimension == 7 or large_dimension == 8:
             the_scale = diatonic_major
-        elif num_cols == 9 or num_cols == 10:
+        elif large_dimension == 9 or large_dimension == 10:
             the_scale = diatonic_both
-        elif num_cols == 11:
+        elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif num_cols == 12 or num_cols == 13:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
 
     if adventure == 1:
-        if num_cols == 3 or num_cols == 4:
+        if large_dimension == 3 or large_dimension == 4:
             the_scale = trumpet
-        elif num_cols == 5 or num_cols == 6:
+        elif large_dimension == 5 or large_dimension == 6:
             if random.random() > 0.5:
                 the_scale = pentatonic_minor
             else:
                 the_scale = pentatonic_major
-        elif num_cols == 7 or num_cols == 8:
+        elif large_dimension == 7 or large_dimension == 8:
             if random.random() > 0.5:
                 the_scale = diatonic_minor
             else:
                 the_scale = diatonic_major
-        elif num_cols == 9 or num_cols == 10:
+        elif large_dimension == 9 or large_dimension == 10:
             the_scale = diatonic_both
-        elif num_cols == 11:
+        elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif num_cols == 12 or num_cols == 13:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
 
     if adventure == 2:
-        if num_cols == 3 or num_cols == 4:
+        if large_dimension == 3 or large_dimension == 4:
             the_scale = trumpet
-        elif num_cols == 5:
+        elif large_dimension == 5:
             the_scale = pentatonic_minor
-        elif num_cols == 6 or num_cols == 7:
+        elif large_dimension == 6 or large_dimension == 7:
             the_scale = hexatonics[random.choice(hexatonics.keys())]
-        elif num_cols == 8 or num_cols == 9:
+        elif large_dimension == 8 or large_dimension == 9:
             if random.random() > 0.5:
                 the_scale = octatonic_one
             else:
                 the_scale = octatonic_two
-        elif num_cols == 10:
+        elif large_dimension == 10:
              the_scale = diatonic_both
-        elif num_cols == 11:
+        elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif num_cols == 12 or num_cols == 13:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
 
     elif adventure == 3:
@@ -373,10 +382,10 @@ def map_as_large_grid(button_data, adventure):
         base_note_number = 36
 
     mapped_buttons = []
-    for i in range(num_rows):
-        starting_index = i * num_cols
-        ending_index = (i + 1) * num_cols
-        note_number = base_note_number + column_interval * i
+    for i in range(short_dimension):
+        starting_index = i * large_dimension
+        ending_index = (i + 1) * large_dimension
+        note_number = base_note_number + short_dimension_interval * i
 
         if adventure < 3:
             mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
