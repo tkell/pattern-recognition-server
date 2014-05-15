@@ -51,9 +51,8 @@ def subtract_data(button_data):
         for j, other_button in enumerate(button_data):
             if j == i:
                 continue
-            subtracted_data[i][j]['location']['x'] = subtracted_data[i][j]['location']['x'] / max_distance
-            subtracted_data[i][j]['location']['y'] = subtracted_data[i][j]['location']['y'] / max_distance
-
+            subtracted_data[i][j]['location']['x'] = subtracted_data[i][j]['location']['x'] / float(max_distance)
+            subtracted_data[i][j]['location']['y'] = subtracted_data[i][j]['location']['y'] / float(max_distance)
     return subtracted_data
 
 
