@@ -115,6 +115,7 @@ def map_as_xylo(button_data, adventure):
 
     if adventure == 0:
         mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+
     elif adventure == 1:
         if button_length <= 8:
             if random.random() > 0.5:
@@ -146,7 +147,7 @@ def map_as_xylo(button_data, adventure):
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 3:
-        map_equal_tempered(button_data, 60)
+        mapped_buttons = map_equal_tempered(button_data, 60)
 
     elif adventure == 4:
         mapped_buttons = map_by_ratio(button_data, 60)
