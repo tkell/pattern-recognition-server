@@ -56,7 +56,7 @@ def map_equal_tempered(button_data, note_number):
     start_button = button_data[0]['location']
     base_freq = midi_to_freq(note_number)
     for index, button in enumerate(button_data):
-        freq = base_freq * (2 ** (index / len(button_data)))
+        freq = base_freq * (2 ** (index / float(len(button_data))))
         button['noteFreq'] = freq
         mapped_buttons.append(button)
 
