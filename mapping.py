@@ -14,10 +14,11 @@ chromatic = [1];
 pentatonic_major = [2, 2, 3, 2, 3]
 
 # Hexatonics
-whole_tone = [2]
-augmented = [3, 1]
-prometheus = [2, 2, 2, 3, 1, 2]
-blues = [3, 2, 1, 1, 3, 2]
+hexatonics = {'whole_tone': [2],
+              'augmented': [3, 1],
+              'prometheus' :[2, 2, 2, 3, 1, 2],
+              'blues': [3, 2, 1, 1, 3, 2],
+            }
 
 # Octatonics
 octatonic_one = [2, 1]
@@ -119,15 +120,7 @@ def map_as_xylo(button_data, adventure):
 
     elif adventure == 2:
         if button_length == 7: #hexatonics
-            res = random.random()
-            if res < 0.25:
-                the_scale = whole_tone
-            elif res < 0.5:
-                the_scale = augmented
-            elif res < 0.75:
-                the_scale = prometheus
-            else:
-                the_scale = blues
+            the_scale = hexatonics[random.choice(hexatonics.keys())]
         if button_length == 8 or button_length == 9: #octatonics
             if random.random() > 0.5:
                 the_scale = octatonic_one
