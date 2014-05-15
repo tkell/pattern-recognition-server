@@ -85,6 +85,8 @@ def map_as_xylo(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_length = len(button_data)
 
+    print adventure
+
     if adventure == 0:
         mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     elif adventure == 1:
@@ -101,6 +103,7 @@ def map_as_xylo(button_data, adventure):
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, diatonic_major, 60)
 
+    print mapped_buttons
     return mapped_buttons
 
 # Piano roll:  a chromatic scale, from bottom to top
