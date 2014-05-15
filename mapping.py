@@ -121,14 +121,13 @@ def map_as_xylo(button_data, adventure):
     elif adventure == 2:
         if button_length == 7: #hexatonics
             the_scale = hexatonics[random.choice(hexatonics.keys())]
-        if button_length == 8 or button_length == 9: #octatonics
+        elif button_length == 8 or button_length == 9: #octatonics
             if random.random() > 0.5:
                 the_scale = octatonic_one
             else:
                 the_scale = octatonic_two
         elif button_length == 10:
             the_scale = diatonic_both
-
         elif button_length == 11:
             the_scale = diatonic_extra
         elif button_length == 12 or button_length == 13:
