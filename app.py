@@ -48,8 +48,8 @@ def objects_from_image():
 def data_from_objects():
     pass
 
-def mapping_from_classification(classification, button_data):
-    mapped_buttons = map_as(classification, button_data)
+def mapping_from_classification(classification, button_data, adventure):
+    mapped_buttons = map_as(classification, button_data, adventure)
     return mapped_buttons
 
 
@@ -86,7 +86,7 @@ def analyze_data():
     classification = res[0]
 
     # Create mapping, return mapping and the classification
-    mapping_data = mapping_from_classification(classification, button_data)
+    mapping_data = mapping_from_classification(classification, button_data, adventure)
     return_data = {'result': classification, 'mapping': mapping_data}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.

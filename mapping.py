@@ -27,51 +27,76 @@ def map_ordered(button_data, the_scale, note_number):
         scale_index = index % len(the_scale);
         note_number = note_number + the_scale[scale_index];
         button['noteFreq'] = midi_to_freq(note_number)
+        button['noteMIDI'] = note_number
         mapped_buttons.append(button)
     return mapped_buttons
 
+def map_by_ratio(button_data, note_number):
+    mapped_buttons = []
+    start_button = button_data[0]['location']
+    base_freq = midi_to_freq(note_number)
+
+    max_distance = 0
+    for button in button_data:
+        distance = ((start_button['x'] - button['location']['x']) ** 2 + (start_button['y'] - button['location']['y']) ** 2) ** 0.5
+        if distance > max_distance:
+            max_distance = distance
+
+    for button in button_data:
+        distance = ((start_button['x'] - button['location']['x']) ** 2 + (start_button['y'] - button['location']['y']) ** 2) ** 0.5
+        ratio = distance / float(max_distance) + 1
+        freq = base_freq * ratio
+        button['noteFreq'] = freq
+        mapped_buttons.append(button)
+
+    return mapped_buttons
+
+
 # Master mapping function
-def map_as(classification, button_data):
+def map_as(classification, button_data, adventure):
     if classification == 'piano' or classification == 'big_piano':
-        return map_as_piano(button_data)
+        return map_as_piano(button_data, adventure)
     if classification == 'xylophone':
-        return map_as_xylo(button_data)
+        return map_as_xylo(button_data, adventure)
     if classification == 'piano_roll':
-        return map_as_piano_roll(button_data)
+        return map_as_piano_roll(button_data, adventure)
     if classification == 'zither':
-        return map_as_zither(button_data)
+        return map_as_zither(button_data, adventure)
     if classification == 'small_grid':
-        return map_as_small_grid(button_data)
+        return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':
-        return map_as_large_grid(button_data)
+        return map_as_large_grid(button_data, adventure)
 
 
 # Piano:  a chromatic scale, from left to right
-def map_as_piano(button_data):
+def map_as_piano(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    mapped_buttons = map_ordered(button_data, chromatic, 60)
+    if adventure < 4:
+        mapped_buttons = map_ordered(button_data, chromatic, 60)
+    if adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
     return mapped_buttons
 
 # Xylophone:  a diatonic major scale, from left to right
-def map_as_xylo(button_data):
+def map_as_xylo(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
 
 # Piano roll:  a chromatic scale, from bottom to top
-def map_as_piano_roll(button_data):
+def map_as_piano_roll(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     mapped_buttons = map_ordered(button_data, chromatic, 60)
     return mapped_buttons
 
 # Zither:  a diatonic major scale, from bottom to top
-def map_as_zither(button_data):
+def map_as_zither(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
     return mapped_buttons
 
 # Small grid:  conditionals, then bottom-left to top-roight
-def map_as_small_grid(button_data):
+def map_as_small_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
@@ -89,7 +114,7 @@ def map_as_small_grid(button_data):
 
 
 # Large grid:  needs work!
-def map_as_large_grid(button_data):
+def map_as_large_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
