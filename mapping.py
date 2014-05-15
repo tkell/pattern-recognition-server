@@ -10,7 +10,7 @@ import random
 # List of scales
 chromatic = [1];
 
-# Pentatonics
+# Pentatonics.  I could use some more exciting things here
 pentatonic_major = [2, 2, 3, 2, 3]
 pentatonic_minor = [3, 2, 3, 2, 2]
 
@@ -216,33 +216,62 @@ def map_as_small_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    button_length = len(button_data)
 
     if adventure == 0:
-        if len(button_data) == 3 or len(button_data) == 4:
+        if button_length == 3 or button_length == 4:
             the_scale = trumpet
-        elif len(button_data) == 5 or len(button_data) == 6:
+        elif button_length == 5 or button_length == 6:
             the_scale = pentatonic_major
-        elif len(button_data) == 7 or len(button_data) == 8:
+        elif button_length == 7 or button_length == 8:
             the_scale = diatonic_major
-        elif len(button_data) == 9 or len(button_data) == 10:
+        elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
     elif adventure == 1:
-        if len(button_data) == 3 or len(button_data) == 4:
+        if button_length == 3 or button_length == 4:
             the_scale = trumpet
-        elif len(button_data) == 5 or len(button_data) == 6:
+        elif button_length == 5 or button_length == 6:
             if random.random() > 0.5:
                 the_scale = pentatonic_minor
             else:
                 the_scale = pentatonic_major
-        elif len(button_data) == 7 or len(button_data) == 8:
+        elif button_length == 7 or button_length == 8:
             if random.random() > 0.5:
                 the_scale = diatonic_minor
             else:
                 the_scale = diatonic_major
-        elif len(button_data) == 9 or len(button_data) == 10:
+        elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
 
-    mapped_buttons = map_ordered(button_data, the_scale, 60)
+    elif adventure == 2:
+        if button_length == 3 or button_length == 4:
+            the_scale = trumpet
+        elif button_length == 5:  
+            the_scale = pentatonic_minor
+        elif button_length == 6 or button_length == 7:
+            the_scale = hexatonics[random.choice(hexatonics.keys())]
+        elif button_length == 8 or button_length == 9:
+            if random.random() > 0.5:
+                the_scale = octatonic_one
+            else:
+                the_scale = octatonic_two
+        elif button_length == 10:
+             the_scale = diatonic_both
+        elif button_length == 11:
+            the_scale = diatonic_extra
+        elif button_length == 12 or button_length == 13:
+            the_scale = chromatic
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 3:
+        mapped_buttons = map_equal_tempered(button_data, 60)
+
+    elif adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
+
     return mapped_buttons
 
 
