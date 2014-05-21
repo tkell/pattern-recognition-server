@@ -73,8 +73,8 @@ def analyze_data():
     else:
         adventure = 0
 
-    if 'buttons' in button_data:
-        button_data = button_data['buttons']
+    if 'buttonData' in button_data:
+        button_data = button_data['buttonData']
     else:
         button_data = button_data
 
