@@ -97,9 +97,8 @@ def load_data(category_name, collected_data, collected_labels):
 
 def pad_data(example_data, target_length):
     padding_length = target_length - len(example_data)
-    while len(example_data) < target_length:
-        example_data.extend(example_data)
-    return example_data[0:target_length]
+    example_data.extend([0] * padding_length)
+    return example_data
 
 
 def create_classifier_from_data(layout_list):
