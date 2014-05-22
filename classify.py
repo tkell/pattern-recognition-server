@@ -28,6 +28,12 @@ def load_data_from_file(classification):
 # This is not very pythonic, but I am trying to match the old JS version, 
 # in order to not break other code
 def subtract_data(button_data):
+
+    ## Let's try adding a sort here
+    # This should really stay here
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
     max_distance = 0
     subtracted_data = {}
     for i, button in enumerate(button_data):

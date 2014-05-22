@@ -44,6 +44,6 @@ for example_data in test_data:
     if len(example_data) <= small_max_length:
         example_data = pad_data(example_data, small_max_length)
         print small_classifier.predict([example_data])
-    elif len(example_data) > 1000:
+    elif len(example_data) > small_max_length:
         example_data = pad_data(example_data, large_max_length)
         print large_classifier.predict([example_data])
