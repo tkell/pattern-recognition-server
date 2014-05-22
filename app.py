@@ -54,7 +54,7 @@ def mapping_from_classification(classification, button_data, adventure):
 
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
-    if len(example_data) < small_max_length:
+    if len(example_data) <= small_max_length:
         example_data = pad_data(example_data, small_max_length)
         res = small_classifier.predict([example_data])
     else:
