@@ -104,6 +104,8 @@ def fake_analysis():
     # herp derp hard code
     max_example_button_length = 12
     raw_data = translate_data_to_scikit(piano_data, max_example_button_length)
+    print "we passed translating the data"
+    print len(raw_data[0])
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
     classification = res[0]
