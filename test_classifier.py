@@ -18,20 +18,12 @@ xylophone_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/x
 small_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/small_grid.json').json()
 piano_roll_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano_roll.json').json()
 zither_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/zither.json').json()
-# small_classifier, small_max_length = create_classifier_from_data([(piano_data, 'piano'), 
-#                                                                 (xylophone_data, 'xylophone'),
-#                                                                 (small_grid_data, 'small grid'),
-#                                                                 (piano_roll_data, 'piano roll'),
-#                                                                 (zither_data, 'zither'),
-#                                                                 ])
-
-# Expandg to piano roll, zither..
 small_classifier, small_max_length = create_classifier_from_data([(piano_data, 'piano'), 
                                                                 (xylophone_data, 'xylophone'),
+                                                                (small_grid_data, 'small grid'),
                                                                 (piano_roll_data, 'piano roll'),
-                                                                (zither_data, 'zither'),                                                                
+                                                                (zither_data, 'zither'),
                                                                 ])
-
 
 # Create large classifier
 print "Downloading large classifier data.."
