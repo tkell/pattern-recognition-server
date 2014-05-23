@@ -37,37 +37,57 @@ def find_max_distance(button_data):
 
     return max(max_x, max_y), max_x, max_y
 
+def get_slope(button_data):
+    y_dist = button_data[0]['location']['y'] - button_data[-1]['location']['y']
+    x_dist = button_data[0]['location']['x'] - button_data[-1]['location']['x']
+    
+    if x_dist == 0:
+        x_dist = 1
+    return y_dist / float(x_dist)
+
+
+def get_rows_and_cols(button_data):
+    rows = []
+    cols = [] 
+    for button in button_data:
+        if button['location']['y'] not in rows:
+            rows.append(button['location']['y'])
+        if button['location']['x'] not in cols:
+            cols.append(button['location']['x'])
+    num_rows = len(rows)
+    num_cols = len(cols)
+
+    return num_rows, num_cols
+
 # This is me flailing around trying to find a dimensionally consistant feature set
 # Not going so well.
 def generate_features(button_data):
     # Sort
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-
-    # number of buttons, mean x / y, x_max, y_max, num_rows, num_cols, 
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True) 
     num_buttons = len(button_data)
+    
+    num_rows, num_cols = get_rows_and_cols(button_data)
+    max_dist, max_x, max_y = find_max_distance(button_data)
 
-    # Mean distances, from linear button steps
-    x_dists = []
-    y_dists = []
-    for i, button in enumerate(button_data[0:-1]):
-        x_dists.append(button_data[i]['location']['x'] - button_data[i + 1]['location']['x'])
-        y_dists.append(button_data[i]['location']['y'] - button_data[i + 1]['location']['y'])
-    x_mean = sum(x_dists) / float(len(x_dists))
-    y_mean = sum(y_dists) / float(len(y_dists))
+    slope = get_slope(button_data)
+    
+    def line_eq(x):
+        return slope * x + button_data[0]['location']['y']
 
-    max_distance, max_x, max_y = find_max_distance(button_data)
+    total_varience = 0
+    for button in button_data:
+        rel_x = button['location']['x'] - button_data[0]['location']['x']
+        varience = abs(line_eq(rel_x) - button['location']['y'])
+        total_varience = total_varience + varience / float(max_dist)
 
-    x_mean = x_mean / float(max_distance)
-    y_mean = y_mean / float(max_distance)
+    mean_varience = total_varience / float(len(button_data))
 
-    return [num_buttons, x_mean, y_mean, max_x, max_y]
+    return [num_buttons, num_rows, num_cols, slope, mean_varience]
 
 
-# This one returns the normalized distances with no repetition
-# So it is not 1 to all, 2 to all, but 1 to all, 2 to all but 1, etc
-# We also pad with zeros in the right places!
-def subtract_data_better(button_data, max_button_length):
+# This one returns the normalized distances with better padding
+def generate_distance_features(button_data, max_button_length):
     # First we sort.
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
@@ -101,12 +121,11 @@ def subtract_data_better(button_data, max_button_length):
 
     return distances
 
-
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data, max_button_length):
     all_data = []
     for raw_example in data:
-        example_data = subtract_data_better(raw_example, max_button_length) # new magic!
+        example_data = generate_features(raw_example) # select your magic here
         all_data.append(example_data)
     return all_data
 
@@ -125,7 +144,7 @@ def create_classifier_from_data(layout_list):
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
-    classifier = NearestCentroid()
+    classifier = svm.LinearSVC()
     classifier.fit(collected_data, collected_labels)
 
     # Validate on training dataset
