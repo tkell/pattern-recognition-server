@@ -102,12 +102,8 @@ def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
     
     # herp derp hard code
-    max_example_button_length = 12
-    raw_data = translate_data_to_scikit(piano_data, max_example_button_length)
-    print "we passed translating the data"
-    print len(raw_data[0])
-    raw_example = raw_data[0]
-    res = classification_from_data(raw_example)
+    print "about to classify the data"
+    res = classification_from_data(piano_data[0])
     classification = res[0]
     return "Hello, we have just done a test classification:  %s" % classification
 
