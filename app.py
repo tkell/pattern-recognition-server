@@ -54,6 +54,7 @@ def mapping_from_classification(classification, button_data, adventure):
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     if len(example_data) <= small_max_length:
+        print "about to translate to small..."
         translated_data = translate_data_to_scikit([example_data], small_max_length)
         res = small_classifier.predict(translated_data)
     else:
@@ -77,9 +78,11 @@ def analyze_data():
     else:
         button_data = button_data
 
+    print 'about to classify'
     res = classification_from_data(button_data)
     classification = res[0]
 
+    print 'about to map'
     # Create mapping, return mapping and the classification
     mapping_data = mapping_from_classification(classification, button_data, adventure)
     return_data = {'result': classification, 'mapping': mapping_data}
@@ -100,9 +103,6 @@ def analyze_image():
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
-    
-    # herp derp hard code
-    print "about to classify the data"
     res = classification_from_data(piano_data[0])
     classification = res[0]
     return "Hello, we have just done a test classification:  %s" % classification
