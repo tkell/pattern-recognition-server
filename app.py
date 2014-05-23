@@ -16,7 +16,6 @@ from requests import get
 from classify import create_classifier_from_data
 from classify import load_data_from_file
 from classify import translate_data_to_scikit
-from classify import pad_data
 from cross_domain import crossdomain
 from mapping import map_as
 
@@ -55,11 +54,11 @@ def mapping_from_classification(classification, button_data, adventure):
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     if len(example_data) <= small_max_length:
-        example_data = pad_data(example_data, small_max_length)
-        res = small_classifier.predict([example_data])
+        translated_data = translate_data_to_scikit([example_data], small_max_length)
+        res = small_classifier.predict(translated_data)
     else:
-        example_data = pad_data(example_data, large_max_length)
-        res = large_classifier.predict([example_data])
+        translated_data = translate_data_to_scikit([example_data], large_max_length)
+        res = large_classifier.predict(translated_data)
 
     return res
 
@@ -78,9 +77,7 @@ def analyze_data():
     else:
         button_data = button_data
 
-    raw_data = translate_data_to_scikit([button_data])
-    raw_example = raw_data[0]
-    res = classification_from_data(raw_example)
+    res = classification_from_data(button_data)
     classification = res[0]
 
     # Create mapping, return mapping and the classification
@@ -103,7 +100,10 @@ def analyze_image():
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
-    raw_data = translate_data_to_scikit(piano_data)
+    
+    # herp derp hard code
+    max_example_button_length = 12
+    raw_data = translate_data_to_scikit(piano_data, max_example_button_length)
     raw_example = raw_data[0]
     res = classification_from_data(raw_example)
     classification = res[0]

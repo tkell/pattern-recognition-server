@@ -20,114 +20,117 @@ def load_data_from_file(classification):
             data = json.loads(line)
     return data
 
+# Find the maximium distance for a set of button data
+def find_max_distance(button_data):
+    max_distance = 0 
+    max_x = 0
+    max_y = 0
+    
+    for i, button in enumerate(button_data):
+        for j, other_button in enumerate(button_data):
+            x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
+            y_distance = button_data[i]['location']['y'] - button_data[j]['location']['y']
+            if max_x < abs(x_distance):
+                max_x = x_distance
+            if max_y < abs(y_distance):
+                max_y = y_distance
 
-# Function that replaces the button subtraction code in the client.
-# Basically, this goes from a list of button objects
-# to whatever we want our data to look like.  
-# For the moment, we want the difference in location between all buttons.
-# This is not very pythonic, but I am trying to match the old JS version, 
-# in order to not break other code
-def subtract_data(button_data):
+    return max(max_x, max_y), max_x, max_y
 
-    ## Let's try adding a sort here
-    # This should really stay here
+# This is me flailing around trying to find a dimensionally consistant feature set
+# Not going so well.
+def generate_features(button_data):
+    # Sort
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
 
-    max_distance = 0
-    subtracted_data = {}
-    for i, button in enumerate(button_data):
-        subtracted_data[i] = {}
-        for j, other_button in enumerate(button_data):
-            if j == i:
-                continue
+    # number of buttons, mean x / y, x_max, y_max, num_rows, num_cols, 
+    num_buttons = len(button_data)
 
-            # Other subtraction stuff could go here, in the future.
-            x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
-            y_distance = button_data[i]['location']['y'] - button_data[j]['location']['y']
-            subtracted_data[i][j] = {'location':  {'x': x_distance, 'y': y_distance}}
+    # Mean distances, from linear button steps
+    x_dists = []
+    y_dists = []
+    for i, button in enumerate(button_data[0:-1]):
+        x_dists.append(button_data[i]['location']['x'] - button_data[i + 1]['location']['x'])
+        y_dists.append(button_data[i]['location']['y'] - button_data[i + 1]['location']['y'])
+    x_mean = sum(x_dists) / float(len(x_dists))
+    y_mean = sum(y_dists) / float(len(y_dists))
 
-            if max_distance < abs(x_distance):
-                max_distance = x_distance
-            if max_distance < abs(y_distance):
-                max_distance = y_distance
+    max_distance, max_x, max_y = find_max_distance(button_data)
 
-    # Normalize with max_distance
-    for i, button in enumerate(button_data):
-        for j, other_button in enumerate(button_data):
-            if j == i:
-                continue
-            subtracted_data[i][j]['location']['x'] = subtracted_data[i][j]['location']['x'] / float(max_distance)
-            subtracted_data[i][j]['location']['y'] = subtracted_data[i][j]['location']['y'] / float(max_distance)
-    return subtracted_data
+    x_mean = x_mean / float(max_distance)
+    y_mean = y_mean / float(max_distance)
 
+    return [num_buttons, x_mean, y_mean, max_x, max_y]
+
+
+# This one returns the normalized distances with no repetition
+# So it is not 1 to all, 2 to all, but 1 to all, 2 to all but 1, etc
+# We also pad with zeros in the right places!
+def subtract_data_better(button_data, max_button_length):
+    # First we sort.
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
+    # Then we find the max distance
+    max_distance, max_x, max_y = find_max_distance(button_data)
+
+    # We actually do the subtraction
+    distances = []
+    for index, button in enumerate(button_data):
+        for other_button in button_data[index + 1:]:
+            x_distance = button['location']['x'] - other_button['location']['x']
+            y_distance = button['location']['y'] - other_button['location']['y']
+
+            distances.append(x_distance)
+            distances.append(y_distance)
+
+        # This bit pads things in place, as it were, 
+        # rather than stacking all the zeros at the end, 
+        # and screwing the indicies up
+        if len(button_data) < max_button_length:
+            distances.extend([0] * (2 * (max_button_length - len(button_data))))
+
+    # Final padding
+    if len(button_data) < max_button_length:
+        final_padding_count = max_button_length * (max_button_length - 1) - len(distances)
+        distances.extend([0] * final_padding_count)
+
+    # Divide it out
+    distances = [d / float(max_distance) for d in distances]
+
+    return distances
 
 
 # Translate giant dict / json to scikit-style giant list
-# The use of sorted() here scares me a little.
-# If I am consistent with it, it should not be a problem,
-# but if I am not, I am going to ruin a ton of shit.
-def translate_data_to_scikit(data):
+def translate_data_to_scikit(data, max_button_length):
     all_data = []
     for raw_example in data:
-        example = subtract_data(raw_example) # new magic!
-        example_data = []
-        buttons = sorted(example.keys())
-        for button in buttons:
-            other_buttons = sorted(example[button].keys())
-            for other_button in other_buttons:
-                difference_dict = example[button][other_button]
-                difference_keys = sorted(difference_dict.keys())
-                for difference_key in difference_keys:
-                    data_point = difference_dict[difference_key]
-                    # translate from True / False to 1 / 0
-                    if difference_key == 'shape':
-                        data_point = int(data_point)
-                        example_data.append(data_point)
-                    # translate from location dict to two entries
-                    elif difference_key == 'location':
-                        example_data.append(data_point['x'])
-                        example_data.append(data_point['y'])
-                    # default
-                    else:
-                         example_data.append(data_point)
+        example_data = subtract_data_better(raw_example, max_button_length) # new magic!
         all_data.append(example_data)
     return all_data
-
-def load_data(category_name, collected_data, collected_labels):
-    category_data = load_data_from_file(category_name)
-    res = translate_data_to_scikit(category_data)
-    collected_data.extend(res)
-    collected_labels.extend([category_name] * len(res))
-    return
-
-def pad_data(example_data, target_length):
-    padding_length = target_length - len(example_data)
-    example_data.extend([0] * padding_length)
-    return example_data
-
 
 def create_classifier_from_data(layout_list):
     collected_data = []
     collected_labels = []
+
+    max_example_button_length = 0
     for data, category_name in layout_list:
-        res = translate_data_to_scikit(data)
+        for example in data:
+            if max_example_button_length < len(example):
+                max_example_button_length = len(example)
+
+    for data, category_name in layout_list:
+        res = translate_data_to_scikit(data, max_example_button_length)
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
-    max_length = max([len(example) for example in collected_data])
-
-    padded_training_data = []
-    for example_data in collected_data:
-        example_data = pad_data(example_data, max_length)
-        padded_training_data.append(example_data)
-
     classifier = NearestCentroid()
-    classifier.fit(padded_training_data, collected_labels)
+    classifier.fit(collected_data, collected_labels)
 
     # Validate on training dataset
     validation_errors = 0
-    for index, data in enumerate(padded_training_data):
+    for index, data in enumerate(collected_data):
         if collected_labels[index] != classifier.predict([data]):
             validation_errors +=1
             print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
@@ -135,33 +138,5 @@ def create_classifier_from_data(layout_list):
     if validation_errors != 0:
         print "PANIC!  There were %d validation_errors" % validation_errors
 
-    return classifier, max_length
-    
-
-def create_classifier(layout_list):
-    collected_data = []
-    collected_labels = []
-    for layout in layout_list:
-        load_data(layout, collected_data, collected_labels)
-
-    max_length = max([len(example) for example in collected_data])
-
-    padded_training_data = []
-    for example_data in collected_data:
-        example_data = pad_data(example_data, max_length)
-        padded_training_data.append(example_data)
-
-    classifier = NearestCentroid()
-    classifier.fit(padded_training_data, collected_labels)
-
-    # Validate on training dataset
-    validation_errors = 0
-    for index, data in enumerate(padded_training_data):
-        if collected_labels[index] != classifier.predict([data]):
-            validation_errors +=1
-            print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
-
-    if validation_errors != 0:
-        print "PANIC!  There were %d validation_errors" % validation_errors
-
-    return classifier, max_length
+    return classifier, max_example_button_length
+ 
