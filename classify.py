@@ -26,7 +26,6 @@ def find_max_distance(button_data):
     max_x = 0
     max_y = 0
     
-    print "before the loop in find_max_distance"
     for i, button in enumerate(button_data):
         for j, other_button in enumerate(button_data):
             x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
@@ -35,8 +34,6 @@ def find_max_distance(button_data):
                 max_x = x_distance
             if max_y < abs(y_distance):
                 max_y = y_distance
-
-    print "are we crashing in max distance?!"
 
     return max(max_x, max_y), max_x, max_y
 
@@ -83,12 +80,9 @@ def generate_features(button_data):
     num_buttons = len(button_data)
     
     num_rows, num_cols = get_rows_and_cols(button_data)
-
-    print "before max distances"
     max_dist, max_x, max_y = find_max_distance(button_data)
 
     slope = get_slope(button_data)
-    print "got slope"
     
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
@@ -98,15 +92,9 @@ def generate_features(button_data):
         rel_x = button['location']['x'] - button_data[0]['location']['x']
         varience = abs(line_eq(rel_x) - button['location']['y'])
         total_varience = total_varience + varience / float(max_dist)
-
-    print "just before varience"
     mean_varience = total_varience / float(len(button_data))
 
-    print "before returning features"
-    print button_data
-
     return [num_buttons, num_rows, num_cols, slope, mean_varience]
-
 
 # This one returns the normalized distances with better padding
 def generate_distance_features(button_data, max_button_length):
