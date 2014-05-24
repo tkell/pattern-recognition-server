@@ -26,6 +26,7 @@ def find_max_distance(button_data):
     max_x = 0
     max_y = 0
     
+    print "before the loop in find_max_distance"
     for i, button in enumerate(button_data):
         for j, other_button in enumerate(button_data):
             x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
@@ -34,6 +35,8 @@ def find_max_distance(button_data):
                 max_x = x_distance
             if max_y < abs(y_distance):
                 max_y = y_distance
+
+    print "are we crashing in max distance?!"
 
     return max(max_x, max_y), max_x, max_y
 
@@ -51,7 +54,6 @@ def get_rows_and_cols(button_data):
     cols = []
 
     # Define how fuzzy we can get
-    print button_data[0]['radius']
     max_radius = max([b['radius'] for b in button_data])
     max_radius = max_radius / 2
 
