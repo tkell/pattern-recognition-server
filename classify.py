@@ -96,6 +96,8 @@ def generate_features(button_data):
 
     mean_varience = total_varience / float(len(button_data))
 
+    print "before returning features"
+
     return [num_buttons, num_rows, num_cols, slope, mean_varience]
 
 
