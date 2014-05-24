@@ -51,6 +51,7 @@ def get_rows_and_cols(button_data):
     cols = []
 
     # Define how fuzzy we can get
+    print button_data['radius']
     max_radius = max([b['radius'] for b in button_data])
     max_radius = max_radius / 2
 
