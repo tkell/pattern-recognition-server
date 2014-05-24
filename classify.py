@@ -81,9 +81,12 @@ def generate_features(button_data):
     num_buttons = len(button_data)
     
     num_rows, num_cols = get_rows_and_cols(button_data)
+
+    print "before max distances"
     max_dist, max_x, max_y = find_max_distance(button_data)
 
     slope = get_slope(button_data)
+    print "got slope"
     
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
@@ -94,9 +97,11 @@ def generate_features(button_data):
         varience = abs(line_eq(rel_x) - button['location']['y'])
         total_varience = total_varience + varience / float(max_dist)
 
+    print "just before varience"
     mean_varience = total_varience / float(len(button_data))
 
     print "before returning features"
+    print button_data
 
     return [num_buttons, num_rows, num_cols, slope, mean_varience]
 
