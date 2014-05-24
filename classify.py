@@ -48,19 +48,31 @@ def get_slope(button_data):
 
 def get_rows_and_cols(button_data):
     rows = []
-    cols = [] 
-    for button in button_data:
-        if button['location']['y'] not in rows:
-            rows.append(button['location']['y'])
-        if button['location']['x'] not in cols:
-            cols.append(button['location']['x'])
+    cols = []
+
+    # Define how fuzzy we can get
+    max_radius = max([b['radius'] for b in button_data])
+    max_radius = max_radius / 2
+
+    rows.append(button_data[0]['location']['y'])
+    cols.append(button_data[0]['location']['x'])
+
+    for button in button_data[1:]:
+
+        for row in rows:
+            if button['location']['y'] > row - max_radius and button['location']['y'] < row + max_radius:
+                rows.append(button['location']['y'])
+                break
+        for col in cols:
+            if button['location']['x'] > col - max_radius and button['location']['x'] < col + max_radius:
+                cols.append(button['location']['x'])
+                break
+
     num_rows = len(rows)
     num_cols = len(cols)
-
     return num_rows, num_cols
 
-# This is me flailing around trying to find a dimensionally consistant feature set
-# Not going so well.
+# HMM.
 def generate_features(button_data):
     # Sort
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
