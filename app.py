@@ -77,7 +77,11 @@ def analyze_data():
     else:
         button_data = button_data
 
+    print "just before we start classifying"
+    print button_data
+
     res = classification_from_data(button_data)
+    print "AFTER classification"
     classification = res[0]
 
     # Create mapping, return mapping and the classification
