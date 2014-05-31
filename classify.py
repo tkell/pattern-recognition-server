@@ -50,9 +50,13 @@ def get_rows_and_cols(button_data):
     rows = []
     cols = []
 
-    # Define how fuzzy we can get
-    max_radius = max([b['radius'] for b in button_data])
-    max_radius = max_radius / 2
+    # Fake radius if we don't have it
+    if 'radius' not in button_data[0].keys():
+        max_radius = 10
+    else:
+        # Define how fuzzy we can get
+        max_radius = max([b['radius'] for b in button_data])
+        max_radius = max_radius / 2
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
