@@ -220,7 +220,7 @@ def map_as_circle(button_data, adventure):
     center_x = sum([b['location']['x'] for b in button_data]) / len(button_data)
     center_y = sum([b['location']['y'] for b in button_data]) / len(button_data)
 
-    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'] - center_x, b['location']['y'] - center_y))
+    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'] - center_x, b['location']['y'] - center_y), reverse=True)
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
 
     return mapped_buttons
