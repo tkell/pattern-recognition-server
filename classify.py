@@ -136,7 +136,7 @@ def generate_distance_features(button_data, max_button_length):
     return distances
 
 # Translate giant dict / json to scikit-style giant list
-def translate_data_to_scikit(data, max_button_length):
+def translate_data_to_scikit(data):
     all_data = []
     for raw_example in data:
         example_data = generate_features(raw_example) # select your magic here
@@ -147,14 +147,8 @@ def create_classifier_from_data(layout_list):
     collected_data = []
     collected_labels = []
 
-    max_example_button_length = 0
     for data, category_name in layout_list:
-        for example in data:
-            if max_example_button_length < len(example):
-                max_example_button_length = len(example)
-
-    for data, category_name in layout_list:
-        res = translate_data_to_scikit(data, max_example_button_length)
+        res = translate_data_to_scikit(data)
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
@@ -171,5 +165,5 @@ def create_classifier_from_data(layout_list):
     if validation_errors != 0:
         print "PANIC!  There were %d validation_errors" % validation_errors
 
-    return classifier, max_example_button_length
+    return classifier
  

@@ -26,18 +26,17 @@ xylophone_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/x
 small_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/small_grid.json').json()
 piano_roll_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano_roll.json').json()
 zither_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/zither.json').json()
-small_classifier, small_max_length = create_classifier_from_data([(piano_data, 'piano'), 
-                                                                (xylophone_data, 'xylophone'),
-                                                                (small_grid_data, 'small_grid'),
-                                                                (piano_roll_data, 'piano_roll'),
-                                                                (zither_data, 'zither'),
-                                                                ])
-# Create large classifier
-big_piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/big_piano.json').json()
+circle_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/circle.json').json()
 large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
-large_classifier, large_max_length = create_classifier_from_data([(big_piano_data, 'big_piano'), 
-                                                                (large_grid_data, 'large_grid'),
-                                                                ])
+
+classifier = create_classifier_from_data([(piano_data, 'piano'), 
+                                        (xylophone_data, 'xylophone'),
+                                        (small_grid_data, 'small grid'),
+                                        (piano_roll_data, 'piano roll'),
+                                        (zither_data, 'zither'),
+                                        (circle_data, 'circle'),
+                                        (large_grid_data, 'large_grid')
+                                        ])
 
 app = Flask(__name__)
 
@@ -53,13 +52,8 @@ def mapping_from_classification(classification, button_data, adventure):
 
 ## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
-    if len(example_data) <= small_max_length:
-        translated_data = translate_data_to_scikit([example_data], small_max_length)
-        res = small_classifier.predict(translated_data)
-    else:
-        translated_data = translate_data_to_scikit([example_data], large_max_length)
-        res = large_classifier.predict(translated_data)
-
+    translated_data = translate_data_to_scikit([example_data])
+    res =  classifier.predict(translated_data)
     return res
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])

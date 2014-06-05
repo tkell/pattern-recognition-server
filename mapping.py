@@ -99,6 +99,10 @@ def map_as(classification, button_data, adventure):
         return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':
         return map_as_large_grid(button_data, adventure)
+    
+    # DUMMY FOR NOW
+    if classification == 'circle':
+        return map_as_zither(button_data, adventure)
 
 
 # Piano:  a chromatic scale, from left to right
