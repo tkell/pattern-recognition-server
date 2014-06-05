@@ -6,9 +6,11 @@ Mapping functions for each prototype, hidden behind map_as.
 '''
 
 import random
+from math import atan2
 
 # List of scales
-chromatic = [1];
+chromatic = [1]
+fifths = [7]
 
 # Pentatonics.  I could use some more exciting things here
 pentatonic_major = [2, 2, 3, 2, 3]
@@ -99,10 +101,8 @@ def map_as(classification, button_data, adventure):
         return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':
         return map_as_large_grid(button_data, adventure)
-    
-    # DUMMY FOR NOW
     if classification == 'circle':
-        return map_as_zither(button_data, adventure)
+        return map_as_circle(button_data, adventure)
 
 
 # Piano:  a chromatic scale, from left to right
@@ -212,6 +212,15 @@ def map_as_zither(button_data, adventure):
 
     elif adventure == 4:
         mapped_buttons = map_by_ratio(button_data, 60)
+
+    return mapped_buttons
+
+def map_as_circle(button_data, adventure):
+    # sort clockwise
+    # need to sort top to bottom too - first, I think?
+
+    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'], b['location']['y']))
+    mapped_buttons = map_ordered(button_data, diatonic_major, 60)
 
     return mapped_buttons
 
