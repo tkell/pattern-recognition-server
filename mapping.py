@@ -217,9 +217,11 @@ def map_as_zither(button_data, adventure):
 
 def map_as_circle(button_data, adventure):
     # sort clockwise
-    # need to sort top to bottom too - first, I think?
-    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'], b['location']['y']))
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
+    center_x = sum([b['location']['x'] for b in button_data]) / len(button_data)
+    center_y = sum([b['location']['y'] for b in button_data]) / len(button_data)
+
+    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'] - center_x, b['location']['y'] - center_y))
     mapped_buttons = map_ordered(button_data, diatonic_major, 60)
 
     return mapped_buttons
