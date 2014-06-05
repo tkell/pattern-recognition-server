@@ -216,7 +216,7 @@ def map_as_zither(button_data, adventure):
     return mapped_buttons
 
 def map_as_circle(button_data, adventure):
-    # sort clockwise
+    # sort clockwise.  Oh god, non-linearity.
 
     center_x = sum([b['location']['x'] for b in button_data]) / len(button_data)
     center_y = sum([b['location']['y'] for b in button_data]) / len(button_data)
