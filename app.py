@@ -31,8 +31,8 @@ large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/
 
 classifier = create_classifier_from_data([(piano_data, 'piano'), 
                                         (xylophone_data, 'xylophone'),
-                                        (small_grid_data, 'small grid'),
-                                        (piano_roll_data, 'piano roll'),
+                                        (small_grid_data, 'small_grid'),
+                                        (piano_roll_data, 'piano_roll'),
                                         (zither_data, 'zither'),
                                         (circle_data, 'circle'),
                                         (large_grid_data, 'large_grid')
