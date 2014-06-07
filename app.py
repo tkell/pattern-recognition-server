@@ -18,6 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
+from image_api.image_extract import image_to_button_data
 
 
 # Create small classifier
@@ -40,11 +41,12 @@ classifier = create_classifier_from_data([(piano_data, 'piano'),
 
 app = Flask(__name__)
 
+# this will be were we talk to the image api stuf
 def objects_from_image():
+    image_to_button_data
     pass
 
-def data_from_objects():
-    pass
+
 
 def mapping_from_classification(classification, button_data, adventure):
     mapped_buttons = map_as(classification, button_data, adventure)
