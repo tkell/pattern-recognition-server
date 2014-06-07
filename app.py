@@ -18,7 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
-from image_api.image_extract import image_to_button_data
+#from image_api.image_extract import image_to_button_data
 
 
 # Create small classifier
@@ -43,7 +43,7 @@ app = Flask(__name__)
 
 # this will be were we talk to the image api stuf
 def objects_from_image():
-    image_to_button_data
+    #image_to_button_data
     pass
 
 
