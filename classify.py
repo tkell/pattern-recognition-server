@@ -8,8 +8,20 @@ in order to classify data.
 '''
 
 import json
+import math
 from sklearn import svm
 from sklearn.neighbors.nearest_centroid import NearestCentroid
+
+def get_mean(the_list):
+    return sum(the_list) / float(len(the_list))
+
+
+def get_standard_dev(the_list):
+    mean = get_mean(the_list)
+    squared_diffs = [(mean - num) ** 2 for num in the_list]
+    standard_dev = get_mean(squared_diffs) ** 0.5
+    return standard_dev
+
 
 # Load data from a file
 def load_data_from_file(classification):
@@ -91,14 +103,16 @@ def generate_features(button_data):
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
 
-    total_varience = 0
+    variences = []
     for button in button_data:
         rel_x = button['location']['x'] - button_data[0]['location']['x']
         varience = abs(line_eq(rel_x) - button['location']['y'])
-        total_varience = total_varience + varience / float(max_dist)
-    mean_varience = total_varience / float(len(button_data))
+        variences.append(varience)
 
-    return [num_buttons, num_rows, num_cols, slope, mean_varience]
+    mean_varience = get_mean(variences)
+    std_dev_varience = get_standard_dev(variences)
+
+    return [num_buttons, num_rows, num_cols, slope, mean_varience, std_dev_varience]
 
 # This one returns the normalized distances with better padding
 def generate_distance_features(button_data, max_button_length):
