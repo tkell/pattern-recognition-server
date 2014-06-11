@@ -18,11 +18,13 @@ pentatonic_major = [2, 2, 3, 2, 3]
 pentatonic_minor = [3, 2, 3, 2, 2]
 
 # Hexatonics
-hexatonics = {'whole_tone': [2],
+hexatonic_dict = {'whole_tone': [2],
               'augmented': [3, 1],
               'prometheus' :[2, 2, 2, 3, 1, 2],
               'blues': [3, 2, 1, 1, 3, 2],
             }
+hexatonics = [hexatonic_dict[k] for k in hexatonic_dict.keys()]
+
 
 # Octatonics
 octatonic_one = [2, 1]
@@ -165,12 +167,12 @@ def map_as_xylo(button_data, adventure):
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
+            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, diatonic_both, diatonic_extra, chromatic])
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
-        if button_length == 7: #hexatonics
-            the_scale = hexatonics[random.choice(hexatonics.keys())]
+        if button_length <= 7: #hexatonics
+            the_scale = random.choice(hexatonics)
         elif button_length == 8 or button_length == 9: #octatonics
             if random.random() > 0.5:
                 the_scale = octatonic_one
@@ -180,8 +182,12 @@ def map_as_xylo(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length >= 12:
+        elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        else:
+            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            the_scale = find_scale(button_length, scale_list)
+
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 3:
@@ -219,8 +225,11 @@ def map_as_zither(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length >= 12:
+        elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        else:
+            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
+
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
@@ -235,8 +244,11 @@ def map_as_zither(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length >= 12:
+        elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        else:
+            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            the_scale = find_scale(button_length, scale_list)
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 3:
@@ -279,8 +291,7 @@ def map_as_circle(button_data, adventure):
         elif button_length <= 11:
             the_scale = random.choice([fourths, diatonic_both, diatonic_extra, octatonic_one, octatonic_two])
         elif button_length >= 12:
-            hexas = [hexatonics[k] for k in hexatonics.keys()]
-            all_scales = hexas.extend([fourths, chromatic, diatonic_extra, octatonic_one, octatonic_two])
+            all_scales = hexatonics.extend([fourths, chromatic, diatonic_extra, octatonic_one, octatonic_two])
             the_scale = random.choice(all_scales)
 
         mapped_buttons = map_ordered(button_data, the_scale, 60)
@@ -325,7 +336,7 @@ def map_as_small_grid(button_data, adventure):
         elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
         else:
-            the_scale = chromatic
+            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
@@ -344,8 +355,12 @@ def map_as_small_grid(button_data, adventure):
              the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length >= 12:
+        elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        else:
+            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            the_scale = find_scale(button_length, scale_list)
+
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 3:
@@ -357,7 +372,6 @@ def map_as_small_grid(button_data, adventure):
     return mapped_buttons
 
 
-# Large grid:  needs work and cunning to determine the direction
 def map_as_large_grid(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
@@ -407,8 +421,10 @@ def map_as_large_grid(button_data, adventure):
             the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension >= 12:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
+        else:
+            the_scale = find_scale(large_dimension, [diatonic_major, pentatonic_major, chromatic])
 
     if adventure == 1:
         if large_dimension == 3 or large_dimension == 4:
@@ -427,8 +443,10 @@ def map_as_large_grid(button_data, adventure):
             the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension >= 12:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
+        else:
+            the_scale = find_scale(large_dimension, [diatonic_minor, pentatonic_minor, chromatic])
 
     if adventure == 2:
         if large_dimension == 3 or large_dimension == 4:
@@ -446,8 +464,11 @@ def map_as_large_grid(button_data, adventure):
              the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension >= 12:
+        elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
+        else: 
+            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            the_scale = find_scale(large_dimension, scale_list)
 
     elif adventure == 3:
         mapped_buttons = map_equal_tempered(button_data, 60)
