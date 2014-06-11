@@ -140,7 +140,7 @@ def map_as_xylo(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length == 12 or button_length == 13:
+        elif button_length >= 12:
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -156,7 +156,7 @@ def map_as_xylo(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length == 12 or button_length == 13:
+        elif button_length >= 12:
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -195,7 +195,7 @@ def map_as_zither(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length == 12 or button_length == 13:
+        elif button_length >= 12:
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -211,7 +211,7 @@ def map_as_zither(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length == 12 or button_length == 13:
+        elif button_length >= 12:
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -283,6 +283,8 @@ def map_as_small_grid(button_data, adventure):
             the_scale = diatonic_major
         elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
+        else:
+            the_scale = diatonic_major
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 1:
@@ -298,6 +300,8 @@ def map_as_small_grid(button_data, adventure):
                 the_scale = diatonic_major
         elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
+        else:
+            the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
@@ -316,7 +320,7 @@ def map_as_small_grid(button_data, adventure):
              the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length == 12 or button_length == 13:
+        elif button_length >= 12:
             the_scale = chromatic
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -379,7 +383,7 @@ def map_as_large_grid(button_data, adventure):
             the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension == 12 or large_dimension == 13:
+        elif large_dimension >= 12:
             the_scale = chromatic
 
     if adventure == 1:
@@ -399,7 +403,7 @@ def map_as_large_grid(button_data, adventure):
             the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension == 12 or large_dimension == 13:
+        elif large_dimension >= 12:
             the_scale = chromatic
 
     if adventure == 2:
@@ -418,7 +422,7 @@ def map_as_large_grid(button_data, adventure):
              the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
-        elif large_dimension == 12 or large_dimension == 13:
+        elif large_dimension >= 12:
             the_scale = chromatic
 
     elif adventure == 3:
