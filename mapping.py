@@ -233,9 +233,7 @@ def map_as_small_grid(button_data, adventure):
     button_length = len(button_data)
 
     if adventure == 0:
-        if button_length == 3 or button_length == 4:
-            the_scale = trumpet
-        elif button_length == 5 or button_length == 6:
+        if button_length <= 6:
             the_scale = pentatonic_major
         elif button_length == 7 or button_length == 8:
             the_scale = diatonic_major
@@ -244,9 +242,7 @@ def map_as_small_grid(button_data, adventure):
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 1:
-        if button_length == 3 or button_length == 4:
-            the_scale = trumpet
-        elif button_length == 5 or button_length == 6:
+        if button_length <= 6:
             if random.random() > 0.5:
                 the_scale = pentatonic_minor
             else:
