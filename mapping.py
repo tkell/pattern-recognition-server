@@ -11,6 +11,7 @@ from math import atan2
 # List of scales
 chromatic = [1]
 fifths = [7]
+fourths = [5]
 
 # Pentatonics.  I could use some more exciting things here
 pentatonic_major = [2, 2, 3, 2, 3]
@@ -216,12 +217,48 @@ def map_as_zither(button_data, adventure):
     return mapped_buttons
 
 def map_as_circle(button_data, adventure):
-    # sort clockwise, hopefully...
+    # sort clockwise
     center_x = sum([b['location']['x'] for b in button_data]) / len(button_data)
     center_y = sum([b['location']['y'] for b in button_data]) / len(button_data)
 
     button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'] - center_x, b['location']['y'] - center_y), reverse=True)
-    mapped_buttons = map_ordered(button_data, diatonic_major, 60)
+    button_length = len(button_data)
+
+    if adventure == 0:
+        the_scale = random.choice([fifths, fifths, pentatonic_major, diatonic_major])
+        mapped_buttons = map_ordered(button_data, fifths, 60)
+
+    elif adventure == 1:
+        if button_length <= 6:
+            if random.random() > 0.5:
+                the_scale = pentatonic_minor
+            else:
+                the_scale = pentatonic_major
+        elif button_length <= 11:
+            the_scale = random.choice([fifths, fifths, diatonic_major, diatonic_both])
+        elif button_length >= 12:
+            the_scale = random.choice([fifths, chromatic, diatonic_major, diatonic_extra])
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 2:
+        if button_length <= 7: #hexatonics
+            the_scale = hexatonics[random.choice(hexatonics.keys())]
+        elif button_length == 8 or button_length == 9: #octatonics
+            the_scale = random.choice([fourths, octatonic_one, octatonic_two])
+        elif button_length <= 11:
+            the_scale = random.choice([fourths, diatonic_both, diatonic_extra, octatonic_one, octatonic_two])
+        elif button_length >= 12:
+            hexas = [hexatonics[k] for k in hexatonics.keys()]
+            all_scales = hexas.extend([fourths, chromatic, diatonic_extra, octatonic_one, octatonic_two])
+            the_scale = random.choice(all_scales)
+
+        mapped_buttons = map_ordered(button_data, the_scale, 60)
+
+    elif adventure == 3:
+        mapped_buttons = map_equal_tempered(button_data, 60)
+
+    elif adventure == 4:
+        mapped_buttons = map_by_ratio(button_data, 60)
 
     return mapped_buttons
 
