@@ -42,14 +42,21 @@ def midi_to_freq(midi_number):
     return 440 * (2 ** ((midi_number - 69) / 12.0))
 
 # Help to map an ordered set of buttons to a given scale from a starting point
-def map_ordered(button_data, the_scale, note_number):
+def map_ordered(button_data, the_scale, note_number, same_octave=False):
     mapped_buttons = []
+    
     first_button = button_data[0]
     first_button['noteFreq'] = midi_to_freq(note_number)
+    first_button['noteMIDI'] = note_number
     mapped_buttons.append(first_button)
+
     for index, button in enumerate(button_data[1:]):
         scale_index = index % len(the_scale);
         note_number = note_number + the_scale[scale_index];
+
+        if same_octave:
+            note_number = note_number % 12 + first_button['noteMIDI']
+
         button['noteFreq'] = midi_to_freq(note_number)
         button['noteMIDI'] = note_number
         mapped_buttons.append(button)
@@ -226,7 +233,7 @@ def map_as_circle(button_data, adventure):
 
     if adventure == 0:
         the_scale = random.choice([fifths, fifths, pentatonic_major, diatonic_major])
-        mapped_buttons = map_ordered(button_data, fifths, 60)
+        mapped_buttons = map_ordered(button_data, fifths, 60, same_octave=True)
 
     elif adventure == 1:
         if button_length <= 6:
@@ -238,7 +245,7 @@ def map_as_circle(button_data, adventure):
             the_scale = random.choice([fifths, fifths, diatonic_major, diatonic_both])
         elif button_length >= 12:
             the_scale = random.choice([fifths, chromatic, diatonic_major, diatonic_extra])
-        mapped_buttons = map_ordered(button_data, the_scale, 60)
+        mapped_buttons = map_ordered(button_data, the_scale, 60, same_octave=True)
 
     elif adventure == 2:
         if button_length <= 7: #hexatonics
