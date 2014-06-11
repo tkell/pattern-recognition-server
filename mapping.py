@@ -41,6 +41,28 @@ trumpet = [1, 1, 1]
 def midi_to_freq(midi_number):
     return 440 * (2 ** ((midi_number - 69) / 12.0))
 
+# Helper to find the 'best' scale from a list
+def find_scale(button_length, list_of_scales):
+    the_scale = None
+    for scale in list_of_scales:
+        if button_length % len(scale) == 0 or button_length % len(scale) == 1:
+            the_scale = scale
+            break
+
+    if not the_scale:
+        for scale in list_of_scales:
+            if button_length % len(scale) == -1:
+                the_scale = scale
+                break
+    
+    if not the_scale:
+        the_scale = chromatic
+
+    return the_scale
+
+
+
+
 # Help to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number, same_octave=False):
     mapped_buttons = []
@@ -140,8 +162,10 @@ def map_as_xylo(button_data, adventure):
             the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
-        elif button_length >= 12:
+        elif button_length == 12 or button_length == 13:
             the_scale = chromatic
+        else:
+            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
