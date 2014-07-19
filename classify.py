@@ -112,7 +112,22 @@ def generate_features(button_data):
     mean_varience = get_mean(variences)
     std_dev_varience = get_standard_dev(variences)
 
-    return [num_buttons, num_rows, num_cols, slope, mean_varience, std_dev_varience]
+    # So the above gives me the mean and std dev from the slope line
+
+    # I need to do the same for a centered vertical line.  
+    x_locs = [button['location']['x'] for button in button_data]
+    mean_x = get_mean(x_locs)
+    
+    x_variences = []
+    for x in x_locs:
+        x_variences.append(abs(mean_x - x))
+
+    mean_x_varience = get_mean(x_variences)
+    std_dev_x_varience = get_standard_dev(x_variences)
+
+
+    return [num_buttons, num_rows, num_cols, slope, mean_varience, 
+        std_dev_varience, mean_x_varience, std_dev_x_varience]
 
 # This one returns the normalized distances with better padding
 def generate_distance_features(button_data, max_button_length):
