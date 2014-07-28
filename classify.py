@@ -88,7 +88,7 @@ def get_rows_and_cols(button_data):
     num_cols = len(cols)
     return num_rows, num_cols
 
-# HMM.
+# This is the current favorite
 def generate_features(button_data):
     # Sort
     button_data = sorted(button_data, key=lambda b: b['location']['x'])

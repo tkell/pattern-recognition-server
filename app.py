@@ -18,8 +18,6 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
-#from image_api.image_extract import image_to_button_data
-
 
 # Create small classifier
 piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
@@ -52,7 +50,6 @@ def mapping_from_classification(classification, button_data, adventure):
     mapped_buttons = map_as(classification, button_data, adventure)
     return mapped_buttons
 
-## Work needs to be done here to sort out which classifier is which
 def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
     res =  classifier.predict(translated_data)
