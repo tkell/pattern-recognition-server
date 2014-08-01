@@ -18,7 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
-from size_functions import check_size
+from size_functions import check_size, check_basic_kalimba
 
 # Create small classifier
 piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
