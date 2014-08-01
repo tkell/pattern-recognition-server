@@ -147,7 +147,7 @@ def map_as_piano(button_data, adventure):
     return mapped_buttons
 
 # Xylophone
-def map_as_xylo(button_data, adventure):
+def map_as_xylo(button_data, adventure, increase_direction):
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_length = len(button_data)
 
@@ -208,7 +208,7 @@ def map_as_piano_roll(button_data, adventure):
     return mapped_buttons
 
 # Zither
-def map_as_zither(button_data, adventure):
+def map_as_zither(button_data, adventure, increase_direction):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     button_length = len(button_data)
 
