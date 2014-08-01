@@ -62,10 +62,7 @@ def find_scale(button_length, list_of_scales):
 
     return the_scale
 
-
-
-
-# Help to map an ordered set of buttons to a given scale from a starting point
+# Helper to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number, same_octave=False):
     mapped_buttons = []
     
@@ -209,7 +206,10 @@ def map_as_piano_roll(button_data, adventure):
 
 # Zither
 def map_as_zither(button_data, adventure, increase_direction):
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    if not increase_direction or increase_direction == 'positive':
+        button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    elif increase_direction == 'negative':
+        button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     button_length = len(button_data)
 
     if adventure == 0:
