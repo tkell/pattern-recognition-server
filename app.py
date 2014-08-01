@@ -82,8 +82,6 @@ def analyze_data():
         button_data = button_data
 
     res, increase_direction = classification_from_data(button_data)
-    print "got class and dir back"
-    print res[0], increase_direction
     classification = res[0]
 
     # Create mapping, return mapping and the classification
