@@ -53,11 +53,7 @@ def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
     res =  classifier.predict(translated_data)
 
-    # we need to take size into account
-    # if we're a zither, we need to look for a sequential increase
-        # if we find it, that decide which way we map things
-    # if we're a xylphone, we need to do the same
-    # if we're a xylophone, we also need to look for a Kalimba signature
+    # For certain prototypes, check size patterns
     increase_direction = None
     if res[0] == 'zither':
         increase_direction = check_size(example_data, 'y')
