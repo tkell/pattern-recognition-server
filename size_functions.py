@@ -8,7 +8,7 @@ Is it a kalimba or not, which way do the buttons go, etc?
 
 # Checks to see which direction the size changes in, if any
 # axis is 'x' or 'y'
-def check_size(axis, button_data):
+def check_size(button_data, axis):
     button_data = sorted(button_data, key=lambda b: b['location'][axis])
 
     positive_increase = True
