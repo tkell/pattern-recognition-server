@@ -40,6 +40,7 @@ def check_size(button_data, axis):
 def check_basic_kalimba(button_data):
     max_size = 0
     max_size_index = 0
+    print button_data
     for index, button in enumerate(button_data[1:-1]):
         print button
         if button['radius'] > max_size:
