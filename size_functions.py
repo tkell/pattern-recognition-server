@@ -44,7 +44,7 @@ def check_basic_kalimba(button_data):
     for index, button in enumerate(button_data[1:-1]):
         if button['radius'] > max_size:
             max_size = button['radius']
-            max_size_index = index
+            max_size_index = index + 1
 
     print "max radius and index", max_size, max_size_index
     print "cutting lists"
