@@ -103,6 +103,7 @@ def generate_features(button_data):
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
 
+    # mean and std dev from the line slope
     variences = []
     for button in button_data:
         rel_x = button['location']['x'] - button_data[0]['location']['x']
@@ -112,9 +113,7 @@ def generate_features(button_data):
     mean_varience = get_mean(variences)
     std_dev_varience = get_standard_dev(variences)
 
-    # So the above gives me the mean and std dev from the slope line
-
-    # I need to do the same for a centered vertical line.  
+    # mean and std dev from the horiztonal center
     x_locs = [button['location']['x'] for button in button_data]
     mean_x = get_mean(x_locs)
     
@@ -124,7 +123,6 @@ def generate_features(button_data):
 
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
-
 
     return [num_buttons, num_rows, num_cols, slope, mean_varience, 
         std_dev_varience, mean_x_varience, std_dev_x_varience]
