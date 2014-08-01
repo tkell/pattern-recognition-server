@@ -23,11 +23,9 @@ def check_size(button_data, axis):
             positive_increase = False
             break
 
-    button_data.reverse()
-
     print "checking for - increase"
     for index, button in enumerate(button_data[0:-1]):
-        if button_data[index]['radius']  > button_data[index + 1]['radius']:
+        if button_data[index]['radius'] < button_data[index + 1]['radius']:
             continue
         else:
             negative_increase = False
