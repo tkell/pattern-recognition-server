@@ -56,7 +56,7 @@ def check_basic_kalimba(button_data):
     print "about to check lists"
     left_check = True
     for index, button in enumerate(left_list[0:-1]):
-        if button_data[index]['radius'] < button_data[index + 1]['radius']:
+        if left_list[index]['radius'] < left_list[index + 1]['radius']:
             continue
         else:
             left_check = False
@@ -64,7 +64,7 @@ def check_basic_kalimba(button_data):
 
     right_check = True
     for index, button in enumerate(right_list[0:-1]):
-        if button_data[index]['radius'] > button_data[index + 1]['radius']:
+        if right_list[index]['radius'] > right_list[index + 1]['radius']:
             continue
         else:
             left_check = False
