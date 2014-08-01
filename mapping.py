@@ -209,7 +209,7 @@ def map_as_zither(button_data, adventure, increase_direction):
     if not increase_direction or increase_direction == 'positive':
         button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     elif increase_direction == 'negative':
-        button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+        button_data = sorted(button_data, key=lambda b: b['location']['y'])
     button_length = len(button_data)
 
     if adventure == 0:
