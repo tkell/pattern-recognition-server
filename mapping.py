@@ -149,6 +149,13 @@ def map_as_xylo(button_data, adventure, increase_direction):
         button_data = sorted(button_data, key=lambda b: b['location']['x'])
     elif increase_direction == 'positive':
         button_data = sorted(button_data, key=lambda b: b['location']['x'], reverse=True)
+
+    # not sure if this is right
+    elif increase_direction == 'kalimba':
+        button_data = sorted(button_data, key=lambda b: b['location']['x'])
+        button_data = sorted(button_data, key=lambda b: b['radius'])
+        print button_data
+
     button_length = len(button_data)
 
     if adventure == 0:

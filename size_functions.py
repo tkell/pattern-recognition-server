@@ -40,20 +40,14 @@ def check_size(button_data, axis):
 def check_basic_kalimba(button_data):
     max_size = 0
     max_size_index = 0
-    print [b['radius'] for b in button_data]
     for index, button in enumerate(button_data[1:-1]):
         if button['radius'] > max_size:
             max_size = button['radius']
             max_size_index = index + 1
 
-    print "max radius and index", max_size, max_size_index
-    print "cutting lists"
     left_list = button_data[0:max_size_index] # check to see if it increases!
     right_list = button_data[max_size_index + 1:] # check to see if it decreases!
-    print "left list", [b['radius'] for b in left_list]
-    print "right list", [b['radius'] for b in right_list]
 
-    print "about to check lists"
     left_check = True
     for index, button in enumerate(left_list[0:-1]):
         if left_list[index]['radius'] < left_list[index + 1]['radius']:
