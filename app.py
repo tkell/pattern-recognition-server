@@ -55,13 +55,13 @@ def classification_from_data(example_data):
 
     # For certain prototypes, check size patterns
     increase_direction = None
-    if res[0] == 'zither':
-        increase_direction = check_size(example_data, 'y')
-    elif res[0] == 'xylophone':
-        increase_direction = check_size(example_data, 'x')
-        if not increase_direction:
-            print "checking kalimba"
-            increase_direction = check_basic_kalimba(example_data)
+    if 'radius' in example_data[0]:
+        if res[0] == 'zither':
+            increase_direction = check_size(example_data, 'y')
+        elif res[0] == 'xylophone':
+            increase_direction = check_size(example_data, 'x')
+            if not increase_direction:
+                increase_direction = check_basic_kalimba(example_data)
 
     return res, increase_direction
 
