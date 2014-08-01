@@ -48,4 +48,24 @@ def check_basic_kalimba(button_data):
     left_list = button_data[0:max_size_index] # check to see if it increases!
     right_list = button_data[max_size_index + 1:] # check to see if it decreases!
 
+    left_check = True
+    for index, button in enumerate(left_list[0:-1]):
+        if button_data[index]['radius'] < button_data[index + 1]['radius']:
+            continue
+        else:
+            left_check = False
+            break
+
+    right_check = True
+    for index, button in enumerate(right_list[0:-1]):
+        if button_data[index]['radius'] > button_data[index + 1]['radius']:
+            continue
+        else:
+            left_check = False
+            break
+
     # if both of those are true, return true!
+    if left_check and right_check:
+        return 'kalimba'
+    else:
+        return None
