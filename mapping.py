@@ -120,15 +120,15 @@ def map_by_ratio(button_data, note_number):
 
 
 # Master mapping function
-def map_as(classification, button_data, adventure):
+def map_as(classification, button_data, adventure, increase_direction):
     if classification == 'piano' or classification == 'big_piano':
         return map_as_piano(button_data, adventure)
     if classification == 'xylophone':
-        return map_as_xylo(button_data, adventure)
+        return map_as_xylo(button_data, adventure, increase_direction)
     if classification == 'piano_roll':
         return map_as_piano_roll(button_data, adventure)
     if classification == 'zither':
-        return map_as_zither(button_data, adventure)
+        return map_as_zither(button_data, adventure, increase_direction)
     if classification == 'small_grid':
         return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':

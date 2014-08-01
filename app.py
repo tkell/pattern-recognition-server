@@ -18,6 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
+from size_functions import check_size
 
 # Create small classifier
 piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
@@ -44,16 +45,26 @@ def objects_from_image():
     #image_to_button_data
     pass
 
-
-
-def mapping_from_classification(classification, button_data, adventure):
-    mapped_buttons = map_as(classification, button_data, adventure)
+def mapping_from_classification(classification, button_data, adventure, increase_direction):
+    mapped_buttons = map_as(classification, button_data, adventure, increase_direction)
     return mapped_buttons
 
 def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
     res =  classifier.predict(translated_data)
-    return res
+
+    # we need to take size into account
+    # if we're a zither, we need to look for a sequential increase
+        # if we find it, that decide which way we map things
+    # if we're a xylphone, we need to do the same
+    # if we're a xylophone, we also need to look for a Kalimba signature
+    increase_direction = None
+    if res[0] == 'zither':
+        increase_direction = check_size(example_data, 'y')
+    elif res[0] == 'xylophone':
+        increase_direction = check_size(example_data, 'x')
+
+    return res, increase_direction
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
@@ -70,12 +81,13 @@ def analyze_data():
     else:
         button_data = button_data
 
-    res = classification_from_data(button_data)
+    res, increase_direction = classification_from_data(button_data)
     classification = res[0]
 
     # Create mapping, return mapping and the classification
-    mapping_data = mapping_from_classification(classification, button_data, adventure)
-    return_data = {'result': classification, 'mapping': mapping_data}
+    mapping_data = mapping_from_classification(classification, button_data, 
+            adventure, increase_direction)
+    return_data = {'result': classification, 'mapping': mapping_data, 'increase_direction': increase_direction}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     # Must be fixed, but not now.
