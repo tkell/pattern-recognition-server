@@ -145,7 +145,10 @@ def map_as_piano(button_data, adventure):
 
 # Xylophone
 def map_as_xylo(button_data, adventure, increase_direction):
-    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    if not increase_direction or increase_direction == 'negative':
+        button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    elif increase_direction == 'positive':
+        button_data = sorted(button_data, key=lambda b: b['location']['x'], reverse=True)
     button_length = len(button_data)
 
     if adventure == 0:
