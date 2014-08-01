@@ -105,7 +105,7 @@ def analyze_image():
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
-    res = classification_from_data(piano_data[0])
+    res, increase_direction = classification_from_data(piano_data[0])
     classification = res[0]
     return "Hello, we have just done a test classification:  %s" % classification
 
