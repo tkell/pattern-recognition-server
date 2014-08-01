@@ -60,6 +60,7 @@ def classification_from_data(example_data):
     elif res[0] == 'xylophone':
         increase_direction = check_size(example_data, 'x')
         if not increase_direction:
+            print "checking kalimba"
             increase_direction = check_basic_kalimba(example_data)
 
     return res, increase_direction
