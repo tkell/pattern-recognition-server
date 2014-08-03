@@ -82,6 +82,7 @@ def check_staff(button_data):
     for index, button in enumerate(button_data):
         print index, button['shape'], shapes[index % 2]
         if button['shape'] != shapes[index % 2]:
+            print "we broke!"
             is_staff = False
             break
 
