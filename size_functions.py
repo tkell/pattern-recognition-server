@@ -69,3 +69,15 @@ def check_basic_kalimba(button_data):
         return 'kalimba'
     else:
         return None
+
+def check_staff(button_data):
+    button_data = sorted(button_data, key=lambda b: b['location']['y'])
+    shapes = [button_data[0]['shape'], button_data[1]['shape']]
+
+    is_staff = True
+    for index, button in enumerate(button_data):
+        if button['shape'] != shapes[index % 2]:
+            is_staff = False
+            break
+
+    return is_staff
