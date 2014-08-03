@@ -215,6 +215,13 @@ def map_as_piano_roll(button_data, adventure):
 
 # Zither
 def map_as_zither(button_data, adventure, increase_direction):
+
+    # dodge for staff
+    if 'increase_direction' == 'staff':
+        offset_major = [1, 2, 2, 2, 1, 2, 2]
+        mapped_buttons = map_ordered(button_data, offset_major, 64)
+        return mapped_buttons
+
     if not increase_direction or increase_direction == 'positive':
         button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     elif increase_direction == 'negative':
