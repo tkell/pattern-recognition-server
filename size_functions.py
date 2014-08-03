@@ -74,6 +74,10 @@ def check_staff(button_data):
     button_data = sorted(button_data, key=lambda b: b['location']['y'])
     shapes = [button_data[0]['shape'], button_data[1]['shape']]
 
+    print "these are the  main shapes", shapes
+
+    print "these are the button shapes", [b['shape'] for b in button_data]
+
     is_staff = True
     for index, button in enumerate(button_data):
         if button['shape'] != shapes[index % 2]:

@@ -58,12 +58,14 @@ def classification_from_data(example_data):
     if 'radius' in example_data[0]:
         if res[0] == 'zither':
             increase_direction = check_size(example_data, 'y')
-            if not increase_direction:
-                increase_direction == check_staff(example_data)
         elif res[0] == 'xylophone':
             increase_direction = check_size(example_data, 'x')
             if not increase_direction:
                 increase_direction = check_basic_kalimba(example_data)
+
+    if not increase_direction and 'shape' in example_data[0]:
+        print "checking staff"
+        increase_direction == check_staff(example_data)
 
     return res, increase_direction
 
