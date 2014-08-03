@@ -66,6 +66,7 @@ def classification_from_data(example_data):
     if not increase_direction and 'shape' in example_data[0]:
         print "checking staff"
         increase_direction == check_staff(example_data)
+        print "we got %s from check_staff", increase_direction
 
     return res, increase_direction
 

@@ -87,6 +87,8 @@ def check_staff(button_data):
             break
 
     if is_staff:
+        print "returning staff"
         return 'staff'
     else:
+        print "returning none"
         return None
