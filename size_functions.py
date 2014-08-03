@@ -81,5 +81,6 @@ def check_staff(button_data):
             break
 
     if is_staff:
+        return 'staff'
     else:
         return None
