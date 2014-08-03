@@ -63,7 +63,7 @@ def classification_from_data(example_data):
             if not increase_direction:
                 increase_direction = check_basic_kalimba(example_data)
 
-    if not increase_direction and 'shape' in example_data[0]:
+    if not increase_direction and res[0] == 'zither' and 'shape' in example_data[0]:
         increase_direction = check_staff(example_data)
 
     return res, increase_direction
