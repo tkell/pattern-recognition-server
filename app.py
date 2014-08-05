@@ -94,6 +94,9 @@ def analyze_data():
     # Create mapping, return mapping and the classification
     mapping_data = mapping_from_classification(classification, button_data, 
             adventure, increase_direction)
+
+    print "mapped"
+
     return_data = {'result': classification, 'mapping': mapping_data, 'increase_direction': increase_direction}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
