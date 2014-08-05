@@ -18,7 +18,7 @@ from classify import load_data_from_file
 from classify import translate_data_to_scikit
 from cross_domain import crossdomain
 from mapping import map_as
-from size_functions import check_size, check_basic_kalimba, check_staff
+from size_functions import check_size, check_basic_kalimba, check_staff, check_tonnetz
 
 # Create small classifier
 piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
@@ -65,6 +65,9 @@ def classification_from_data(example_data):
 
     if not increase_direction and res[0] == 'zither' and 'shape' in example_data[0]:
         increase_direction = check_staff(example_data)
+
+    if res[0] == 'large_grid':
+        increase_direction == check_tonnetz(example_data)
 
     return res, increase_direction
 

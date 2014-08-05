@@ -83,3 +83,29 @@ def check_staff(button_data):
         return 'staff'
     else:
         return None
+
+def check_tonnetz(button_data):
+    total_grid_distance = 0
+    total_tonnetz_distance = 0
+
+    def grid_line(x):
+        return 1 * x + button['location']['y']
+
+    def tonnetz_line(x):
+        return 2 * x + button['location']['y']
+
+    for button in button_data:
+        # draw a line at 45, draw a line at 60
+        for other_button in button_data:
+            y_loc = grid_line(other_button['location']['x'])
+            grid_distance = abs(y_loc - other_button['location']['y']) 
+            total_grid_distance += grid_distance
+
+            y_loc = tonnetz_line(other_button['location']['x'])
+            tonnetz_distance = abs(y_loc - other_button['location']['y']) 
+            total_tonnetz_distance += tonnetz_distance
+
+    if total_tonnetz_distance > total_grid_distance:
+        return 'tonnetz'
+    else:
+        return None
