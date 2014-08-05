@@ -66,9 +66,6 @@ def classification_from_data(example_data):
     if not modifier and res[0] == 'zither' and 'shape' in example_data[0]:
         modifier = check_staff(example_data)
 
-    if res[0] == 'large_grid':
-        modifier = check_tonnetz(example_data)
-
     return res, modifier
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
