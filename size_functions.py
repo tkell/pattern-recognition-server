@@ -84,8 +84,8 @@ def check_staff(button_data):
         return None
 
 def check_tonnetz(button_data):
-    total_grid_distance = 0
-    total_tonnetz_distance = 0
+    grid_count = 0
+    tonnetz_count = 0
 
     def grid_line(x):
         return 1 * x + button['location']['y']
@@ -98,14 +98,16 @@ def check_tonnetz(button_data):
         for other_button in button_data:
             y_loc = grid_line(button['location']['x'])
             grid_distance = abs(y_loc - other_button['location']['y']) 
-            total_grid_distance += grid_distance
+            if grid_distance < 10:
+                grid_count++
 
             y_loc = tonnetz_line(button['location']['x'])
             tonnetz_distance = abs(y_loc - other_button['location']['y']) 
-            total_tonnetz_distance += tonnetz_distance
+            if tonnetz_distance < 10:
+                tonnetz_count++
 
-    print total_tonnetz_distance, total_grid_distance
-    if total_tonnetz_distance > total_grid_distance:
+    print tonnetz_count, grid_count
+    if tonnetz_count > grid_count:
         print "we think it is a tonnetz"
         return 'tonnetz'
     else:
