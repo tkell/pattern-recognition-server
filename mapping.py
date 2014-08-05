@@ -425,10 +425,6 @@ def map_as_large_grid(button_data, adventure):
         large = rows
         short = cols
 
-    print large_dimension, short_dimension
-    print large
-    print short
-
     if short_dimension == 2:
         short_dimension_interval = 7
     elif short_dimension == 3:
@@ -512,7 +508,6 @@ def map_as_large_grid(button_data, adventure):
     else:
         base_note_number = 36
 
-    print button_data
     mapped_buttons = []
     for i, loc in enumerate(short):
         start_button = short[loc][0]
@@ -522,8 +517,6 @@ def map_as_large_grid(button_data, adventure):
         for button in short[loc]:
             temp_buttons.append(button_data[button_data.index(button)])
         note_number = base_note_number + short_dimension_interval * i
-
-        print temp_buttons
 
         if adventure < 3:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
