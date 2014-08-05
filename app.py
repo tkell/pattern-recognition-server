@@ -53,6 +53,8 @@ def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
     res =  classifier.predict(translated_data)
 
+    print "we got a response back", res[0]
+
     # For certain prototypes, check size patterns
     increase_direction = None
     if 'radius' in example_data[0]:
@@ -66,6 +68,7 @@ def classification_from_data(example_data):
     if not increase_direction and res[0] == 'zither' and 'shape' in example_data[0]:
         increase_direction = check_staff(example_data)
 
+    print "we are about to return the res and the modifier"
     return res, increase_direction
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
