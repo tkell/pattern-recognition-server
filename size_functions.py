@@ -99,12 +99,12 @@ def check_tonnetz(button_data):
             y_loc = grid_line(button['location']['x'])
             grid_distance = abs(y_loc - other_button['location']['y']) 
             if grid_distance < 10:
-                grid_count++
+                grid_count+= 1
 
             y_loc = tonnetz_line(button['location']['x'])
             tonnetz_distance = abs(y_loc - other_button['location']['y']) 
             if tonnetz_distance < 10:
-                tonnetz_count++
+                tonnetz_count+= 1
 
     print tonnetz_count, grid_count
     if tonnetz_count > grid_count:
