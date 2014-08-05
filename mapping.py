@@ -510,7 +510,7 @@ def map_as_large_grid(button_data, adventure):
         starting_index = i * large_dimension
         ending_index = (i + 1) * large_dimension
         note_number = base_note_number + short_dimension_interval * i
-        print "hmm...."
+        print "note assigned..."
 
         if adventure < 3:
             mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
