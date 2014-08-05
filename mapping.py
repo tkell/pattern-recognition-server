@@ -118,15 +118,15 @@ def map_by_ratio(button_data, note_number):
 
 
 # Master mapping function
-def map_as(classification, button_data, adventure, increase_direction):
+def map_as(classification, button_data, adventure, modifier):
     if classification == 'piano' or classification == 'big_piano':
         return map_as_piano(button_data, adventure)
     if classification == 'xylophone':
-        return map_as_xylo(button_data, adventure, increase_direction)
+        return map_as_xylo(button_data, adventure, modifier)
     if classification == 'piano_roll':
         return map_as_piano_roll(button_data, adventure)
     if classification == 'zither':
-        return map_as_zither(button_data, adventure, increase_direction)
+        return map_as_zither(button_data, adventure, modifier)
     if classification == 'small_grid':
         return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':
@@ -145,14 +145,13 @@ def map_as_piano(button_data, adventure):
     return mapped_buttons
 
 # Xylophone
-def map_as_xylo(button_data, adventure, increase_direction):
-    if not increase_direction or increase_direction == 'negative':
+def map_as_xylo(button_data, adventure, modifier):
+    if not modifier or modifier == 'negative':
         button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    elif increase_direction == 'positive':
+    elif modifier == 'positive':
         button_data = sorted(button_data, key=lambda b: b['location']['x'], reverse=True)
 
-    # not sure if this is right
-    elif increase_direction == 'kalimba':
+    elif modifier == 'kalimba':
         button_data = sorted(button_data, key=lambda b: b['location']['x'])
         button_data = sorted(button_data, key=lambda b: b['radius'], reverse=True)
 
@@ -215,17 +214,17 @@ def map_as_piano_roll(button_data, adventure):
     return mapped_buttons
 
 # Zither
-def map_as_zither(button_data, adventure, increase_direction):
+def map_as_zither(button_data, adventure, modifier):
     # dodge for staff
-    if increase_direction == 'staff' and adventure < 3:
+    if modifier == 'staff' and adventure < 3:
         button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
         offset_major = [1, 2, 2, 2, 1, 2, 2]
         mapped_buttons = map_ordered(button_data, offset_major, 64)
         return mapped_buttons
 
-    if not increase_direction or increase_direction == 'positive':
+    if not modifier or modifier == 'positive':
         button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-    elif increase_direction == 'negative':
+    elif modifier == 'negative':
         button_data = sorted(button_data, key=lambda b: b['location']['y'])
     button_length = len(button_data)
 
