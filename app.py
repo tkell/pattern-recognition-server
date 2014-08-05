@@ -67,7 +67,7 @@ def classification_from_data(example_data):
         increase_direction = check_staff(example_data)
 
     if res[0] == 'large_grid':
-        increase_direction == check_tonnetz(example_data)
+        increase_direction = check_tonnetz(example_data)
 
     return res, increase_direction
 

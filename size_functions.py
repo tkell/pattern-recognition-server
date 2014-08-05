@@ -96,11 +96,11 @@ def check_tonnetz(button_data):
     for button in button_data:
         # draw a line at 45, draw a line at 60
         for other_button in button_data:
-            y_loc = grid_line(other_button['location']['x'])
+            y_loc = grid_line(button['location']['x'])
             grid_distance = abs(y_loc - other_button['location']['y']) 
             total_grid_distance += grid_distance
 
-            y_loc = tonnetz_line(other_button['location']['x'])
+            y_loc = tonnetz_line(button['location']['x'])
             tonnetz_distance = abs(y_loc - other_button['location']['y']) 
             total_tonnetz_distance += tonnetz_distance
 
