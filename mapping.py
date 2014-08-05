@@ -396,27 +396,39 @@ def map_as_large_grid(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
 
     # Get the number of rows and columns
-    rows = []
-    cols = [] 
+    rows = {}
+    cols = {} 
     for button in button_data:
         if button['location']['y'] not in rows:
-            rows.append(button['location']['y'])
+            rows[button['location']['y']] = []
+            rows[button['location']['y']].append(button)
+        else: 
+            rows[button['location']['y']].append(button)
+
         if button['location']['x'] not in cols:
-            cols.append(button['location']['x'])
+            cols[button['location']['x']] = []
+            cols[button['location']['x']].append(button)
+        else:
+            cols[button['location']['x']].append(button)
     num_rows = len(rows)
     num_cols = len(cols)
-
 
     # Figure out if we have more columns or rows.
     # This determines where we put the scales, and where we put the leaps
     if num_cols >= num_rows:
         large_dimension = num_cols
         short_dimension = num_rows
+        large = cols
+        short = rows
     else:
         large_dimension = num_rows
         short_dimension = num_cols
+        large = rows
+        short = cols
 
     print large_dimension, short_dimension
+    print large
+    print short
 
     if short_dimension == 2:
         short_dimension_interval = 7
@@ -490,9 +502,6 @@ def map_as_large_grid(button_data, adventure):
             scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
             the_scale = find_scale(large_dimension, scale_list)
 
-    elif adventure == 3:
-        mapped_buttons = map_equal_tempered(button_data, 60)
-
     elif adventure == 4:
         return map_by_ratio(button_data, 60)
 
@@ -505,18 +514,26 @@ def map_as_large_grid(button_data, adventure):
         base_note_number = 36
 
     print "about to assign pitches"
+
+
+    print button_data
     mapped_buttons = []
-    for i in range(short_dimension):
-        starting_index = i * large_dimension
-        ending_index = (i + 1) * large_dimension
+    for i, loc in enumerate(short):
+        start_button = short[loc][0]
+        end_button = short[loc][-1]
+
+        temp_buttons = []
+        for button in short[loc]:
+            temp_buttons.append(button_data[button_data.index(button)])
         note_number = base_note_number + short_dimension_interval * i
-        print "note assigned..."
+
+        print temp_buttons
 
         if adventure < 3:
-            mapped_row = map_ordered(button_data[starting_index:ending_index], the_scale, note_number)
+            mapped_row = map_ordered(temp_buttons, the_scale, note_number)
             mapped_buttons.extend(mapped_row)
         if adventure == 3:
-            mapped_row = map_equal_tempered(button_data[starting_index:ending_index], note_number)
+            mapped_row = map_equal_tempered(temp_buttons, note_number)
             mapped_buttons.extend(mapped_row)
 
     return mapped_buttons
