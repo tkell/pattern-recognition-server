@@ -53,8 +53,6 @@ def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
     res =  classifier.predict(translated_data)
 
-    print "we got a response back", res[0]
-
     # For certain prototypes, check size patterns
     increase_direction = None
     if 'radius' in example_data[0]:
@@ -68,7 +66,6 @@ def classification_from_data(example_data):
     if not increase_direction and res[0] == 'zither' and 'shape' in example_data[0]:
         increase_direction = check_staff(example_data)
 
-    print "we are about to return the res and the modifier"
     return res, increase_direction
 
 @app.route("/analysis", methods=['POST', 'OPTIONS'])
@@ -88,15 +85,9 @@ def analyze_data():
 
     res, increase_direction = classification_from_data(button_data)
     classification = res[0]
-
-    print "about to map", increase_direction, classification
-
     # Create mapping, return mapping and the classification
     mapping_data = mapping_from_classification(classification, button_data, 
             adventure, increase_direction)
-
-    print "mapped"
-
     return_data = {'result': classification, 'mapping': mapping_data, 'increase_direction': increase_direction}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.

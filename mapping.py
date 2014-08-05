@@ -7,6 +7,7 @@ Mapping functions for each prototype, hidden behind map_as.
 
 import random
 from math import atan2
+from collections import OrderedDict
 
 # List of scales
 chromatic = [1]
@@ -389,15 +390,13 @@ def map_as_small_grid(button_data, adventure):
 
 
 def map_as_large_grid(button_data, adventure):
-
-    print "in map as large_grid"
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
 
     # Get the number of rows and columns
-    rows = {}
-    cols = {} 
+    rows = OrderedDict()
+    cols = OrderedDict()
     for button in button_data:
         if button['location']['y'] not in rows:
             rows[button['location']['y']] = []
@@ -512,9 +511,6 @@ def map_as_large_grid(button_data, adventure):
         base_note_number = 48
     else:
         base_note_number = 36
-
-    print "about to assign pitches"
-
 
     print button_data
     mapped_buttons = []
