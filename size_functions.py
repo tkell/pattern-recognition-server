@@ -105,6 +105,7 @@ def check_tonnetz(button_data):
             tonnetz_distance = abs(y_loc - other_button['location']['y']) 
             total_tonnetz_distance += tonnetz_distance
 
+    print total_tonnetz_distance, total_grid_distance
     if total_tonnetz_distance > total_grid_distance:
         return 'tonnetz'
     else:
