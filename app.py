@@ -89,6 +89,8 @@ def analyze_data():
     res, increase_direction = classification_from_data(button_data)
     classification = res[0]
 
+    print "about to map", increase_direction, classification
+
     # Create mapping, return mapping and the classification
     mapping_data = mapping_from_classification(classification, button_data, 
             adventure, increase_direction)

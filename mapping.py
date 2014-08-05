@@ -389,6 +389,8 @@ def map_as_small_grid(button_data, adventure):
 
 
 def map_as_large_grid(button_data, adventure):
+
+    print "in map as large_grid"
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
@@ -413,6 +415,8 @@ def map_as_large_grid(button_data, adventure):
     else:
         large_dimension = num_rows
         short_dimension = num_cols
+
+    print large_dimension, short_dimension
 
     if short_dimension == 2:
         short_dimension_interval = 7
