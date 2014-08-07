@@ -568,16 +568,13 @@ def map_as_tonnetz(button_data, adventure):
         axis = 'x'
         large = cols
         short = rows
-        short = sorted(short, key=lambda b: b['location']['y'], reverse=True)
     else:
         large_dimension = num_rows
         short_dimension = num_cols
         axis = 'y'
         large = rows
         short = cols
-        short = sorted(short, key=lambda b: b['location']['x'])
-
-    print "we've sorted things"
+    print "things are hopefully already sorted?"
     
     if adventure == 0:  # the classical m3, M3, P5
         the_scale = fifths
