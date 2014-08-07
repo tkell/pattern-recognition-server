@@ -68,12 +68,18 @@ def get_rows_and_cols(button_data):
     else:
         # Define how fuzzy we can get
         max_radius = max([b['radius'] for b in button_data])
-        max_radius = max_radius / 2
+
+        if not max_radius:
+            print "bizarre error", button_data
+            max_radius = 10
+        else:
+            max_radius = max_radius / 2
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
 
     for button in button_data[1:]:
+
         for row in rows:
             if button['location']['y'] > row - max_radius and button['location']['y'] < row + max_radius:
                 rows.append(button['location']['y'])
