@@ -13,6 +13,9 @@ from collections import OrderedDict
 chromatic = [1]
 fifths = [7]
 fourths = [5]
+minor_thirds = [3]
+major_seconds = [2]
+
 
 # Pentatonics.  I could use some more exciting things here
 pentatonic_major = [2, 2, 3, 2, 3]
@@ -131,6 +134,8 @@ def map_as(classification, button_data, adventure, modifier):
         return map_as_small_grid(button_data, adventure)
     if classification == 'large_grid':
         return map_as_large_grid(button_data, adventure)
+    if classification == 'tonnetz':
+        return map_as_tonnetz(button_data, adventure)
     if classification == 'circle':
         return map_as_circle(button_data, adventure)
 
@@ -516,6 +521,95 @@ def map_as_large_grid(button_data, adventure):
         for button in short[loc]:
             temp_buttons.append(button_data[button_data.index(button)])
         note_number = base_note_number + short_dimension_interval * i
+
+        if adventure < 3:
+            mapped_row = map_ordered(temp_buttons, the_scale, note_number)
+            mapped_buttons.extend(mapped_row)
+        if adventure == 3:
+            mapped_row = map_equal_tempered(temp_buttons, note_number)
+            mapped_buttons.extend(mapped_row)
+
+    return mapped_buttons
+
+
+
+
+def map_as_tonnetz(button_data, adventure):
+    # rows first, then columns
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+
+    # Will need to get short / long here toooo
+    # Get the number of rows and columns
+    rows = OrderedDict()
+    cols = OrderedDict()
+    for button in button_data:
+        if button['location']['y'] not in rows:
+            rows[button['location']['y']] = []
+            rows[button['location']['y']].append(button)
+        else: 
+            rows[button['location']['y']].append(button)
+
+        if button['location']['x'] not in cols:
+            cols[button['location']['x']] = []
+            cols[button['location']['x']].append(button)
+        else:
+            cols[button['location']['x']].append(button)
+    num_rows = len(rows)
+    num_cols = len(cols)
+
+    # Figure out if we have more columns or rows.
+    # This determines where we put the scales, and where we put the leaps
+    if num_cols >= num_rows:
+        large_dimension = num_cols
+        short_dimension = num_rows
+        large = cols
+        short = rows
+    else:
+        large_dimension = num_rows
+        short_dimension = num_cols
+        large = rows
+        short = cols
+    
+    if adventure == 0:  # the classical m3, M3, P5
+        leap_interval = 4
+        the_scale = minor_thirds
+
+    if adventure == 1:
+        if random.random() > 0.5:
+            leap_interval = 4
+            the_scale = minor_thirds   
+        else:
+            leap_interval = 3
+            the_scale = major_seconds
+
+    if adventure == 2:
+        leap_interval = random.choice([6, 5, 4, 3, 2])
+        the_scale = [leap_interval - 1]
+
+    if adventure == 3:
+        leap_interval = random.choice([6, 5, 4, 3, 2])
+
+    elif adventure == 4:
+        return map_by_ratio(button_data, 60)
+
+    # Lower notes for bigger grids
+    if len(button_data) < 24:
+        base_note_number = 60
+    elif len(button_data) < 48:
+        base_note_number = 48
+    else:
+        base_note_number = 36
+
+    mapped_buttons = []
+    for i, loc in enumerate(short):
+        start_button = short[loc][0]
+        end_button = short[loc][-1]
+
+        temp_buttons = []
+        for button in short[loc]:
+            temp_buttons.append(button_data[button_data.index(button)])
+        note_number = base_note_number + leap_interval * i
 
         if adventure < 3:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
