@@ -572,7 +572,7 @@ def map_as_tonnetz(button_data, adventure):
         short = cols
     
     if adventure == 0:  # the classical m3, M3, P5
-        leap_interval = 4
+        leap_interval = 10 #HMMMM
         the_scale = minor_thirds
 
     if adventure == 1:
@@ -602,10 +602,14 @@ def map_as_tonnetz(button_data, adventure):
         base_note_number = 36
 
     mapped_buttons = []
-    for i, loc in enumerate(short):
-        start_button = short[loc][0]
-        end_button = short[loc][-1]
 
+    # map the first button
+    # map everything in that button's row
+    # map everything in that button's col
+    # go to the next
+
+
+    for i, loc in enumerate(short):
         temp_buttons = []
         for button in short[loc]:
             temp_buttons.append(button_data[button_data.index(button)])
