@@ -612,28 +612,30 @@ def map_as_tonnetz(button_data, adventure):
 
     print "we're about to actually map"
     first_buttons = []
-    for i, loc in enumerate(short):
+    short_keys = sorted(short.keys())
+    print short_keys
+    for i, key in short_keys:
         if i == 0:
-            first_buttons.append(short[loc][0])
+            first_buttons.append(short[key][0])
             temp_buttons = []
-            for button in short[loc]:
+            for button in short[key]:
                 temp_buttons.append(button_data[button_data.index(button)])
             note_number = base_note_number
         else:
 
             last_button = first_buttons[-1]
             #compare!
-            if last_button['location'][axis] <= short[loc][0]['location'][axis]:
+            if last_button['location'][axis] < short[key][0]['location'][axis]:
                 offset = 4
             else:
                 offset = 3
            
             temp_buttons = []
-            for button in short[loc]:
+            for button in short[key]:
                 temp_buttons.append(button_data[button_data.index(button)])
             note_number = note_number + offset
 
-            first_buttons.append(short[loc][0])
+            first_buttons.append(short[key][0])
 
         print "we've picked our buttons, and are going to map them..."
         if adventure < 3:
