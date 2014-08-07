@@ -170,7 +170,7 @@ def generate_distance_features(button_data, max_button_length):
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data):
     all_data = []
-    for raw_example in data:
+    for raw_example in data[0:5]: # DEBUGS
         example_data = generate_features(raw_example) # select your magic here
         all_data.append(example_data)
     return all_data

@@ -20,7 +20,7 @@ from cross_domain import crossdomain
 from mapping import map_as
 from modifier_functions import check_size, check_basic_kalimba, check_staff
 
-# Create small classifier
+# Create classifier
 piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
 xylophone_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/xylophone.json').json()
 small_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/small_grid.json').json()
@@ -30,14 +30,17 @@ circle_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/circ
 large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
 tonnetz_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/tonnetz.json').json()
 
-classifier = create_classifier_from_data([(piano_data, 'piano'), 
-                                        (xylophone_data, 'xylophone'),
-                                        (small_grid_data, 'small_grid'),
-                                        (piano_roll_data, 'piano_roll'),
-                                        (zither_data, 'zither'),
-                                        (circle_data, 'circle'),
-                                        (large_grid_data, 'large_grid')
-                                        ])
+classifier = create_classifier_from_data([(piano_data, 'piano')])
+
+# classifier = create_classifier_from_data([(piano_data, 'piano'), 
+#                                         (xylophone_data, 'xylophone'),
+#                                         (small_grid_data, 'small_grid'),
+#                                         (piano_roll_data, 'piano_roll'),
+#                                         (zither_data, 'zither'),
+#                                         (circle_data, 'circle'),
+#                                         (large_grid_data, 'large_grid'),
+#                                         (tonnetz_data, 'tonnetz')
+#                                         ])
 
 app = Flask(__name__)
 
