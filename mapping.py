@@ -620,10 +620,10 @@ def map_as_tonnetz(button_data, adventure):
                 temp_buttons.append(button_data[button_data.index(button)])
             note_number = base_note_number
         else:
-            last_button = first_buttons[-1]
 
+            last_button = first_buttons[-1]
             #compare!
-            if last_button['location'][axis] =< short[loc][0]['location'][axis]:
+            if last_button['location'][axis] <= short[loc][0]['location'][axis]:
                 offset = 4
             else:
                 offset = 3
@@ -631,7 +631,7 @@ def map_as_tonnetz(button_data, adventure):
             temp_buttons = []
             for button in short[loc]:
                 temp_buttons.append(button_data[button_data.index(button)])
-            note_number = base_note_number + offset
+            note_number = note_number + offset
 
             first_buttons.append(short[loc][0])
 
