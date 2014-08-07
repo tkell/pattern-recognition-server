@@ -70,10 +70,10 @@ def get_rows_and_cols(button_data):
         max_radius = max([b['radius'] for b in button_data])
 
         if not max_radius:
-            print "error!"
-            print button_data
-
-        max_radius = max_radius / 2
+            print "bizarre error", button_data
+            max_radius = 10
+        else:
+            max_radius = max_radius / 2
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
@@ -180,6 +180,7 @@ def create_classifier_from_data(layout_list):
     collected_labels = []
 
     for data, category_name in layout_list:
+        print category_name
         res = translate_data_to_scikit(data)
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
