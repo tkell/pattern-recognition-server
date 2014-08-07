@@ -170,7 +170,7 @@ def generate_distance_features(button_data, max_button_length):
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data):
     all_data = []
-    for raw_example in data[0:5]: # DEBUGS
+    for raw_example in data:
         example_data = generate_features(raw_example) # select your magic here
         all_data.append(example_data)
     return all_data
@@ -180,7 +180,6 @@ def create_classifier_from_data(layout_list):
     collected_labels = []
 
     for data, category_name in layout_list:
-        print category_name
         res = translate_data_to_scikit(data)
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
