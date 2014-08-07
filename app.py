@@ -30,17 +30,14 @@ circle_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/circ
 large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
 tonnetz_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/tonnetz.json').json()
 
-classifier = create_classifier_from_data([(piano_data, 'piano')])
-
-# classifier = create_classifier_from_data([(piano_data, 'piano'), 
-#                                         (xylophone_data, 'xylophone'),
-#                                         (small_grid_data, 'small_grid'),
-#                                         (piano_roll_data, 'piano_roll'),
-#                                         (zither_data, 'zither'),
-#                                         (circle_data, 'circle'),
-#                                         (large_grid_data, 'large_grid'),
-#                                         (tonnetz_data, 'tonnetz')
-#                                         ])
+classifier = create_classifier_from_data([(piano_data, 'piano'), 
+                                        (xylophone_data, 'xylophone'),
+                                        (small_grid_data, 'small_grid'),
+                                        (piano_roll_data, 'piano_roll'),
+                                        (zither_data, 'zither'),
+                                        (large_grid_data, 'large_grid'),
+                                        (tonnetz_data, 'tonnetz')
+                                        ])
 
 app = Flask(__name__)
 
