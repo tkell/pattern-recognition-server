@@ -577,22 +577,34 @@ def map_as_tonnetz(button_data, adventure):
     print "things are hopefully already sorted?"
     
     if adventure == 0:  # the classical m3, M3, P5
+        low_offset = -4
+        high_offset = 3
         the_scale = fifths
 
     if adventure == 1:
         if random.random() > 0.5:
-            leap_interval = 4
-            the_scale = minor_thirds   
+            low_offset = -4
+            high_offset = 3
+            the_scale = fifths 
         else:
-            leap_interval = 3
-            the_scale = major_seconds
+            low_offset = -3
+            high_offset = 2
+            the_scale = fourths
 
     if adventure == 2:
-        leap_interval = random.choice([6, 5, 4, 3, 2])
-        the_scale = [leap_interval - 1]
+        if random.random() > 0.5:
+            low_offset = -3
+            high_offset = 2
+            the_scale = fourths
+        else:
+            low_offset = -2
+            high_offset = 1
+            the_scale = minor_thirds
 
     if adventure == 3:
-        leap_interval = random.choice([6, 5, 4, 3, 2])
+        low_offset = random.choice([-6, -5, -4, -3, -2])
+        high_offset = random.choice([5, 4, 3, 2, 1])
+        the_scale = random.choice([[5], [4], [3], [2], [1]])
 
     elif adventure == 4:
         return map_by_ratio(button_data, 60)
@@ -626,9 +638,9 @@ def map_as_tonnetz(button_data, adventure):
             last_button = first_buttons[-1]
             #compare!
             if last_button['location'][axis] < short[key][0]['location'][axis]:
-                offset = -4
+                offset = low_offset
             else:
-                offset = 3
+                offset = high_offset
            
             temp_buttons = []
             for button in short[key]:
@@ -638,11 +650,8 @@ def map_as_tonnetz(button_data, adventure):
             first_buttons.append(short[key][0])
 
         print "we've picked our buttons, and are going to map them..."
-        if adventure < 3:
+        if adventure < 4:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
-            mapped_buttons.extend(mapped_row)
-        if adventure == 3:
-            mapped_row = map_equal_tempered(temp_buttons, note_number)
             mapped_buttons.extend(mapped_row)
 
     return mapped_buttons
