@@ -614,7 +614,7 @@ def map_as_tonnetz(button_data, adventure):
     first_buttons = []
     short_keys = sorted(short.keys())
     print short_keys
-    for i, key in short_keys:
+    for i, key in enumerate(short_keys):
         if i == 0:
             first_buttons.append(short[key][0])
             temp_buttons = []
