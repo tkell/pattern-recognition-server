@@ -558,6 +558,8 @@ def map_as_tonnetz(button_data, adventure):
     num_rows = len(rows)
     num_cols = len(cols)
 
+    print "we got our rows"
+
     # Figure out if we have more columns or rows.
     # This determines where we put the scales, and where we put the leaps
     if num_cols >= num_rows:
@@ -574,6 +576,8 @@ def map_as_tonnetz(button_data, adventure):
         large = rows
         short = cols
         short = sorted(short, key=lambda b: b['location']['x'])
+
+    print "we've sorted things"
     
     if adventure == 0:  # the classical m3, M3, P5
         the_scale = fifths
@@ -609,6 +613,7 @@ def map_as_tonnetz(button_data, adventure):
     # map the first button
     # Find the buttons that are nearest to it
 
+    print "we're about to actually map"
     first_buttons = []
     for i, loc in enumerate(short):
         if i == 0:
@@ -621,7 +626,6 @@ def map_as_tonnetz(button_data, adventure):
             last_button = first_buttons[-1]
 
             #compare!
-
             if last_button['location'][axis] < short[loc][0]['location'][axis]:
                 offset = 4
             else:
@@ -634,6 +638,7 @@ def map_as_tonnetz(button_data, adventure):
 
             first_buttons.append(short[loc][0])
 
+        print "we've picked our buttons, and are going to map them..."
         if adventure < 3:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
             mapped_buttons.extend(mapped_row)
