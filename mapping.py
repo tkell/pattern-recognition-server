@@ -626,7 +626,7 @@ def map_as_tonnetz(button_data, adventure):
             last_button = first_buttons[-1]
             #compare!
             if last_button['location'][axis] < short[key][0]['location'][axis]:
-                offset = 4
+                offset = -4
             else:
                 offset = 3
            
