@@ -531,9 +531,6 @@ def map_as_large_grid(button_data, adventure):
 
     return mapped_buttons
 
-
-
-
 def map_as_tonnetz(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
@@ -558,8 +555,6 @@ def map_as_tonnetz(button_data, adventure):
     num_rows = len(rows)
     num_cols = len(cols)
 
-    print "we got our rows"
-
     # Figure out if we have more columns or rows.
     # This determines where we put the scales, and where we put the leaps
     if num_cols >= num_rows:
@@ -574,7 +569,6 @@ def map_as_tonnetz(button_data, adventure):
         axis = 'y'
         large = rows
         short = cols
-    print "things are hopefully already sorted?"
     
     if adventure == 0:  # the classical m3, M3, P5
         low_offset = -4
@@ -622,7 +616,6 @@ def map_as_tonnetz(button_data, adventure):
     # map the first button
     # Find the buttons that are nearest to it
 
-    print "we're about to actually map"
     first_buttons = []
     short_keys = sorted(short.keys())
     print short_keys
@@ -649,7 +642,6 @@ def map_as_tonnetz(button_data, adventure):
 
             first_buttons.append(short[key][0])
 
-        print "we've picked our buttons, and are going to map them..."
         if adventure < 4:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
             mapped_buttons.extend(mapped_row)
