@@ -563,17 +563,20 @@ def map_as_tonnetz(button_data, adventure):
     if num_cols >= num_rows:
         large_dimension = num_cols
         short_dimension = num_rows
+        axis = 'x'
         large = cols
         short = rows
+        short = sorted(short, key=lambda b: b['location']['y'], reverse=True)
     else:
         large_dimension = num_rows
         short_dimension = num_cols
+        axis = 'y'
         large = rows
         short = cols
+        short = sorted(short, key=lambda b: b['location']['x'])
     
     if adventure == 0:  # the classical m3, M3, P5
-        leap_interval = 10 #HMMMM
-        the_scale = minor_thirds
+        the_scale = fifths
 
     if adventure == 1:
         if random.random() > 0.5:
@@ -604,16 +607,32 @@ def map_as_tonnetz(button_data, adventure):
     mapped_buttons = []
 
     # map the first button
-    # map everything in that button's row
-    # map everything in that button's col
-    # go to the next
+    # Find the buttons that are nearest to it
 
-
+    first_buttons = []
     for i, loc in enumerate(short):
-        temp_buttons = []
-        for button in short[loc]:
-            temp_buttons.append(button_data[button_data.index(button)])
-        note_number = base_note_number + leap_interval * i
+        if i == 0:
+            first_buttons.append(short[loc][0])
+            temp_buttons = []
+            for button in short[loc]:
+                temp_buttons.append(button_data[button_data.index(button)])
+            note_number = base_note_number
+        else:
+            last_button = first_buttons[-1]
+
+            #compare!
+
+            if last_button['location'][axis] < short[loc][0]['location'][axis]:
+                offset = 4
+            else:
+                offset = 3
+           
+            temp_buttons = []
+            for button in short[loc]:
+                temp_buttons.append(button_data[button_data.index(button)])
+            note_number = base_note_number + offset
+
+            first_buttons.append(short[loc][0])
 
         if adventure < 3:
             mapped_row = map_ordered(temp_buttons, the_scale, note_number)
