@@ -36,8 +36,7 @@ classifier = create_classifier_from_data([(piano_data, 'piano'),
                                         (piano_roll_data, 'piano_roll'),
                                         (zither_data, 'zither'),
                                         (circle_data, 'circle'),
-                                        (large_grid_data, 'large_grid'),
-                                        (tonnetz_data, 'tonnetz'),
+                                        (large_grid_data, 'large_grid')
                                         ])
 
 app = Flask(__name__)
