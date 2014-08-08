@@ -29,7 +29,7 @@ ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither',
 classification_list = []
 for classification in ALL_CLASSIFICATIONS:
     data = get('http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification).json()
-    classification_list.append(data, classification)
+    classification_list.append((data, classification))
 
 classifier = create_classifier_from_data(classification_list)
 
