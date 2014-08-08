@@ -127,7 +127,7 @@ def validate(classification):
                 correct += 1
             else:
                 incorrect += 1
-        results_string += "%s:  %d correct, %d incorrect, out of %d\n" % (classification, correct, incorrect, len(example_data))
+        results_string += "%s:  %d correct, %d incorrect, out of %d<br>" % (classification, correct, incorrect, len(example_data))
 
     return results_string
 
