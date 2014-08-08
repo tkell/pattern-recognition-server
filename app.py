@@ -23,25 +23,15 @@ from cross_domain import crossdomain
 from mapping import map_as
 from modifier_functions import check_size, check_basic_kalimba, check_staff
 
-# Create classifier
-piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
-xylophone_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/xylophone.json').json()
-small_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/small_grid.json').json()
-piano_roll_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano_roll.json').json()
-zither_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/zither.json').json()
-circle_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/circle.json').json()
-large_grid_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/large_grid.json').json()
-tonnetz_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/tonnetz.json').json()
+ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither',
+                       'small_grid', 'large_grid', 'tonnetz','circle']
 
-classifier = create_classifier_from_data([(piano_data, 'piano'), 
-                                        (xylophone_data, 'xylophone'),
-                                        (small_grid_data, 'small_grid'),
-                                        (piano_roll_data, 'piano_roll'),
-                                        (zither_data, 'zither'),
-                                        (large_grid_data, 'large_grid'),
-                                        (tonnetz_data, 'tonnetz'),
-                                        (circle_data, 'circle'),
-                                        ])
+classification_list = []
+for classification in ALL_CLASSIFICATIONS:
+    data = get('http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification).json()
+    classification_list.append(data, classification)
+
+classifier = create_classifier_from_data(classification_list)
 
 app = Flask(__name__)
 
@@ -110,13 +100,8 @@ def analyze_image():
 
 @app.route("/validate/<layout_type>", methods=['GET'])
 def validate(layout_type):
-    classifications  = ['piano', 'xylophone',
-                        'piano_roll', 'zither',
-                        'small_grid', 'large_grid', 'tonnetz',
-                        'circle']
-
     if layout_type == 'all':
-        classifications = classifications
+        classifications = ALL_CLASSIFICATIONS
     else:
         classifications = [layout_type]
 
