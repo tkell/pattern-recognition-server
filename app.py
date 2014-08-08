@@ -26,7 +26,7 @@ from modifier_functions import check_size, check_basic_kalimba, check_staff
 
 # ['piano', 'xylophone','piano_roll', 'zither', 'small_grid', 'large_grid', 'tonnetz','circle']
 ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither',
-                       'small_grid', 'large_grid', 'tonnetz','circle']
+                       'large_grid', 'tonnetz','circle']
 
 classification_list = []
 for classification in ALL_CLASSIFICATIONS:
