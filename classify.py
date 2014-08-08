@@ -68,7 +68,7 @@ def get_rows_and_cols(button_data):
     else:
         # Define how fuzzy we can get
         max_radius = max([b['radius'] for b in button_data])
-        max_radius = max_radius / 4
+        max_radius = max_radius / 8
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
@@ -176,7 +176,10 @@ def create_classifier_from_data(layout_list):
     for data, category_name in layout_list:
         res = translate_data_to_scikit(data)
         if category_name in ['piano', 'piano_roll']:
-            print category_name, res[3]
+            print category_name
+            for r in res[0:10]:
+                print r[3],
+            print '\n'
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
