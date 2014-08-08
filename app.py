@@ -118,13 +118,15 @@ def validate(classification):
         classifications = [classification]
 
     results = {}
-
-    results_string = ''
     print "before the classification loop"
     for classification in classifications:
+        print classification
         results[classification] = (0, 0, {})
+        print "about to grab the data"
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
         example_data = get(data_url).json()
+
+        print got the data
 
         correct = 0
         incorrect += 1
