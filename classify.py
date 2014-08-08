@@ -175,7 +175,6 @@ def create_classifier_from_data(layout_list):
 
     for data, category_name in layout_list:
         res = translate_data_to_scikit(data)
-        if category_name in ['piano', 'piano_roll']:
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
