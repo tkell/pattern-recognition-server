@@ -107,17 +107,25 @@ def analyze_image():
 @app.route("/validate/<classification>", methods=['GET'])
 def validate(classification):
 
+    print "about to get data"
     data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
     example_data = get(data_url)
 
+    print "got data"
+
     correct = 0
     incorrect = 0
+
+    print "about to try things"
     for example in example_data:
         res, modifier = classification_from_data(example)
         if res[0] == classification:
             correct += 1
         else:
             incorrect += 1
+
+    print "done things!"
+
     return "%s:  %d correct, %d incorrect, out of %d" % (classification, correct, incorrect, len(example_data))
 
 # Test to make sure that we are loading and anaylzing data correctly
