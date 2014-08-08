@@ -123,9 +123,7 @@ def generate_features(button_data):
 
     return [num_rows, num_cols, 
             slope, mean_varience, std_dev_varience, 
-            mean_x_varience, std_dev_x_varience,
-            num_buttons
-            ]
+            mean_x_varience, std_dev_x_varience]
 
 # This one returns the normalized distances with better padding
 def generate_distance_features(button_data, max_button_length):
