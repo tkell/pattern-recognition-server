@@ -106,16 +106,16 @@ def analyze_image():
     return "We have, in theory, parsed the image and returned JSON"
 
 
-@app.route("/validate/<classification>", methods=['GET'])
+@app.route("/validate/<layout_type>", methods=['GET'])
 def validate(classification):
     classifications  = ['piano', 'xylophone', 'small_grid', 
                         'piano_roll', 'zither', 'large_grid', 
                         'tonnetz', 'circle']
 
-    if classification == 'all':
+    if layout_type == 'all':
         classifications = classifications
     else:
-        classifications = [classification]
+        classifications = [layout_type]
 
     results = {}
     for classification in classifications:
@@ -144,7 +144,7 @@ def validate(classification):
 
         results[classification] = (correct, incorrect, incorrect_string)
 
-    return render_template('validate.html', classification=classification, results=results)
+    return render_template('validate.html', classification=layout_type, results=results)
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
