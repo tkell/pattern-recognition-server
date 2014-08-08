@@ -107,7 +107,7 @@ def analyze_image():
 
 
 @app.route("/validate/<layout_type>", methods=['GET'])
-def validate(classification):
+def validate(layout_type):
     classifications  = ['piano', 'xylophone', 'small_grid', 
                         'piano_roll', 'zither', 'large_grid', 
                         'tonnetz', 'circle']
