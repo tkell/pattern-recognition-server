@@ -126,7 +126,7 @@ def validate(classification):
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
         example_data = get(data_url).json()
 
-        print got the data
+        print 'got the data'
 
         correct = 0
         incorrect += 1
