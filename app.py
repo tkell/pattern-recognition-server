@@ -106,28 +106,30 @@ def analyze_image():
 
 @app.route("/validate/<classification>", methods=['GET'])
 def validate(classification):
+    classifications  = ['piano', 'xylophone', 'small_grid', 
+                        'piano_roll', 'zither', 'large_grid', 'tonnetz']
 
-    print "about to get data"
-    data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
-    example_data = get(data_url).json()
+    if classification == 'all':
+        classifications = classifications
+    else:
+        classifications = [classification] 
 
-    print "got data"
+    results_string = ''
+    for classification in classifications:
+        data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
+        example_data = get(data_url).json()
 
-    correct = 0
-    incorrect = 0
+        correct = 0
+        incorrect = 0
+        for example in example_data:
+            res, modifier = classification_from_data(example)
+            if res[0] == classification:
+                correct += 1
+            else:
+                incorrect += 1
+        results_string += "%s:  %d correct, %d incorrect, out of %d\n" % (classification, correct, incorrect, len(example_data))
 
-    print "about to try things"
-    for example in example_data:
-        res, modifier = classification_from_data(example)
-        print res[0]
-        if res[0] == classification:
-            correct += 1
-        else:
-            incorrect += 1
-
-    print "done things!"
-
-    return "%s:  %d correct, %d incorrect, out of %d" % (classification, correct, incorrect, len(example_data))
+    return results_string
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
