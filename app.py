@@ -23,8 +23,9 @@ from cross_domain import crossdomain
 from mapping import map_as
 from modifier_functions import check_size, check_basic_kalimba, check_staff
 
-ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither',
-                       'small_grid', 'large_grid', 'tonnetz']
+
+# ['piano', 'xylophone','piano_roll', 'zither', 'small_grid', 'large_grid', 'tonnetz','circle']
+ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither']
 
 classification_list = []
 for classification in ALL_CLASSIFICATIONS:
