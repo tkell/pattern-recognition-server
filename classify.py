@@ -186,16 +186,5 @@ def create_classifier_from_data(layout_list):
 
     classifier = svm.LinearSVC()
     classifier.fit(collected_data, collected_labels)
-
-    # Validate on training dataset
-    validation_errors = 0
-    for index, data in enumerate(collected_data):
-        if collected_labels[index] != classifier.predict([data]):
-            validation_errors +=1
-            print '%s VALIDATION ERROR:  %d %s' % (collected_labels[index], index, classifier.predict([data]))
-
-    if validation_errors != 0:
-        print "PANIC!  There were %d validation_errors" % validation_errors
-
     return classifier
  
