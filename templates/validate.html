@@ -1,10 +1,23 @@
 <html>
 <head>
-    <title>Classification API Validation:  {{classification}}</title>
+    <title>Validation:  {{classification}}</title>
 </head>
-
 <body>
 
-</body>
+<table> 
+    <tr>
+        <td>Class</td>
+        <td>Correct</td>
+        <td>Incorrect</td>
+    </tr>
+{% for item in results %}
+    <tr>
+        <td>{{item}}</td>
+        <td>{{results[item][0]}}</td>
+        <td>{{results[item][1]}}</td>
+    </tr>
+{% endfor %}
+</table>
 
+</body>
 </html>

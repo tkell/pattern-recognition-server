@@ -115,10 +115,13 @@ def validate(classification):
     if classification == 'all':
         classifications = classifications
     else:
-        classifications = [classification] 
+        classifications = [classification]
+
+    results = {}
 
     results_string = ''
     for classification in classifications:
+        results[classification] = (0, 0)
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
         example_data = get(data_url).json()
 
@@ -130,9 +133,10 @@ def validate(classification):
                 correct += 1
             else:
                 incorrect += 1
-        results_string += "%s:  %d correct, %d incorrect, out of %d<br>" % (classification, correct, incorrect, len(example_data))
 
-    return render_template('validate.html', classification=classification)
+        results[classification] = (correct, incorrect)
+
+    return render_template('validate.html', classification=classification, results=results)
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
