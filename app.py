@@ -131,7 +131,7 @@ def validate(classification):
                 incorrect += 1
         results_string += "%s:  %d correct, %d incorrect, out of %d<br>" % (classification, correct, incorrect, len(example_data))
 
-    return results_string
+    return return render_template('validate.html', classification=classification)
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
