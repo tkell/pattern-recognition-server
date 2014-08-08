@@ -129,7 +129,7 @@ def validate(classification):
         print 'got the data'
 
         correct = 0
-        incorrect += 1
+        incorrect = 0
         incorrect_details = {}
         print "in the loop"
         for example in example_data:
