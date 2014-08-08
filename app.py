@@ -118,20 +118,14 @@ def validate(classification):
         classifications = [classification]
 
     results = {}
-    print "before the classification loop"
     for classification in classifications:
-        print classification
         results[classification] = (0, 0, {})
-        print "about to grab the data"
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
         example_data = get(data_url).json()
-
-        print 'got the data'
 
         correct = 0
         incorrect = 0
         incorrect_details = {}
-        print "in the loop"
         for example in example_data:
             res, modifier = classification_from_data(example)
             if res[0] == classification:
@@ -142,8 +136,6 @@ def validate(classification):
                 else:
                     incorrect_details[res[0]] += 1
                 incorrect += 1
-
-        print "trying to make the string"
 
         incorrect_string = ''
         for bad_classification in incorrect_details:
