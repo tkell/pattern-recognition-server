@@ -103,6 +103,11 @@ def analyze_data():
 def analyze_image():
     return "We have, in theory, parsed the image and returned JSON"
 
+
+@app.route("/validate/<classification>", methods=['GET'])
+def validate(classification):
+    return "Hello, we will check some results here %s" % classification
+
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
 def fake_analysis():
