@@ -9,12 +9,14 @@
         <td>Class</td>
         <td>Correct</td>
         <td>Incorrect</td>
+        <td>Details</td>
     </tr>
 {% for item in results %}
     <tr>
         <td>{{item}}</td>
         <td>{{results[item][0]}}</td>
         <td>{{results[item][1]}}</td>
+        <td>{{results[item][2]}}</td>
     </tr>
 {% endfor %}
 </table>

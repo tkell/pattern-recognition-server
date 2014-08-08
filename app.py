@@ -121,20 +121,30 @@ def validate(classification):
 
     results_string = ''
     for classification in classifications:
-        results[classification] = (0, 0)
+        results[classification] = (0, 0, {})
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
         example_data = get(data_url).json()
 
         correct = 0
-        incorrect = 0
+        incorrect += 1
+        incorrect_details = {}
         for example in example_data:
             res, modifier = classification_from_data(example)
             if res[0] == classification:
                 correct += 1
             else:
+                if res[0] not in incorrect_details:
+                    incorrect_details[res[0]] = 0
+                else:
+                    incorrect_details[res[0]] += 1
                 incorrect += 1
 
-        results[classification] = (correct, incorrect)
+        incorrect_string = ''
+        for bad_classification in incorrect_details:
+            incorrect_string = incorrect_string + \
+            '%s:  %d.  ' % (bad_classification, incorrect_details[bad_classification])
+
+        results[classification] = (correct, incorrect, incorrect_string)
 
     return render_template('validate.html', classification=classification, results=results)
 
