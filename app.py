@@ -36,7 +36,8 @@ classifier = create_classifier_from_data([(piano_data, 'piano'),
                                         (piano_roll_data, 'piano_roll'),
                                         (zither_data, 'zither'),
                                         (large_grid_data, 'large_grid'),
-                                        (tonnetz_data, 'tonnetz')
+                                        (tonnetz_data, 'tonnetz'),
+                                        (circle_data, 'circle'),
                                         ])
 
 app = Flask(__name__)
@@ -107,7 +108,8 @@ def analyze_image():
 @app.route("/validate/<classification>", methods=['GET'])
 def validate(classification):
     classifications  = ['piano', 'xylophone', 'small_grid', 
-                        'piano_roll', 'zither', 'large_grid', 'tonnetz']
+                        'piano_roll', 'zither', 'large_grid', 
+                        'tonnetz', 'circle']
 
     if classification == 'all':
         classifications = classifications
