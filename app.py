@@ -120,7 +120,7 @@ def validate(layout_type):
     else:
         classifications = [layout_type]
 
-    results = OrderedDict
+    results = OrderedDict()
     for classification in classifications:
         results[classification] = (0, 0, {})
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
