@@ -68,13 +68,12 @@ def get_rows_and_cols(button_data):
     else:
         # Define how fuzzy we can get
         max_radius = max([b['radius'] for b in button_data])
-        max_radius = max_radius / 2
+        max_radius = max_radius / 4
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
 
     for button in button_data[1:]:
-
         for row in rows:
             if button['location']['y'] > row - max_radius and button['location']['y'] < row + max_radius:
                 rows.append(button['location']['y'])
@@ -96,10 +95,8 @@ def generate_features(button_data):
     num_buttons = len(button_data)
     
     num_rows, num_cols = get_rows_and_cols(button_data)
-    max_dist, max_x, max_y = find_max_distance(button_data)
 
     slope = get_slope(button_data)
-    
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
 
@@ -124,8 +121,9 @@ def generate_features(button_data):
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
 
-    return [num_buttons, num_rows, num_cols, slope, mean_varience, 
-        std_dev_varience, mean_x_varience, std_dev_x_varience]
+    return [num_buttons, num_rows, num_cols, 
+            slope, mean_varience, std_dev_varience, 
+            mean_x_varience, std_dev_x_varience]
 
 # This one returns the normalized distances with better padding
 def generate_distance_features(button_data, max_button_length):
