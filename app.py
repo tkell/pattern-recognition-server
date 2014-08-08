@@ -132,7 +132,7 @@ def validate(classification):
                 correct += 1
             else:
                 if res[0] not in incorrect_details:
-                    incorrect_details[res[0]] = 0
+                    incorrect_details[res[0]] = 1
                 else:
                     incorrect_details[res[0]] += 1
                 incorrect += 1
