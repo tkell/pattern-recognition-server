@@ -10,6 +10,7 @@ from flask import Flask
 from flask import request
 from flask import make_response
 from flask import jsonify
+from flask import render_template
 
 from requests import get
 
