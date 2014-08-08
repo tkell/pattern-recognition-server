@@ -128,6 +128,7 @@ def validate(classification):
         correct = 0
         incorrect += 1
         incorrect_details = {}
+        print "in the loop"
         for example in example_data:
             res, modifier = classification_from_data(example)
             if res[0] == classification:
@@ -138,6 +139,8 @@ def validate(classification):
                 else:
                     incorrect_details[res[0]] += 1
                 incorrect += 1
+
+        print "trying to make the string"
 
         incorrect_string = ''
         for bad_classification in incorrect_details:
