@@ -119,6 +119,7 @@ def validate(classification):
     print "about to try things"
     for example in example_data:
         res, modifier = classification_from_data(example)
+        print res[0]
         if res[0] == classification:
             correct += 1
         else:
