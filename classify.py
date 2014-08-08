@@ -121,7 +121,7 @@ def generate_features(button_data):
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
 
-    return [num_buttons, num_rows, num_cols, 
+    return [num_rows, num_cols, num_buttons
             slope, mean_varience, std_dev_varience, 
             mean_x_varience, std_dev_x_varience]
 
