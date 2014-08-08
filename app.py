@@ -6,6 +6,8 @@ Webserver.  This needs to take data from the mobile app,
 classify it, and return a list of classifications.
 '''
 
+from collections import OrderedDict
+
 from flask import Flask
 from flask import request
 from flask import make_response
@@ -108,16 +110,17 @@ def analyze_image():
 
 @app.route("/validate/<layout_type>", methods=['GET'])
 def validate(layout_type):
-    classifications  = ['piano', 'xylophone', 'small_grid', 
-                        'piano_roll', 'zither', 'large_grid', 
-                        'tonnetz', 'circle']
+    classifications  = ['piano', 'xylophone',
+                        'piano_roll', 'zither',
+                        'small_grid', 'large_grid', 'tonnetz',
+                        'circle']
 
     if layout_type == 'all':
         classifications = classifications
     else:
         classifications = [layout_type]
 
-    results = {}
+    results = OrderedDict
     for classification in classifications:
         results[classification] = (0, 0, {})
         data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
@@ -143,7 +146,7 @@ def validate(layout_type):
             '%s:  %d.  ' % (bad_classification, incorrect_details[bad_classification])
 
         results[classification] = (correct, incorrect, incorrect_string)
-
+    
     return render_template('validate.html', classification=layout_type, results=results)
 
 # Test to make sure that we are loading and anaylzing data correctly
