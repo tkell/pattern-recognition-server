@@ -106,7 +106,19 @@ def analyze_image():
 
 @app.route("/validate/<classification>", methods=['GET'])
 def validate(classification):
-    return "Hello, we will check some results here %s" % classification
+
+    data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
+    example_data = get(data_url)
+
+    correct = 0
+    incorrect = 0
+    for example in example_data:
+        res, modifier = classification_from_data(example)
+        if res[0] == classification:
+            correct += 1
+        else:
+            incorrect += 1
+    return "%s:  %d correct, %d incorrect, out of %d" % (classification, correct, incorrect, len(example_data))
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/test_analysis", methods=['GET'])
