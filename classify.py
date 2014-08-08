@@ -183,7 +183,7 @@ def create_classifier_from_data(layout_list):
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
-    classifier = svm.LinearSVC()
+    classifier = svm.NuSVC()
     classifier.fit(collected_data, collected_labels)
     return classifier
  
