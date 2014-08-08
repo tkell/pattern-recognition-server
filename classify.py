@@ -176,14 +176,12 @@ def create_classifier_from_data(layout_list):
     for data, category_name in layout_list:
         res = translate_data_to_scikit(data)
         if category_name in ['piano', 'piano_roll']:
-            print category_name
-            for r in res[0:10]:
-                print r[3],
-            print '\n'
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
-    classifier = svm.NuSVC()
+    classifier = svm.LinearSVC() 
+    # nuSVC works on all validation, but gives lousy results in practice
+    # LinearSVC fails many validations, but feels better in practice
     classifier.fit(collected_data, collected_labels)
     return classifier
  
