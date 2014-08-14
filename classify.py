@@ -178,7 +178,7 @@ def create_classifier_from_data(layout_list):
         collected_data.extend(res)
         collected_labels.extend([category_name] * len(res))
 
-    classifier = svm.LinearSVC(tol=0.001) 
+    classifier = svm.LinearSVC(tol=0.01) 
     # nuSVC works on all validation, but gives lousy results in practice
     # LinearSVC fails many validations, but feels better in practice
     classifier.fit(collected_data, collected_labels)
