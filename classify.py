@@ -197,7 +197,9 @@ def create_classifier_from_data(layout_list):
     # GaussianNB is not bad in validation, but gets some demo tests wrong
     # BernoulliNB is very bad in validation
 
-    # Treeees?!
+    # Treeees:  perfect validation, perfect demo app.
+    # Also appears stable.
+    # OK on live input.  =\
     classifier = tree.DecisionTreeClassifier()
 
 
