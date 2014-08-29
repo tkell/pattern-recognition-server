@@ -189,7 +189,7 @@ def create_classifier_from_data(layout_list):
     # gives perfect validation with weights set to distance,
     # But fails the demo app test.
     # But is lineaaar.
-    classifier = neighbors.KNeighborsClassifier(15, weights='distance')
+    classifier = neighbors.KNeighborsClassifier(30, weights='distance')
 
     classifier.fit(collected_data, collected_labels)
     return classifier
