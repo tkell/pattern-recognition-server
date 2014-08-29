@@ -195,7 +195,7 @@ def create_classifier_from_data(layout_list):
 
     # Bayes, bayes, bayes. 
     # GaussianNB is not bad in validation, but gets some demo tests wrong
-    classifier = naive_bayes.MultinomialNB()
+    classifier = naive_bayes.BernoulliNB()
 
 
     classifier.fit(collected_data, collected_labels)
