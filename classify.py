@@ -12,6 +12,7 @@ import math
 from sklearn import svm
 from sklearn import neighbors
 from sklearn import naive_bayes
+from sklearn import tree
 
 def get_mean(the_list):
     return sum(the_list) / float(len(the_list))
@@ -191,11 +192,13 @@ def create_classifier_from_data(layout_list):
     # But fails the demo app test, but is stable.
     # classifier = neighbors.KNeighborsClassifier(10, weights='distance')
 
-    # NearestCentroid is bad in all regards.
 
     # Bayes, bayes, bayes. 
     # GaussianNB is not bad in validation, but gets some demo tests wrong
-    classifier = naive_bayes.BernoulliNB()
+    # BernoulliNB is very bad in validation
+
+    # Treeees?!
+    classifier = tree.DecisionTreeClassifier()
 
 
     classifier.fit(collected_data, collected_labels)
