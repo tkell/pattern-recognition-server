@@ -10,7 +10,7 @@ in order to classify data.
 import json
 import math
 from sklearn import svm
-from sklearn.neighbors.nearest_centroid import NearestCentroid
+from sklearn import neighbors
 
 def get_mean(the_list):
     return sum(the_list) / float(len(the_list))
@@ -182,9 +182,11 @@ def create_classifier_from_data(layout_list):
     # but may require many restarts to get there.
     # nuSVC works on all validation, but gives lousy results in practice
     # LinearSVC fails many validations, but feels better in practice
+    # NearestCentroid is bad in all regards.
     # classifier = svm.LinearSVC(tol=0.01) 
 
-    classifier = NearestCentroid()
+    classifier = neighbors.KNeighborsClassifier(15)
+
     classifier.fit(collected_data, collected_labels)
     return classifier
  
