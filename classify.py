@@ -9,9 +9,9 @@ in order to classify data.
 
 import json
 import math
-from sklearn import svm
-from sklearn import neighbors
-from sklearn import naive_bayes
+#from sklearn import svm
+#from sklearn import neighbors
+#from sklearn import naive_bayes
 from sklearn import tree
 
 def get_mean(the_list):
