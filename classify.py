@@ -185,8 +185,10 @@ def create_classifier_from_data(layout_list):
     # NearestCentroid is bad in all regards.
     # classifier = svm.LinearSVC(tol=0.01) 
 
-    # KNeighborsClassifier is good with 5, 3 crashes, 
-    classifier = neighbors.KNeighborsClassifier(5, weights='distance')
+    # KNeighborsClassifier is good with 5, 
+    # gives perfect validation with weights set to distance,
+    # But fails
+    classifier = neighbors.KNeighborsClassifier(10, weights='distance')
 
     classifier.fit(collected_data, collected_labels)
     return classifier
