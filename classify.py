@@ -11,6 +11,7 @@ import json
 import math
 from sklearn import svm
 from sklearn import neighbors
+from sklearn.naive_bayes import GaussianNB
 
 def get_mean(the_list):
     return sum(the_list) / float(len(the_list))
@@ -182,14 +183,18 @@ def create_classifier_from_data(layout_list):
     # but may require many restarts to get there.
     # nuSVC works on all validation, but gives lousy results in practice
     # LinearSVC fails many validations, but feels better in practice
-    # NearestCentroid is bad in all regards.
     # classifier = svm.LinearSVC(tol=0.01) 
 
+    # NearestCentroid is bad in all regards.
     # KNeighborsClassifier is good with 5 or 10
     # gives perfect validation with weights set to distance,
-    # But fails the demo app test.
-    # But is lineaaar.
-    classifier = neighbors.KNeighborsClassifier(30, weights='distance')
+    # But fails the demo app test, but is stable.
+    # classifier = neighbors.KNeighborsClassifier(10, weights='distance')
+
+    # NearestCentroid is bad in all regards.
+
+    # Bayes, bayes, bayes
+    classifier = GaussianNB()
 
     classifier.fit(collected_data, collected_labels)
     return classifier
