@@ -14,17 +14,6 @@ import math
 #from sklearn import naive_bayes
 from sklearn import tree
 
-def get_mean(the_list):
-    return sum(the_list) / float(len(the_list))
-
-
-def get_standard_dev(the_list):
-    mean = get_mean(the_list)
-    squared_diffs = [(mean - num) ** 2 for num in the_list]
-    standard_dev = get_mean(squared_diffs) ** 0.5
-    return standard_dev
-
-
 # Load data from a file
 def load_data_from_file(classification):
     data = []
@@ -33,6 +22,24 @@ def load_data_from_file(classification):
         for line in f:
             data = json.loads(line)
     return data
+
+
+def get_mean(the_list):
+    return sum(the_list) / float(len(the_list))
+
+def get_euclidian_distance(button_1, button_2):
+    x2 = (button_1['location']['x'] - button_2['location']['x']) ** 2 
+    y2 = (button_1['location']['y'] - button_2['location']['y']) ** 2
+    return (x2 + y2) ** 0.5
+
+def get_standard_dev(the_list):
+    mean = get_mean(the_list)
+    squared_diffs = [(mean - num) ** 2 for num in the_list]
+    standard_dev = get_mean(squared_diffs) ** 0.5
+    return standard_dev
+
+
+
 
 # Find the maximium distance for a set of button data
 def find_max_distance(button_data):
@@ -103,10 +110,15 @@ def generate_features(button_data):
         return slope * x + button_data[0]['location']['y']
 
     # mean and std dev from the line slope
+    ## This needs to be normalized!  
+    ## Let's get the Euclidian distance from 0 to -1, and use that
+    total_distance = get_euclidian_distance(button_data[0], button_data[-1])
+
     variences = []
     for button in button_data:
         rel_x = button['location']['x'] - button_data[0]['location']['x']
         varience = abs(line_eq(rel_x) - button['location']['y'])
+        varience = varience / float(total_distance)
         variences.append(varience)
 
     mean_varience = get_mean(variences)
@@ -117,13 +129,14 @@ def generate_features(button_data):
     mean_x = get_mean(x_locs)
     
     x_variences = []
+    ## This also needs to be normalized!
     for x in x_locs:
-        x_variences.append(abs(mean_x - x))
+        x_varience = abs(mean_x - x) / float(total_distance)
+        x_variences.append(x_varience)
 
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
 
-    # [num_buttons, num_rows, num_cols, slope, mean_varience, std_dev_varience, mean_x_varience, std_dev_x_varience]
     return [num_buttons, num_rows, num_cols, 
             slope, mean_varience, std_dev_varience, 
             mean_x_varience, std_dev_x_varience]
