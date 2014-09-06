@@ -77,7 +77,7 @@ def get_rows_and_cols(button_data):
     else:
         # Define how fuzzy we can get
         max_radius = max([b['radius'] for b in button_data])
-        max_radius = max_radius / 2
+        max_radius = max_radius / 8
 
     rows.append(button_data[0]['location']['y'])
     cols.append(button_data[0]['location']['x'])
@@ -137,8 +137,8 @@ def generate_features(button_data):
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
 
-    return [num_buttons, num_buttons, num_rows, num_cols, 
-            slope, slope, mean_varience, std_dev_varience, 
+    return [num_buttons, num_rows, num_cols, 
+            slope, mean_varience, std_dev_varience, 
             mean_x_varience, std_dev_x_varience]
 
 # This one returns the normalized distances with better padding
