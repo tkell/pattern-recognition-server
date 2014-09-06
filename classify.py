@@ -38,9 +38,6 @@ def get_standard_dev(the_list):
     standard_dev = get_mean(squared_diffs) ** 0.5
     return standard_dev
 
-
-
-
 # Find the maximium distance for a set of button data
 def find_max_distance(button_data):
     max_distance = 0 
@@ -59,8 +56,11 @@ def find_max_distance(button_data):
     return max(max_x, max_y), max_x, max_y
 
 def get_slope(button_data):
-    y_dist = button_data[0]['location']['y'] - button_data[-1]['location']['y']
-    x_dist = button_data[0]['location']['x'] - button_data[-1]['location']['x']
+    x_button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    x_dist = x_button_data[0]['location']['x'] - x_button_data[-1]['location']['x']
+
+    y_button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True) 
+    y_dist = y_button_data[0]['location']['y'] - y_button_data[-1]['location']['y']
     
     if x_dist == 0:
         x_dist = 1
