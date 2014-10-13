@@ -109,9 +109,7 @@ def generate_features(button_data):
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
 
-    # mean and std dev from the line slope
-    ## This needs to be normalized!  
-    ## Let's get the Euclidian distance from 0 to -1, and use that
+    # normalized mean and std dev from the line slope
     total_distance = get_euclidian_distance(button_data[0], button_data[-1])
 
     variences = []
@@ -124,12 +122,11 @@ def generate_features(button_data):
     mean_varience = get_mean(variences)
     std_dev_varience = get_standard_dev(variences)
 
-    # mean and std dev from the horiztonal center
+    # normalized mean and std dev from the horiztonal center
     x_locs = [button['location']['x'] for button in button_data]
     mean_x = get_mean(x_locs)
     
     x_variences = []
-    ## This also needs to be normalized!
     for x in x_locs:
         x_varience = abs(mean_x - x) / float(total_distance)
         x_variences.append(x_varience)
