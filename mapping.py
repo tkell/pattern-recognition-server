@@ -351,8 +351,8 @@ def map_as_small_grid(button_data, adventure):
             if appended:
                 break
             for b in row:
-                if button['location']['y'] < b['location']['y'] - max_radius \
-                    or button['location']['y'] > b['location']['y'] + max_radius:
+                if button['location']['y'] > b['location']['y'] - max_radius \
+                    and button['location']['y'] < b['location']['y'] + max_radius:
                         row.append(button)
                         appended = True
                         break
