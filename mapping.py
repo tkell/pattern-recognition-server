@@ -359,6 +359,8 @@ def map_as_small_grid(button_data, adventure):
         if not appended:
             rows.append([button])
 
+    print "we have %d rows" % len(rows)
+
     # Sort each row by X value..
     rows = [sorted(row, key=lambda b: b['location']['x']) for row in rows]
 
