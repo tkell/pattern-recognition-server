@@ -359,8 +359,6 @@ def map_as_small_grid(button_data, adventure):
         if not appended:
             rows.append([button])
 
-    print "we have %d rows" % len(rows)
-
     # Sort each row by X value..
     rows = [sorted(row, key=lambda b: b['location']['x']) for row in rows]
 
@@ -379,7 +377,7 @@ def map_as_small_grid(button_data, adventure):
             the_scale = diatonic_both
         else:
             the_scale = diatonic_major
-        mapped_buttons = map_ordered(button_data, the_scale, 60)
+        mapped_buttons = map_ordered(better_button_data, the_scale, 60)
 
     elif adventure == 1:
         if button_length <= 6:
@@ -420,13 +418,13 @@ def map_as_small_grid(button_data, adventure):
             scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
             the_scale = find_scale(button_length, scale_list)
 
-        mapped_buttons = map_ordered(button_data, the_scale, 60)
+        mapped_buttons = map_ordered(better_button_data, the_scale, 60)
 
     elif adventure == 3:
-        mapped_buttons = map_equal_tempered(button_data, 60)
+        mapped_buttons = map_equal_tempered(better_button_data, 60)
 
     elif adventure == 4:
-        mapped_buttons = map_by_ratio(button_data, 60)
+        mapped_buttons = map_by_ratio(better_button_data, 60)
 
     return mapped_buttons
 
