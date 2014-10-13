@@ -84,11 +84,11 @@ def get_rows_and_cols(button_data):
 
     for button in button_data[1:]:
         for row in rows:
-            if button['location']['y'] > row - max_radius and button['location']['y'] < row + max_radius:
+            if button['location']['y'] < row - max_radius or button['location']['y'] > row + max_radius:
                 rows.append(button['location']['y'])
                 break
         for col in cols:
-            if button['location']['x'] > col - max_radius and button['location']['x'] < col + max_radius:
+            if button['location']['x'] < col - max_radius or button['location']['x'] > col + max_radius:
                 cols.append(button['location']['x'])
                 break
 
