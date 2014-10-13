@@ -332,6 +332,42 @@ def map_as_small_grid(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     button_length = len(button_data)
 
+    # Fake radius if we don't have it
+    if 'radius' not in button_data[0].keys():
+        max_radius = 10
+    else:
+        # Define how fuzzy we can get
+        max_radius = max([b['radius'] for b in button_data])
+        max_radius = max_radius
+
+    # Start the data
+    rows = []
+    rows.append([button_data[0]])
+
+    # Try to put each button in a row
+    for button in button_data[1:]:
+        appended = False
+        for row in rows:
+            if appended:
+                break
+            for b in row:
+                if button['location']['y'] < b['location']['y'] - max_radius \
+                    or button['location']['y'] > b['location']['y'] + max_radius:
+                        row.append(button)
+                        appended = True
+                        break
+        if not appended:
+            rows.append([button])
+
+    # Sort each row by X value..
+    rows = [sorted(row, key=lambda b: b['location']['x']) for row in rows]
+
+    # make the new list!
+    better_button_data = []
+    for row in rows:
+        better_button_data.extend(row)
+
+    # Pick a mapping
     if adventure == 0:
         if button_length <= 6:
             the_scale = pentatonic_major
@@ -358,7 +394,7 @@ def map_as_small_grid(button_data, adventure):
             the_scale = diatonic_both
         else:
             the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
-        mapped_buttons = map_ordered(button_data, the_scale, 60)
+        mapped_buttons = map_ordered(better_button_data, the_scale, 60)
 
     elif adventure == 2:
         if button_length == 3 or button_length == 4:
@@ -618,7 +654,6 @@ def map_as_tonnetz(button_data, adventure):
 
     first_buttons = []
     short_keys = sorted(short.keys())
-    print short_keys
     for i, key in enumerate(short_keys):
         if i == 0:
             first_buttons.append(short[key][0])
