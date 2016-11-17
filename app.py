@@ -150,4 +150,4 @@ def hello():
     return "Hello there, the server is up."
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
