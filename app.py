@@ -65,7 +65,7 @@ def classification_from_data(example_data):
 
     return res, modifier
 
-@app.route("/analysis", methods=['POST', 'OPTIONS'])
+@app.route("/pattern-rec/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
 def analyze_data():
     # Transform the data, get a classification
@@ -95,12 +95,12 @@ def analyze_data():
     resp.headers['Access-Control-Max-Age'] = 54000
     return resp
 
-@app.route("/image", methods=['POST'])
+@app.route("/pattern-rec/image", methods=['POST'])
 def analyze_image():
     return "We have, in theory, parsed the image and returned JSON"
 
 
-@app.route("/validate/<layout_type>", methods=['GET'])
+@app.route("/pattern-rec/validate/<layout_type>", methods=['GET'])
 def validate(layout_type):
     if layout_type == 'all':
         classifications = ALL_CLASSIFICATIONS
@@ -137,7 +137,7 @@ def validate(layout_type):
     return render_template('validate.html', classification=layout_type, results=results)
 
 # Test to make sure that we are loading and anaylzing data correctly
-@app.route("/test_analysis", methods=['GET'])
+@app.route("/pattern-rec/test_analysis", methods=['GET'])
 def fake_analysis():
     piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
     res, modifier = classification_from_data(piano_data[0])
@@ -145,7 +145,7 @@ def fake_analysis():
     return "Hello, we have just done a test classification:  %s" % classification
 
 # Test to make sure that the server is up
-@app.route("/hello", methods=['GET'])
+@app.route("/pattern-rec/hello", methods=['GET'])
 def hello():
     return "Hello there, the server is up."
 
