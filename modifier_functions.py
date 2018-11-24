@@ -106,9 +106,9 @@ def check_tonnetz(button_data):
             if tonnetz_distance < 10:
                 tonnetz_count+= 1
 
-    print tonnetz_count, grid_count
+    print(tonnetz_count, grid_count)
     if tonnetz_count > grid_count:
-        print "we think it is a tonnetz"
+        print("we think it is a tonnetz")
         return 'tonnetz'
     else:
         return None
