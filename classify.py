@@ -135,46 +135,11 @@ def generate_features(button_data):
             slope, mean_varience, std_dev_varience, 
             mean_x_varience, std_dev_x_varience]
 
-# This one returns the normalized distances with better padding
-def generate_distance_features(button_data, max_button_length):
-    # First we sort.
-    button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-
-    # Then we find the max distance
-    max_distance, max_x, max_y = find_max_distance(button_data)
-
-    # We actually do the subtraction
-    distances = []
-    for index, button in enumerate(button_data):
-        for other_button in button_data[index + 1:]:
-            x_distance = button['location']['x'] - other_button['location']['x']
-            y_distance = button['location']['y'] - other_button['location']['y']
-
-            distances.append(x_distance)
-            distances.append(y_distance)
-
-        # This bit pads things in place, as it were, 
-        # rather than stacking all the zeros at the end, 
-        # and screwing the indicies up
-        if len(button_data) < max_button_length:
-            distances.extend([0] * (2 * (max_button_length - len(button_data))))
-
-    # Final padding
-    if len(button_data) < max_button_length:
-        final_padding_count = max_button_length * (max_button_length - 1) - len(distances)
-        distances.extend([0] * final_padding_count)
-
-    # Divide it out
-    distances = [d / float(max_distance) for d in distances]
-
-    return distances
-
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data):
     all_data = []
     for raw_example in data:
-        example_data = generate_features(raw_example) # select your magic here
+        example_data = generate_features(raw_example)
         all_data.append(example_data)
     return all_data
 
