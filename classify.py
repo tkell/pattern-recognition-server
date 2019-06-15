@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
@@ -9,9 +8,7 @@ in order to classify data.
 
 import json
 import math
-#from sklearn import svm
-#from sklearn import neighbors
-#from sklearn import naive_bayes
+import pickle
 from sklearn import tree
 
 # Load data from a file
@@ -138,81 +135,16 @@ def generate_features(button_data):
             slope, mean_varience, std_dev_varience, 
             mean_x_varience, std_dev_x_varience]
 
-# This one returns the normalized distances with better padding
-def generate_distance_features(button_data, max_button_length):
-    # First we sort.
-    button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
-
-    # Then we find the max distance
-    max_distance, max_x, max_y = find_max_distance(button_data)
-
-    # We actually do the subtraction
-    distances = []
-    for index, button in enumerate(button_data):
-        for other_button in button_data[index + 1:]:
-            x_distance = button['location']['x'] - other_button['location']['x']
-            y_distance = button['location']['y'] - other_button['location']['y']
-
-            distances.append(x_distance)
-            distances.append(y_distance)
-
-        # This bit pads things in place, as it were, 
-        # rather than stacking all the zeros at the end, 
-        # and screwing the indicies up
-        if len(button_data) < max_button_length:
-            distances.extend([0] * (2 * (max_button_length - len(button_data))))
-
-    # Final padding
-    if len(button_data) < max_button_length:
-        final_padding_count = max_button_length * (max_button_length - 1) - len(distances)
-        distances.extend([0] * final_padding_count)
-
-    # Divide it out
-    distances = [d / float(max_distance) for d in distances]
-
-    return distances
-
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data):
     all_data = []
     for raw_example in data:
-        example_data = generate_features(raw_example) # select your magic here
+        example_data = generate_features(raw_example)
         all_data.append(example_data)
     return all_data
 
-def create_classifier_from_data(layout_list):
-    collected_data = []
-    collected_labels = []
-
-    for data, category_name in layout_list:
-        res = translate_data_to_scikit(data)
-        collected_data.extend(res)
-        collected_labels.extend([category_name] * len(res))
-
-    # This was 0.0001 - the higher tolerance can give good results, 
-    # but may require many restarts to get there.
-    # nuSVC works on all validation, but gives lousy results in practice
-    # LinearSVC fails many validations, but feels better in practice
-    # classifier = svm.LinearSVC(tol=0.01) 
-
-    # NearestCentroid is bad in all regards.
-    # KNeighborsClassifier is good with 5 or 10
-    # gives perfect validation with weights set to distance,
-    # But fails the demo app test, but is stable.
-    # classifier = neighbors.KNeighborsClassifier(10, weights='distance')
-
-
-    # Bayes, bayes, bayes. 
-    # GaussianNB is not bad in validation, but gets some demo tests wrong
-    # BernoulliNB is very bad in validation
-
-    # Treeees:  perfect validation, perfect demo app.
-    # Also appears stable.
-    # OK on live input.  =\
-    classifier = tree.DecisionTreeClassifier()
-
-
-    classifier.fit(collected_data, collected_labels)
+def create_classifier_from_pickle(filepath):
+    with open(filepath, 'rb') as f:
+        classifier = pickle.load(f)
     return classifier
  

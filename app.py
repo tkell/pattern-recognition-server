@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Webserver.  This needs to take data from the mobile app, 
-classify it, and return a list of classifications.
+Webserver.  This takes data from the app and classifies it.
 '''
 
 from collections import OrderedDict
@@ -15,32 +14,17 @@ from flask import jsonify
 from flask import render_template
 
 from requests import get
-
-from classify import create_classifier_from_data
-from classify import load_data_from_file
-from classify import translate_data_to_scikit
 from cross_domain import crossdomain
+
+from classify import create_classifier_from_pickle
+from classify import translate_data_to_scikit
 from mapping import map_as
 from modifier_functions import check_size, check_basic_kalimba, check_staff
 
-
-# ['piano', 'xylophone','piano_roll', 'zither', 'small_grid', 'large_grid', 'tonnetz','circle']
-ALL_CLASSIFICATIONS = ['piano', 'xylophone','piano_roll', 'zither',
-                       'small_grid', 'large_grid', 'tonnetz','circle']
-
-classification_list = []
-for classification in ALL_CLASSIFICATIONS:
-    data = get('http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification).json()
-    classification_list.append((data, classification))
-
-classifier = create_classifier_from_data(classification_list)
+classifier_path = 'trained_classifier.pkl'
+classifier = create_classifier_from_pickle(classifier_path)
 
 app = Flask(__name__)
-
-# this will be were we talk to the image api stuf
-def objects_from_image():
-    #image_to_button_data
-    pass
 
 def mapping_from_classification(classification, button_data, adventure, modifier):
     mapped_buttons = map_as(classification, button_data, adventure, modifier)
@@ -88,16 +72,11 @@ def analyze_data():
     return_data = {'result': classification, 'mapping': mapping_data, 'modifier': modifier}
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
-    # Must be fixed, but not now.
     resp = make_response(jsonify(**return_data))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST'
     resp.headers['Access-Control-Max-Age'] = 54000
     return resp
-
-@app.route("/pattern-rec/image", methods=['POST'])
-def analyze_image():
-    return "We have, in theory, parsed the image and returned JSON"
 
 
 @app.route("/pattern-rec/validate/<layout_type>", methods=['GET'])
