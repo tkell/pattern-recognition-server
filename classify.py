@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
@@ -9,9 +8,7 @@ in order to classify data.
 
 import json
 import math
-#from sklearn import svm
-#from sklearn import neighbors
-#from sklearn import naive_bayes
+import pickle
 from sklearn import tree
 
 # Load data from a file
@@ -181,38 +178,8 @@ def translate_data_to_scikit(data):
         all_data.append(example_data)
     return all_data
 
-def create_classifier_from_data(layout_list):
-    collected_data = []
-    collected_labels = []
-
-    for data, category_name in layout_list:
-        res = translate_data_to_scikit(data)
-        collected_data.extend(res)
-        collected_labels.extend([category_name] * len(res))
-
-    # This was 0.0001 - the higher tolerance can give good results, 
-    # but may require many restarts to get there.
-    # nuSVC works on all validation, but gives lousy results in practice
-    # LinearSVC fails many validations, but feels better in practice
-    # classifier = svm.LinearSVC(tol=0.01) 
-
-    # NearestCentroid is bad in all regards.
-    # KNeighborsClassifier is good with 5 or 10
-    # gives perfect validation with weights set to distance,
-    # But fails the demo app test, but is stable.
-    # classifier = neighbors.KNeighborsClassifier(10, weights='distance')
-
-
-    # Bayes, bayes, bayes. 
-    # GaussianNB is not bad in validation, but gets some demo tests wrong
-    # BernoulliNB is very bad in validation
-
-    # Treeees:  perfect validation, perfect demo app.
-    # Also appears stable.
-    # OK on live input.  =\
-    classifier = tree.DecisionTreeClassifier()
-
-
-    classifier.fit(collected_data, collected_labels)
+def create_classifier_from_pickle(filepath):
+    with open(filepath, 'rb') as f:
+        classifier = pickle.load(f)
     return classifier
  
