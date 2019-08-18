@@ -1,13 +1,139 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-'''
-Mapping functions for each prototype, hidden behind map_as.
-'''
-
+import json
 import random
 from math import atan2
 from collections import OrderedDict
+
+
+# Tree classifier -----------------------
+# unsure if the formatting is right!
+def get_classification(data):
+    num_buttons = data[0]
+    num_rows = data[1]
+    num_cols = data[2]
+    slope = data[3]
+    mean_var = data[4]
+    std_dev_var = data[5]
+    mean_x_var = data[6]
+    std_dev_x_var = data[7]
+
+    if num_rows <= 1.5:
+        if mean_var <= 0.21650634706020355:
+            return 'xylophone'
+        else:  # if mean_var > 0.21650634706020355
+            return 'circle'
+    else:  # if num_rows > 1.5
+        if num_cols <= 13.5:
+            if num_cols <= 2.0:
+                if num_buttons <= 6.5:
+                    if std_dev_x_var <= 0.07486573606729507:
+                        return 'small_grid'
+                    else:  # if std_dev_x_var > 0.07486573606729507
+                        return 'circle'
+                else:  # if num_buttons > 6.5
+                    if mean_x_var <= 0.16608050651848316:
+                        return 'zither'
+                    else:  # if mean_x_var > 0.16608050651848316
+                        return 'circle'
+            else:  # if num_cols > 2.0
+                if std_dev_var <= 0.5679819285869598:
+                    if std_dev_var <= 0.10309640690684319:
+                        if num_rows <= 6.5:
+                            if mean_x_var <= 0.31577572226524353:
+                                return 'piano'
+                            else:  # if mean_x_var > 0.31577572226524353
+                                return 'small_grid'
+                        else:  # if num_rows > 6.5
+                            return 'small_grid'
+                    else:  # if std_dev_var > 0.10309640690684319
+                        if mean_x_var <= 0.30158163607120514:
+                            if std_dev_var <= 0.10598976537585258:
+                                return 'piano'
+                            else:  # if std_dev_var > 0.10598976537585258
+                                return 'small_grid'
+                        else:  # if mean_x_var > 0.30158163607120514
+                            if mean_var <= 0.3213394209742546:
+                                return 'small_grid'
+                            else:  # if mean_var > 0.3213394209742546
+                                return 'circle'
+                else:  # if std_dev_var > 0.5679819285869598
+                    return 'piano_roll'
+        else:  # if num_cols > 13.5
+            if mean_var <= 0.5047118216753006:
+                if mean_x_var <= 0.17323721945285797:
+                    if num_rows <= 25.5:
+                        if std_dev_var <= 0.3435194343328476:
+                            if slope <= -1.6445452570915222:
+                                if num_buttons <= 24.5:
+                                    return 'large_grid'
+                                else:  # if num_buttons > 24.5
+                                    if num_buttons <= 26.5:
+                                        return 'tonnetz'
+                                    else:  # if num_buttons > 26.5
+                                        return 'large_grid'
+                            else:  # if slope > -1.6445452570915222
+                                if slope <= -1.5641443729400635:
+                                    return 'tonnetz'
+                                else:  # if slope > -1.5641443729400635
+                                    return 'large_grid'
+                        else:  # if std_dev_var > 0.3435194343328476
+                            return 'tonnetz'
+                    else:  # if num_rows > 25.5
+                        if mean_var <= 0.3418903797864914:
+                            return 'large_grid'
+                        else:  # if mean_var > 0.3418903797864914
+                            return 'tonnetz'
+                else:  # if mean_x_var > 0.17323721945285797
+                    if mean_var <= 0.26044249534606934:
+                        if std_dev_x_var <= 0.16096936911344528:
+                            if num_rows <= 40.5:
+                                return 'large_grid'
+                            else:  # if num_rows > 40.5
+                                return 'tonnetz'
+                        else:  # if std_dev_x_var > 0.16096936911344528
+                            return 'tonnetz'
+                    else:  # if mean_var > 0.26044249534606934
+                        if std_dev_x_var <= 0.10907256975769997:
+                            if mean_var <= 0.36868488788604736:
+                                if num_rows <= 39.0:
+                                    return 'large_grid'
+                                else:  # if num_rows > 39.0
+                                    return 'tonnetz'
+                            else:  # if mean_var > 0.36868488788604736
+                                if mean_x_var <= 0.2271130010485649:
+                                    return 'tonnetz'
+                                else:  # if mean_x_var > 0.2271130010485649
+                                    return 'large_grid'
+                        else:  # if std_dev_x_var > 0.10907256975769997
+                            if mean_var <= 0.3034055233001709:
+                                if std_dev_x_var <= 0.13167573511600494:
+                                    return 'large_grid'
+                                else:  # if std_dev_x_var > 0.13167573511600494
+                                    return 'tonnetz'
+                            else:  # if mean_var > 0.3034055233001709
+                                if num_buttons <= 15.5:
+                                    return 'large_grid'
+                                else:  # if num_buttons > 15.5
+                                    if slope <= -1.5788135528564453:
+                                        return 'large_grid'
+                                    else:  # if slope > -1.5788135528564453
+                                        if std_dev_x_var <= 0.11206164956092834:
+                                            if slope <= -1.2089494466781616:
+                                                return 'tonnetz'
+                                            else:  # if slope > -1.2089494466781616
+                                                return 'large_grid'
+                                        else:  # if std_dev_x_var > 0.11206164956092834
+                                            if slope <= -1.3813077211380005:
+                                                if mean_var <= 0.36789606511592865:
+                                                    return 'large_grid'
+                                                else:  # if mean_var > 0.36789606511592865
+                                                    return 'tonnetz'
+                                            else:  # if slope > -1.3813077211380005
+                                                return 'tonnetz'
+            else:  # if mean_var > 0.5047118216753006
+                return 'circle'
+
+
+# Mapping scales and functions -------------
 
 # List of scales
 chromatic = [1]
@@ -15,7 +141,6 @@ fifths = [7]
 fourths = [5]
 minor_thirds = [3]
 major_seconds = [2]
-
 
 # Pentatonics.  I could use some more exciting things here
 pentatonic_major = [2, 2, 3, 2, 3]
@@ -43,6 +168,11 @@ diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1]  # has flat 3, flat 6, and  flat
 
 # Odd
 trumpet = [1, 1, 1]
+
+
+def mapping_from_classification(classification, button_data, adventure, modifier):
+    mapped_buttons = map_as(classification, button_data, adventure, modifier)
+    return mapped_buttons
 
 
 def midi_to_freq(midi_number):
@@ -93,7 +223,6 @@ def map_ordered(button_data, the_scale, note_number, same_octave=False):
 
 def map_equal_tempered(button_data, note_number):
     mapped_buttons = []
-    start_button = button_data[0]['location']
     temperment = float(len(button_data) - 1)
     base_freq = midi_to_freq(note_number)
     for index, button in enumerate(button_data):
@@ -524,12 +653,10 @@ def map_as_large_grid(button_data, adventure):
     if num_cols >= num_rows:
         large_dimension = num_cols
         short_dimension = num_rows
-        large = cols
         short = rows
     else:
         large_dimension = num_rows
         short_dimension = num_cols
-        large = rows
         short = cols
 
     if short_dimension == 2:
@@ -627,9 +754,6 @@ def map_as_large_grid(button_data, adventure):
 
     mapped_buttons = []
     for i, loc in enumerate(short):
-        start_button = short[loc][0]
-        end_button = short[loc][-1]
-
         temp_buttons = []
         for button in short[loc]:
             temp_buttons.append(button_data[button_data.index(button)])
@@ -672,16 +796,10 @@ def map_as_tonnetz(button_data, adventure):
     # Figure out if we have more columns or rows.
     # This determines where we put the scales, and where we put the leaps
     if num_cols >= num_rows:
-        large_dimension = num_cols
-        short_dimension = num_rows
         axis = 'x'
-        large = cols
         short = rows
     else:
-        large_dimension = num_rows
-        short_dimension = num_cols
         axis = 'y'
-        large = rows
         short = cols
 
     if adventure == 0:  # the classical m3, M3, P5
@@ -760,3 +878,260 @@ def map_as_tonnetz(button_data, adventure):
             mapped_buttons.extend(mapped_row)
 
     return mapped_buttons
+
+
+# Modifier functions for mappings ----------------------
+def check_size(button_data, axis):
+    button_data = sorted(button_data, key=lambda b: b['location'][axis])
+    positive_increase = True
+    negative_increase = True
+
+    for index, button in enumerate(button_data[0:-1]):
+        if button_data[index]['radius'] < button_data[index + 1]['radius']:
+            continue
+        else:
+            positive_increase = False
+            break
+
+    for index, button in enumerate(button_data[0:-1]):
+        if button_data[index]['radius'] > button_data[index + 1]['radius']:
+            continue
+        else:
+            negative_increase = False
+            break
+
+    if positive_increase:
+        return 'positive'
+    elif negative_increase:
+        return 'negative'
+    else:
+        return None
+
+
+# if the maximum is not at the far left and right,
+# and things decrease from it, in both directions, it is a kalimba!
+def check_basic_kalimba(button_data):
+    max_size = 0
+    max_size_index = 0
+    for index, button in enumerate(button_data[1:-1]):
+        if button['radius'] > max_size:
+            max_size = button['radius']
+            max_size_index = index + 1
+
+    left_list = button_data[0:max_size_index]  # check to see if it increases!
+    right_list = button_data[max_size_index + 1 :]  # check to see if it decreases!
+
+    left_check = True
+    for index, button in enumerate(left_list[0:-1]):
+        if left_list[index]['radius'] < left_list[index + 1]['radius']:
+            continue
+        else:
+            left_check = False
+            break
+
+    right_check = True
+    for index, button in enumerate(right_list[0:-1]):
+        if right_list[index]['radius'] > right_list[index + 1]['radius']:
+            continue
+        else:
+            left_check = False
+            break
+
+    # if both of those are true, return true!
+    if left_check and right_check:
+        return 'kalimba'
+    else:
+        return None
+
+
+def check_staff(button_data):
+    button_data = sorted(button_data, key=lambda b: b['location']['y'])
+    shapes = [button_data[0]['shape'], button_data[1]['shape']]
+    is_staff = True
+    for index, button in enumerate(button_data):
+        if (
+            button['shape'] != shapes[index % 2]
+            or button['shape'] == shapes[(index % 2) - 1]
+        ):
+            is_staff = False
+            break
+
+    if is_staff:
+        return 'staff'
+    else:
+        return None
+
+
+# Translation functions for scikit --------------
+def translate_data_to_scikit(data):
+    all_data = []
+    for raw_example in data:
+        example_data = generate_features(raw_example)
+        all_data.append(example_data)
+    return all_data
+
+
+def generate_features(button_data):
+    button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    num_buttons = len(button_data)
+
+    num_rows, num_cols = get_rows_and_cols(button_data)
+
+    slope = get_slope(button_data)
+
+    def line_eq(x):
+        return slope * x + button_data[0]['location']['y']
+
+    # normalized mean and std dev from the line slope
+    total_distance = get_euclidian_distance(button_data[0], button_data[-1])
+
+    variences = []
+    for button in button_data:
+        rel_x = button['location']['x'] - button_data[0]['location']['x']
+        varience = abs(line_eq(rel_x) - button['location']['y'])
+        varience = varience / float(total_distance)
+        variences.append(varience)
+
+    mean_varience = get_mean(variences)
+    std_dev_varience = get_standard_dev(variences)
+
+    # normalized mean and std dev from the horiztonal center
+    x_locs = [button['location']['x'] for button in button_data]
+    mean_x = get_mean(x_locs)
+
+    x_variences = []
+    for x in x_locs:
+        x_varience = abs(mean_x - x) / float(total_distance)
+        x_variences.append(x_varience)
+
+    mean_x_varience = get_mean(x_variences)
+    std_dev_x_varience = get_standard_dev(x_variences)
+
+    return [
+        num_buttons,
+        num_rows,
+        num_cols,
+        slope,
+        mean_varience,
+        std_dev_varience,
+        mean_x_varience,
+        std_dev_x_varience,
+    ]
+
+
+def get_mean(the_list):
+    return sum(the_list) / float(len(the_list))
+
+
+def get_standard_dev(the_list):
+    mean = get_mean(the_list)
+    squared_diffs = [(mean - num) ** 2 for num in the_list]
+    standard_dev = get_mean(squared_diffs) ** 0.5
+    return standard_dev
+
+
+def get_euclidian_distance(button_1, button_2):
+    x2 = (button_1['location']['x'] - button_2['location']['x']) ** 2
+    y2 = (button_1['location']['y'] - button_2['location']['y']) ** 2
+    return (x2 + y2) ** 0.5
+
+
+def get_slope(button_data):
+    x_button_data = sorted(button_data, key=lambda b: b['location']['x'])
+    x_dist = x_button_data[0]['location']['x'] - x_button_data[-1]['location']['x']
+
+    y_button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+    y_dist = y_button_data[0]['location']['y'] - y_button_data[-1]['location']['y']
+
+    if x_dist == 0:
+        x_dist = 1
+    return y_dist / float(x_dist)
+
+
+def get_rows_and_cols(button_data):
+    rows = []
+    cols = []
+
+    # Fake radius if we don't have it
+    if 'radius' not in button_data[0].keys():
+        max_radius = 10
+    else:
+        # Define how fuzzy we can get
+        max_radius = max([b['radius'] for b in button_data])
+        max_radius = max_radius
+
+    rows.append(button_data[0]['location']['y'])
+    cols.append(button_data[0]['location']['x'])
+
+    for button in button_data[1:]:
+        for row in rows:
+            if (
+                button['location']['y'] < row - max_radius
+                or button['location']['y'] > row + max_radius
+            ):
+                rows.append(button['location']['y'])
+                break
+        for col in cols:
+            if (
+                button['location']['x'] < col - max_radius
+                or button['location']['x'] > col + max_radius
+            ):
+                cols.append(button['location']['x'])
+                break
+
+    num_rows = len(rows)
+    num_cols = len(cols)
+    return num_rows, num_cols
+
+
+# Main classify and map function --------------
+def classification_from_data(example_data):
+    translated_data = generate_features(example_data)
+    res = get_classification(translated_data)
+
+    # For certain prototypes, check size patterns
+    modifier = None
+    if 'radius' in example_data[0]:
+        if res == 'zither':
+            modifier = check_size(example_data, 'y')
+        elif res == 'xylophone':
+            modifier = check_size(example_data, 'x')
+            if not modifier:
+                modifier = check_basic_kalimba(example_data)
+
+    if not modifier and res == 'zither' and 'shape' in example_data[0]:
+        modifier = check_staff(example_data)
+    return res, modifier
+
+
+# Main function
+def analyze(event_body):
+    button_data = json.loads(event_body)
+    if 'adventure' in button_data:
+        adventure = button_data['adventure']
+    else:
+        adventure = 0
+
+    if 'buttonData' in button_data:
+        button_data = button_data['buttonData']
+    else:
+        button_data = button_data
+
+    classification, modifier = classification_from_data(button_data)
+    mapping_data = mapping_from_classification(
+        classification, button_data, adventure, modifier
+    )
+    return {'result': classification, 'mapping': mapping_data, 'modifier': modifier}
+
+
+def lambda_handler(event, context):
+    result = analyze(event['body'])
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        },
+        'body': json.dumps(result),
+    }
