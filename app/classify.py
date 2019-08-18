@@ -24,10 +24,12 @@ def load_data_from_file(classification):
 def get_mean(the_list):
     return sum(the_list) / float(len(the_list))
 
+
 def get_euclidian_distance(button_1, button_2):
-    x2 = (button_1['location']['x'] - button_2['location']['x']) ** 2 
+    x2 = (button_1['location']['x'] - button_2['location']['x']) ** 2
     y2 = (button_1['location']['y'] - button_2['location']['y']) ** 2
     return (x2 + y2) ** 0.5
+
 
 def get_standard_dev(the_list):
     mean = get_mean(the_list)
@@ -35,16 +37,21 @@ def get_standard_dev(the_list):
     standard_dev = get_mean(squared_diffs) ** 0.5
     return standard_dev
 
+
 # Find the maximium distance for a set of button data
 def find_max_distance(button_data):
-    max_distance = 0 
+    max_distance = 0
     max_x = 0
     max_y = 0
-    
+
     for i, button in enumerate(button_data):
         for j, other_button in enumerate(button_data):
-            x_distance = button_data[i]['location']['x'] - button_data[j]['location']['x']
-            y_distance = button_data[i]['location']['y'] - button_data[j]['location']['y']
+            x_distance = (
+                button_data[i]['location']['x'] - button_data[j]['location']['x']
+            )
+            y_distance = (
+                button_data[i]['location']['y'] - button_data[j]['location']['y']
+            )
             if max_x < abs(x_distance):
                 max_x = x_distance
             if max_y < abs(y_distance):
@@ -52,13 +59,14 @@ def find_max_distance(button_data):
 
     return max(max_x, max_y), max_x, max_y
 
+
 def get_slope(button_data):
     x_button_data = sorted(button_data, key=lambda b: b['location']['x'])
     x_dist = x_button_data[0]['location']['x'] - x_button_data[-1]['location']['x']
 
-    y_button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True) 
+    y_button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     y_dist = y_button_data[0]['location']['y'] - y_button_data[-1]['location']['y']
-    
+
     if x_dist == 0:
         x_dist = 1
     return y_dist / float(x_dist)
@@ -81,11 +89,17 @@ def get_rows_and_cols(button_data):
 
     for button in button_data[1:]:
         for row in rows:
-            if button['location']['y'] < row - max_radius or button['location']['y'] > row + max_radius:
+            if (
+                button['location']['y'] < row - max_radius
+                or button['location']['y'] > row + max_radius
+            ):
                 rows.append(button['location']['y'])
                 break
         for col in cols:
-            if button['location']['x'] < col - max_radius or button['location']['x'] > col + max_radius:
+            if (
+                button['location']['x'] < col - max_radius
+                or button['location']['x'] > col + max_radius
+            ):
                 cols.append(button['location']['x'])
                 break
 
@@ -93,16 +107,18 @@ def get_rows_and_cols(button_data):
     num_cols = len(cols)
     return num_rows, num_cols
 
+
 # This is the current favorite
 def generate_features(button_data):
     # Sort
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
-    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True) 
+    button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
     num_buttons = len(button_data)
-    
+
     num_rows, num_cols = get_rows_and_cols(button_data)
 
     slope = get_slope(button_data)
+
     def line_eq(x):
         return slope * x + button_data[0]['location']['y']
 
@@ -122,7 +138,7 @@ def generate_features(button_data):
     # normalized mean and std dev from the horiztonal center
     x_locs = [button['location']['x'] for button in button_data]
     mean_x = get_mean(x_locs)
-    
+
     x_variences = []
     for x in x_locs:
         x_varience = abs(mean_x - x) / float(total_distance)
@@ -131,9 +147,17 @@ def generate_features(button_data):
     mean_x_varience = get_mean(x_variences)
     std_dev_x_varience = get_standard_dev(x_variences)
 
-    return [num_buttons, num_rows, num_cols,
-            slope, mean_varience, std_dev_varience, 
-            mean_x_varience, std_dev_x_varience]
+    return [
+        num_buttons,
+        num_rows,
+        num_cols,
+        slope,
+        mean_varience,
+        std_dev_varience,
+        mean_x_varience,
+        std_dev_x_varience,
+    ]
+
 
 # Translate giant dict / json to scikit-style giant list
 def translate_data_to_scikit(data):
@@ -143,8 +167,8 @@ def translate_data_to_scikit(data):
         all_data.append(example_data)
     return all_data
 
+
 def create_classifier_from_pickle(filepath):
     with open(filepath, 'rb') as f:
         classifier = pickle.load(f)
     return classifier
- 

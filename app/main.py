@@ -26,13 +26,15 @@ classifier = create_classifier_from_pickle(classifier_path)
 
 app = Flask(__name__)
 
+
 def mapping_from_classification(classification, button_data, adventure, modifier):
     mapped_buttons = map_as(classification, button_data, adventure, modifier)
     return mapped_buttons
 
+
 def classification_from_data(example_data):
     translated_data = translate_data_to_scikit([example_data])
-    res =  classifier.predict(translated_data)
+    res = classifier.predict(translated_data)
 
     # For certain prototypes, check size patterns
     modifier = None
@@ -48,6 +50,7 @@ def classification_from_data(example_data):
         modifier = check_staff(example_data)
 
     return res, modifier
+
 
 @app.route("/pattern-rec/analysis", methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers=['Content-Type'])
@@ -67,9 +70,14 @@ def analyze_data():
     res, modifier = classification_from_data(button_data)
     classification = res[0]
     # Create mapping, return mapping and the classification
-    mapping_data = mapping_from_classification(classification, button_data, 
-            adventure, modifier)
-    return_data = {'result': classification, 'mapping': mapping_data, 'modifier': modifier}
+    mapping_data = mapping_from_classification(
+        classification, button_data, adventure, modifier
+    )
+    return_data = {
+        'result': classification,
+        'mapping': mapping_data,
+        'modifier': modifier,
+    }
 
     # Ugly.  I appear to need both these AND the @crossdomain decorator.
     resp = make_response(jsonify(**return_data))
@@ -89,7 +97,10 @@ def validate(layout_type):
     results = OrderedDict()
     for classification in classifications:
         results[classification] = (0, 0, {})
-        data_url = 'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json' % classification
+        data_url = (
+            'http://www.tide-pool.ca/pattern-recognition/example-data/%s.json'
+            % classification
+        )
         example_data = get(data_url).json()
 
         correct = 0
@@ -108,25 +119,32 @@ def validate(layout_type):
 
         incorrect_string = ''
         for bad_classification in incorrect_details:
-            incorrect_string = incorrect_string + \
-            '%s:  %d.  ' % (bad_classification, incorrect_details[bad_classification])
+            incorrect_string = incorrect_string + '%s:  %d.  ' % (
+                bad_classification,
+                incorrect_details[bad_classification],
+            )
 
         results[classification] = (correct, incorrect, incorrect_string)
-    
+
     return render_template('validate.html', classification=layout_type, results=results)
+
 
 # Test to make sure that we are loading and anaylzing data correctly
 @app.route("/pattern-rec/test_analysis", methods=['GET'])
 def fake_analysis():
-    piano_data = get('http://www.tide-pool.ca/pattern-recognition/example-data/piano.json').json()
+    piano_data = get(
+        'http://www.tide-pool.ca/pattern-recognition/example-data/piano.json'
+    ).json()
     res, modifier = classification_from_data(piano_data[0])
     classification = res[0]
     return "Hello, we have just done a test classification:  %s" % classification
+
 
 # Test to make sure that the server is up
 @app.route("/pattern-rec/hello", methods=['GET'])
 def hello():
     return "Hello there, the server is up."
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=80)

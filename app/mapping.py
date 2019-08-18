@@ -22,11 +22,12 @@ pentatonic_major = [2, 2, 3, 2, 3]
 pentatonic_minor = [3, 2, 3, 2, 2]
 
 # Hexatonics
-hexatonic_dict = {'whole_tone': [2],
-              'augmented': [3, 1],
-              'prometheus' :[2, 2, 2, 3, 1, 2],
-              'blues': [3, 2, 1, 1, 3, 2],
-            }
+hexatonic_dict = {
+    'whole_tone': [2],
+    'augmented': [3, 1],
+    'prometheus': [2, 2, 2, 3, 1, 2],
+    'blues': [3, 2, 1, 1, 3, 2],
+}
 hexatonics = [hexatonic_dict[k] for k in hexatonic_dict.keys()]
 
 
@@ -37,8 +38,8 @@ octatonic_two = [1, 2]
 # Diatonics
 diatonic_major = [2, 2, 1, 2, 2, 2, 1]
 diatonic_minor = [2, 1, 2, 2, 1, 2, 2]
-diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1, 1] # has flat 3 and flat 7
-diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1] # has flat 3, flat 6, and  flat 7
+diatonic_both = [2, 1, 1, 1, 2, 2, 1, 1, 1]  # has flat 3 and flat 7
+diatonic_extra = [2, 1, 1, 1, 2, 1, 1, 1, 1, 1]  # has flat 3, flat 6, and  flat 7
 
 # Odd
 trumpet = [1, 1, 1]
@@ -46,6 +47,7 @@ trumpet = [1, 1, 1]
 
 def midi_to_freq(midi_number):
     return 440 * (2 ** ((midi_number - 69) / 12.0))
+
 
 # Helper to find the 'best' scale from a list
 def find_scale(button_length, list_of_scales):
@@ -60,24 +62,25 @@ def find_scale(button_length, list_of_scales):
             if button_length % len(scale) == -1:
                 the_scale = scale
                 break
-    
+
     if not the_scale:
         the_scale = chromatic
 
     return the_scale
 
+
 # Helper to map an ordered set of buttons to a given scale from a starting point
 def map_ordered(button_data, the_scale, note_number, same_octave=False):
     mapped_buttons = []
-    
+
     first_button = button_data[0]
     first_button['noteFreq'] = midi_to_freq(note_number)
     first_button['noteMIDI'] = note_number
     mapped_buttons.append(first_button)
 
     for index, button in enumerate(button_data[1:]):
-        scale_index = index % len(the_scale);
-        note_number = note_number + the_scale[scale_index];
+        scale_index = index % len(the_scale)
+        note_number = note_number + the_scale[scale_index]
 
         if same_octave:
             note_number = note_number % 12 + first_button['noteMIDI']
@@ -86,6 +89,7 @@ def map_ordered(button_data, the_scale, note_number, same_octave=False):
         button['noteMIDI'] = note_number
         mapped_buttons.append(button)
     return mapped_buttons
+
 
 def map_equal_tempered(button_data, note_number):
     mapped_buttons = []
@@ -99,6 +103,7 @@ def map_equal_tempered(button_data, note_number):
 
     return mapped_buttons
 
+
 def map_by_ratio(button_data, note_number):
     mapped_buttons = []
     start_button = button_data[0]['location']
@@ -106,12 +111,18 @@ def map_by_ratio(button_data, note_number):
 
     max_distance = 0
     for button in button_data:
-        distance = ((start_button['x'] - button['location']['x']) ** 2 + (start_button['y'] - button['location']['y']) ** 2) ** 0.5
+        distance = (
+            (start_button['x'] - button['location']['x']) ** 2
+            + (start_button['y'] - button['location']['y']) ** 2
+        ) ** 0.5
         if distance > max_distance:
             max_distance = distance
 
     for button in button_data:
-        distance = ((start_button['x'] - button['location']['x']) ** 2 + (start_button['y'] - button['location']['y']) ** 2) ** 0.5
+        distance = (
+            (start_button['x'] - button['location']['x']) ** 2
+            + (start_button['y'] - button['location']['y']) ** 2
+        ) ** 0.5
         ratio = distance / float(max_distance) + 1
         freq = base_freq * ratio
         button['noteFreq'] = freq
@@ -149,12 +160,15 @@ def map_as_piano(button_data, adventure):
         mapped_buttons = map_by_ratio(button_data, 60)
     return mapped_buttons
 
+
 # Xylophone
 def map_as_xylo(button_data, adventure, modifier):
     if not modifier or modifier == 'negative':
         button_data = sorted(button_data, key=lambda b: b['location']['x'])
     elif modifier == 'positive':
-        button_data = sorted(button_data, key=lambda b: b['location']['x'], reverse=True)
+        button_data = sorted(
+            button_data, key=lambda b: b['location']['x'], reverse=True
+        )
 
     elif modifier == 'kalimba':
         button_data = sorted(button_data, key=lambda b: b['location']['x'])
@@ -178,13 +192,22 @@ def map_as_xylo(button_data, adventure, modifier):
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, diatonic_both, diatonic_extra, chromatic])
+            the_scale = find_scale(
+                button_length,
+                [
+                    diatonic_major,
+                    pentatonic_major,
+                    diatonic_both,
+                    diatonic_extra,
+                    chromatic,
+                ],
+            )
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
-        if button_length <= 7: #hexatonics
+        if button_length <= 7:  # hexatonics
             the_scale = random.choice(hexatonics)
-        elif button_length == 8 or button_length == 9: #octatonics
+        elif button_length == 8 or button_length == 9:  # octatonics
             if random.random() > 0.5:
                 the_scale = octatonic_one
             else:
@@ -196,7 +219,13 @@ def map_as_xylo(button_data, adventure, modifier):
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            scale_list = [
+                hexatonic_dict['blues'],
+                octatonic_one,
+                diatonic_both,
+                diatonic_extra,
+                chromatic,
+            ]
             the_scale = find_scale(button_length, scale_list)
 
         mapped_buttons = map_ordered(button_data, the_scale, 60)
@@ -209,6 +238,7 @@ def map_as_xylo(button_data, adventure, modifier):
 
     return mapped_buttons
 
+
 # Piano roll:  a chromatic scale, from bottom to top
 def map_as_piano_roll(button_data, adventure):
     button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
@@ -218,17 +248,22 @@ def map_as_piano_roll(button_data, adventure):
         mapped_buttons = map_by_ratio(button_data, 60)
     return mapped_buttons
 
+
 # Zither
 def map_as_zither(button_data, adventure, modifier):
     # dodge for staff
     if modifier == 'staff' and adventure < 3:
-        button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+        button_data = sorted(
+            button_data, key=lambda b: b['location']['y'], reverse=True
+        )
         offset_major = [1, 2, 2, 2, 1, 2, 2]
         mapped_buttons = map_ordered(button_data, offset_major, 64)
         return mapped_buttons
 
     if not modifier or modifier == 'positive':
-        button_data = sorted(button_data, key=lambda b: b['location']['y'], reverse=True)
+        button_data = sorted(
+            button_data, key=lambda b: b['location']['y'], reverse=True
+        )
     elif modifier == 'negative':
         button_data = sorted(button_data, key=lambda b: b['location']['y'])
     button_length = len(button_data)
@@ -249,14 +284,16 @@ def map_as_zither(button_data, adventure, modifier):
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
+            the_scale = find_scale(
+                button_length, [diatonic_major, pentatonic_major, chromatic]
+            )
 
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
     elif adventure == 2:
-        if button_length == 7: #hexatonics
+        if button_length == 7:  # hexatonics
             the_scale = hexatonics[random.choice(hexatonics.keys())]
-        elif button_length == 8 or button_length == 9: #octatonics
+        elif button_length == 8 or button_length == 9:  # octatonics
             if random.random() > 0.5:
                 the_scale = octatonic_one
             else:
@@ -268,7 +305,13 @@ def map_as_zither(button_data, adventure, modifier):
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            scale_list = [
+                hexatonic_dict['blues'],
+                octatonic_one,
+                diatonic_both,
+                diatonic_extra,
+                chromatic,
+            ]
             the_scale = find_scale(button_length, scale_list)
         mapped_buttons = map_ordered(button_data, the_scale, 60)
 
@@ -280,12 +323,19 @@ def map_as_zither(button_data, adventure, modifier):
 
     return mapped_buttons
 
+
 def map_as_circle(button_data, adventure):
     # sort clockwise
     center_x = sum([b['location']['x'] for b in button_data]) / len(button_data)
     center_y = sum([b['location']['y'] for b in button_data]) / len(button_data)
 
-    button_data = sorted(button_data, key=lambda b: atan2(b['location']['x'] - center_x, b['location']['y'] - center_y), reverse=True)
+    button_data = sorted(
+        button_data,
+        key=lambda b: atan2(
+            b['location']['x'] - center_x, b['location']['y'] - center_y
+        ),
+        reverse=True,
+    )
     button_length = len(button_data)
 
     if adventure == 0:
@@ -301,18 +351,24 @@ def map_as_circle(button_data, adventure):
         elif button_length <= 11:
             the_scale = random.choice([fifths, fifths, diatonic_major, diatonic_both])
         elif button_length >= 12:
-            the_scale = random.choice([fifths, chromatic, diatonic_major, diatonic_extra])
+            the_scale = random.choice(
+                [fifths, chromatic, diatonic_major, diatonic_extra]
+            )
         mapped_buttons = map_ordered(button_data, the_scale, 60, same_octave=True)
 
     elif adventure == 2:
-        if button_length <= 7: #hexatonics
+        if button_length <= 7:  # hexatonics
             the_scale = hexatonics[random.choice(hexatonics.keys())]
-        elif button_length == 8 or button_length == 9: #octatonics
+        elif button_length == 8 or button_length == 9:  # octatonics
             the_scale = random.choice([fourths, octatonic_one, octatonic_two])
         elif button_length <= 11:
-            the_scale = random.choice([fourths, diatonic_both, diatonic_extra, octatonic_one, octatonic_two])
+            the_scale = random.choice(
+                [fourths, diatonic_both, diatonic_extra, octatonic_one, octatonic_two]
+            )
         elif button_length >= 12:
-            all_scales = hexatonics.extend([fourths, chromatic, diatonic_extra, octatonic_one, octatonic_two])
+            all_scales = hexatonics.extend(
+                [fourths, chromatic, diatonic_extra, octatonic_one, octatonic_two]
+            )
             the_scale = random.choice(all_scales)
 
         mapped_buttons = map_ordered(button_data, the_scale, 60)
@@ -324,6 +380,7 @@ def map_as_circle(button_data, adventure):
         mapped_buttons = map_by_ratio(button_data, 60)
 
     return mapped_buttons
+
 
 # Small grid:  conditionals, then bottom-left to top-right
 def map_as_small_grid(button_data, adventure):
@@ -351,11 +408,13 @@ def map_as_small_grid(button_data, adventure):
             if appended:
                 break
             for b in row:
-                if button['location']['y'] > b['location']['y'] - max_radius \
-                    and button['location']['y'] < b['location']['y'] + max_radius:
-                        row.append(button)
-                        appended = True
-                        break
+                if (
+                    button['location']['y'] > b['location']['y'] - max_radius
+                    and button['location']['y'] < b['location']['y'] + max_radius
+                ):
+                    row.append(button)
+                    appended = True
+                    break
         if not appended:
             rows.append([button])
 
@@ -393,13 +452,15 @@ def map_as_small_grid(button_data, adventure):
         elif button_length == 9 or button_length == 10:
             the_scale = diatonic_both
         else:
-            the_scale = find_scale(button_length, [diatonic_major, pentatonic_major, chromatic])
+            the_scale = find_scale(
+                button_length, [diatonic_major, pentatonic_major, chromatic]
+            )
         mapped_buttons = map_ordered(better_button_data, the_scale, 60)
 
     elif adventure == 2:
         if button_length == 3 or button_length == 4:
             the_scale = trumpet
-        elif button_length == 5:  
+        elif button_length == 5:
             the_scale = pentatonic_minor
         elif button_length == 6 or button_length == 7:
             the_scale = hexatonics[random.choice(hexatonics.keys())]
@@ -409,13 +470,19 @@ def map_as_small_grid(button_data, adventure):
             else:
                 the_scale = octatonic_two
         elif button_length == 10:
-             the_scale = diatonic_both
+            the_scale = diatonic_both
         elif button_length == 11:
             the_scale = diatonic_extra
         elif button_length == 12 or button_length == 13:
             the_scale = chromatic
         else:
-            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+            scale_list = [
+                hexatonic_dict['blues'],
+                octatonic_one,
+                diatonic_both,
+                diatonic_extra,
+                chromatic,
+            ]
             the_scale = find_scale(button_length, scale_list)
 
         mapped_buttons = map_ordered(better_button_data, the_scale, 60)
@@ -441,7 +508,7 @@ def map_as_large_grid(button_data, adventure):
         if button['location']['y'] not in rows:
             rows[button['location']['y']] = []
             rows[button['location']['y']].append(button)
-        else: 
+        else:
             rows[button['location']['y']].append(button)
 
         if button['location']['x'] not in cols:
@@ -491,7 +558,9 @@ def map_as_large_grid(button_data, adventure):
         elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
         else:
-            the_scale = find_scale(large_dimension, [diatonic_major, pentatonic_major, chromatic])
+            the_scale = find_scale(
+                large_dimension, [diatonic_major, pentatonic_major, chromatic]
+            )
 
     if adventure == 1:
         if large_dimension == 3 or large_dimension == 4:
@@ -513,7 +582,9 @@ def map_as_large_grid(button_data, adventure):
         elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
         else:
-            the_scale = find_scale(large_dimension, [diatonic_minor, pentatonic_minor, chromatic])
+            the_scale = find_scale(
+                large_dimension, [diatonic_minor, pentatonic_minor, chromatic]
+            )
 
     if adventure == 2:
         if large_dimension == 3 or large_dimension == 4:
@@ -528,13 +599,19 @@ def map_as_large_grid(button_data, adventure):
             else:
                 the_scale = octatonic_two
         elif large_dimension == 10:
-             the_scale = diatonic_both
+            the_scale = diatonic_both
         elif large_dimension == 11:
             the_scale = diatonic_extra
         elif large_dimension == 12 or large_dimension == 13:
             the_scale = chromatic
-        else: 
-            scale_list = [hexatonic_dict['blues'], octatonic_one, diatonic_both, diatonic_extra, chromatic]
+        else:
+            scale_list = [
+                hexatonic_dict['blues'],
+                octatonic_one,
+                diatonic_both,
+                diatonic_extra,
+                chromatic,
+            ]
             the_scale = find_scale(large_dimension, scale_list)
 
     elif adventure == 4:
@@ -567,6 +644,7 @@ def map_as_large_grid(button_data, adventure):
 
     return mapped_buttons
 
+
 def map_as_tonnetz(button_data, adventure):
     # rows first, then columns
     button_data = sorted(button_data, key=lambda b: b['location']['x'])
@@ -580,7 +658,7 @@ def map_as_tonnetz(button_data, adventure):
         if button['location']['y'] not in rows:
             rows[button['location']['y']] = []
             rows[button['location']['y']].append(button)
-        else: 
+        else:
             rows[button['location']['y']].append(button)
 
         if button['location']['x'] not in cols:
@@ -605,7 +683,7 @@ def map_as_tonnetz(button_data, adventure):
         axis = 'y'
         large = rows
         short = cols
-    
+
     if adventure == 0:  # the classical m3, M3, P5
         low_offset = -4
         high_offset = 3
@@ -615,7 +693,7 @@ def map_as_tonnetz(button_data, adventure):
         if random.random() > 0.5:
             low_offset = -4
             high_offset = 3
-            the_scale = fifths 
+            the_scale = fifths
         else:
             low_offset = -3
             high_offset = 2
@@ -664,12 +742,12 @@ def map_as_tonnetz(button_data, adventure):
         else:
 
             last_button = first_buttons[-1]
-            #compare!
+            # compare!
             if last_button['location'][axis] < short[key][0]['location'][axis]:
                 offset = low_offset
             else:
                 offset = high_offset
-           
+
             temp_buttons = []
             for button in short[key]:
                 temp_buttons.append(button_data[button_data.index(button)])
